@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Dieter Ravyts</title>
+        <link rel="icon" href="" type="image/jpg">
+        <meta name="keywords" content="">
+        <meta name="author" content="Deveny Faruque - deve1000">
+        <meta name="robots" content="index, follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="cambria.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+          <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+        <style>
+@font-face {
+    font-family:'Cambria';
+        src:url('fonts/CambriaRegular.ttf');
+}
+
+@font-face {
+    font-family:'CambriaB';
+        src:url('fonts/CambriaBold.ttf');
+}
+@font-face {
+    font-family:'CambriaI';
+        src:url('fonts/CambriaItalic.ttf');
+}
+@font-face {
+    font-family:'CambriaBI';
+        src:url('fonts/CambriaBoldItalic.ttf');
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100%;
+    width: 100%;
+    font-family: Cambria;
+    user-select: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+            
+            a:hover{
+                text-decoration: underline;
+            }
+            
+            .active{
+                text-decoration: underline;
+            }
+
+            h5{
+                font-size: 1rem; 
+                margin: 0;
+                padding: 0;
+            }
+            p{
+                font-size: 0.9rem;
+                margin: 0;
+                padding: 0;
+            }
+            
+            .box img{
+                cursor: pointer;
+                display: none;
+            }
+            .box img:first-of-type{
+                display: block;
+            }
+            .work img{
+                margin: 20px 0;
+            }
+            .header{
+                position: relative;
+            }
+            .title{
+                z-index: 100;
+                position: absolute; padding: 1em 1em; top: 0;display: flex;
+            }
+            .nav{padding: 1em 25vw; top:0; display: flex;
+            justify-content: space-around;}
+            .nav a, .title a{
+                margin: 1em;
+            }
+            .resume, .writings{
+                display: none;
+                padding: 4em 10em 0em 15em;
+            }
+            .resume div{margin-bottom: 4em;}
+            .work{
+                padding: 0em 7em 7em 7em;
+            }
+            ul{
+                list-style-type: none;
+            }
+            .box{
+                max-height: 95vh;
+            }
+            .work > div{
+                margin: 0em 5em 10vw 5em;
+            }
+            
+            .ver{
+                max-height: 90vh;
+                max-width: 100% !important;
+            }
+            .hor{
+                width: 100%;
+            }
+        </style>
+</head><body><div class="header">
+  <div class="title">
+    <a href="index.html">Dieter Ravyts</a></div>
+<div class="nav">
+    <a href="javascript:void(0)" onclick="Open('work')" class="active">works</a>
+      <a href="javascript:void(0)" onclick="Open('resume')">resume</a>
+      <a href="javascript:void(0)" onclick="Open('writings')">writings</a>
+  </div></div>
+  <div class="content">
+    <div class="work">
+      <div><img class="hor" src="19/1.untitled.jpg">
+        <div>
+          <h5>Overview</h5>
+          <p></p>
+        </div>
+      </div>
+      <div><img class="hor" src="19/2.untitled.jpg">
+        <div>
+          <h5>Untitled (2019)</h5>
+          <p>35x 24,5cm<br>
+            color pencil on paper, framed</p>
+        </div>
+      </div>
+      <div><img class="hor" src="19/3.untitled.jpg">
+        <div>
+          <h5>Untitled (2019)</h5>
+          <p>35x 24,5cm<br>
+            color pencil on paper, framed</p>
+        </div>
+      </div>
+      <div><img class="hor" src="19/4.untitled.jpg">
+        <div>
+          <h5>Untitled (2019)</h5>
+          <p>35x 24,5cm<br>
+            color pencil on paper, framed</p>
+        </div>
+      </div>
+      <div><img class="hor" src="19/5.untitled.jpg">
+        <div>
+          <h5>Untitled (2019)</h5>
+          <p>35x 24,5cm<br>
+            color pencil on paper, framed</p>
+        </div>
+      </div>
+      <div><img class="ver" src="19/6.lettrist(potrait).jpg">
+        <div>
+          <h5>Lettrist (portrait) (2019)
+          </h5>
+          <p>36,5cm x 27cm<br>
+            Line etching on linnen paper ,framed</p>
+        </div>
+      </div>
+      <div><img class="ver" src="19/7.lettrist(potrait).jpg">
+        <div>
+          <h5>Lettrist (portrait) (2019)
+          </h5>
+          <p>36,5cm x 27cm <br>
+            Line etching on linnen paper ,framed</p>
+        </div>
+      </div>
+      <div><img class="ver" src="19/8.lettrist(potrait).jpg">
+        <div>
+          <h5>Lettrist (figure) (2019)
+          </h5>
+          <p>Variable dimensions<br>
+            Acrylic on wood
+          </p>
+        </div>
+      </div>
+      <div><img class="ver"class="ver"  src="19/9.lettrist(potrait).jpg">
+        <div>
+          <h5>Lettrist (figure) (2019)
+          </h5>
+          <p>Variable dimensions<br>
+            Acrylic on wood
+          </p>
+        </div>
+      </div>
+      <div><img class="ver" src="19/10.lettrist(potrait).jpg">
+        <div>
+          <h5>Lettrist (portrait) (2019)
+          </h5>
+          <p>36,5cm x 27cm <br>
+            Line etching on linnen paper ,framed</p>
+        </div>
+      </div>
+      <div>
+        <div class="box">
+          <img class="hor" src="19/11.lettrist%20(figure)(a).jpg"><img class="hor" src="19/11.lettrist%20(figure)(b).jpg"><img class="hor" src="19/11.lettrist%20(figure)(c).jpg">
+        </div>
+        <div>
+          <h5>Lettrist (figure) (2019)</h5>
+          <p>Variable dimensions <br>
+            Acrylic on wood </p>
+        </div>
+      </div>
+      <div>
+        <div class="box">
+          <img class="ver" src="19/12.lettrist%20(figure)%20(a).jpg">
+          <img class="ver" src="19/12.lettrist%20(figure)%20(b).jpg">
+          <img class="ver" src="19/12.lettrist%20(figure)%20(c).jpg">
+        </div>
+        <div>
+          <h5>Lettrist (figure) (2019)
+          </h5>
+          <p>Variable dimensions<br>
+            Acrylic on wood </p>
+        </div>
+      </div>
+      <div>
+        <div class="box">
+          <img class="ver" src="19/13.lettrist%20(figure)%20(a).jpg"><img class="ver" src="19/13.lettrist%20(figure)%20(b).jpg"><img class="ver" src="19/13.lettrist%20(figure)%20(c).jpg">
+        </div>
+        <div>
+          <h5>Lettrist (figure) (2019)</h5>
+          <p>Variable dimensions <br>
+            Acrylic on wood </p>
+        </div>
+      </div>
+      <div>
+        <div class="box">
+          <img class="ver" src="19/14.lettrist%20(figure)%20(a).jpg">
+          <img class="ver" src="19/14.lettrist%20(figure)%20(b).jpg">
+          <img class="ver" src="19/14.lettrist%20(figure)%20(c).jpg">
+        </div>
+        <div>
+          <h5>Lettrist (figure) (2019)</h5>
+          <p>Variable dimensions <br>
+            Acrylic on wood</p>
+        </div>
+      </div>
+      <div><img class="ver" src="19/15.untitled.jpg">
+        <div>
+          <h5>Untitled (2019)</h5>
+          <p>35x 24,5cm<br>
+            color pencil on paper, framed</p>
+        </div>
+      </div>
+      <div>
+          <img class="hor" src="19/16.overview.jpg">
+          <img class="hor" src="19/17.overview.jpg">
+          <img class="hor" src="19/18.overview.jpg">
+          <img class="ver" src="19/19.overview.jpg">
+          <img class="ver" src="19/20.overview.jpg">
+        <div>
+          <h5>Instalation shot ‘Lettrism’ at Social Harmony</h5>
+          <p></p>
+        </div>
+      </div>
+
+      <div><img class="hor" src="18/1.%20Affiche%2011.jpg">
+        <div>
+          <h5>‘Affiche 11’ 2018</h5>
+          <p>168 × 234 cm<br>Gouache and pencil on paper, framed </p>
+        </div>
+      </div>
+      <div><img class="hor" src="18/2%20affiche%2010_.jpg">
+        <div>
+          <h5>‘Affiche 10’ 2018</h5>
+          <p>168 × 234 cm<br>Gouache and pencil on paper, framed </p>
+        </div>
+      </div>
+      <div><img class="hor" src="18/3.%20Affiche%2010%20(contintued)jpg.jpg">
+        <div>
+          <h5>‘Affiche 10 (continued)’ 2018</h5>
+          <p>168 × 234 cm<br>Gouache and pencil on paper, framed </p>
+        </div>
+      </div>
+      <div><img class="hor" src="18/4%20Affiche9.jpg">
+        <div>
+          <h5>‘Affiche 9’ 2018</h5>
+          <p>168 × 234 cm<br>Gouache and pencil on paper, framed </p>
+
+        </div>
+      </div>
+      <div><img class="hor" src="18/5.%20Affiche%208.jpg">
+        <div>
+          <h5>‘Affiche 8’ 2018</h5>
+          <p>168 × 234 cm<br>Gouache and pencil on paper, framed </p>
+        </div>
+      </div>
+      <div><img class="ver" src="18/6.Formulas.jpg">
+        <div>
+          <h5>‘Formulas’ 2018
+          </h5>
+          <p>20,7 × 13,3 cm<br>Gloss paint on zinc, aluminium frame</p>
+        </div>
+      </div>
+      <div><img class="ver" src="18/7.Formulas.jpg">
+        <div>
+          <h5>‘Formulas’ 2018
+          </h5>
+          <p>16,2 × 20,2 cm<br>Gloss paint on zinc, aluminium frame</p>
+        </div>
+      </div>
+      <div><img class="ver" src="18/8.Formulasjpg.jpg">
+        <div>
+          <h5>‘Formulas’ 2018
+          </h5>
+          <p>19,1 × 16,2 cm<br>Gloss paint on zinc, aluminium frame
+          </p>
+        </div>
+      </div>
+      <div><img class="ver" src="18/9.leaflet.jpg">
+        <div>
+          <h5>‘Leaflet’ 2018
+          </h5>
+          <p>73 × 54 cm<br>Line etch on canvaspaper, wooden frame
+          </p>
+        </div>
+      </div>
+      <div><img class="ver" src="18/10.leaflet.jpg">
+        <div>
+          <h5>‘Leaflet’ 2018
+          </h5>
+          <p>73 × 54 cm<br>Line etch on canvaspaper, wooden frame</p>
+        </div>
+      </div>
+      <div><img class="ver" src="18/11.leaflet.jpg">
+        <div>
+          <h5>‘Leaflet’ 2018</h5>
+          <p>73 × 54 cm<br>Line etch on canvaspaper, wooden frame</p>
+        </div>
+      </div>
+      <div><img class="ver" src="18/12.leaflet.jpg">
+        <div>
+          <h5>‘Leaflet’ 2018
+          </h5>
+          <p>73 × 54 cm<br>Line etch on canvaspaper, wooden frame</p>
+        </div>
+      </div>
+      <div>
+        <div class="box">
+            <img class="hor" src="18/13.bystander%20(a).jpg">
+            <img class="hor" src="18/13.bystander%20(b).jpg">
+            <img class="hor" src="18/13.bystander%20(c).jpg">
+            <img class="ver" src="18/13.bystander%20(d).jpg">        </div>
+
+        <div>
+          <h5>‘Bystander’ 2018 </h5>
+          <p>50 × 47 × 20 cm<br>Wood, glass, mirror, metal, silkscreen</p>
+        </div>
+      </div>
+      <div>
+            <img class="hor" src="18/14.overview.jpg">
+            <img class="hor" src="18/15.overview.jpg">
+            <img class="hor" src="18/16.overview.jpg">
+        <div>
+          <h5>Instalation shot ‘Footnotes’ at Tatjana Pieters</h5>
+        </div>
+      </div>
+      <div><img class="hor" src="18/17.%20Affiche-6.jpg">
+        <div>
+          <h5>‘Affiche 6’ 2015</h5>
+          <p>168 x 240 cm<br>Gouache and pencil on paper, framed</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="resume">
+        <div>
+            <p>
+    <a href="mailto:dieterravyts@hotmail.com?Subject=Hi" target="_top">dieterravyts@hotmail.com</a><br>
+    <a href="https://www.instagram.com/dieterravyts/?hl=en" target="_blank">IG: dieterravyts</a></p>
+            </div>
+        <div>
+      <h5>Solo Exhibitions</h5>
+      <ul>
+        <li>
+          2020 ‘Lettrism’ at Social Harmony, Ghent (BE)
+        </li>
+        <li>2018 ‘Footnotes’ at Tatjana Pieters Gallery, Ghent (BE) </li>
+        <li>2017 ‘A major disappointment’ at Tatjana Pieters Gallery, Ghent </li>
+        <li>2016 ‘Tubepaintings, Paintcontainers and other stuff’ at Loods12, Wetteren (BE) </li>
+        <li>2014 ‘Too Lame for Fame’ (with Jelle Spruyt) at These things take time, Ghent (BE) </li>
+        <li>2013 ‘An introduction: A three letter word for disappointing your parents’ BLAUPUNT, Brussels (BE) </li>
+      </ul>
+        </div><div>
+      <h5>
+        Group exhibitions</h5>
+
+      <ul>
+        <li>
+          2018 ‘Oud slecht werk’ at Social Harmony, Ghent (BE) </li>
+        <li>2018 ‘Ballroomproject with Tatjana, Antwerp (BE) </li>
+        <li>2018 ‘Works on paper’ at Tatjana Pieters Gallery, Ghent (BE) </li>
+        <li>2018 ‘Art Brussels’ with Tatjana Pieters Gallery, Ghent (BE) </li>
+        <li>2018 ‘Peer group’ at Social Harmony, Ghent (BE) </li>
+        <li>2017 ‘Summerhang’ at Tatjana pieters Gallery, Ghent (BE) </li>
+        <li>2016 ‘De Nieuwe Omstandigheden’ at Croxaphox, Ghent (BE) </li>
+        <li>2015 ‘What’s the meaning of a goldfish’ at Tatjana Pieters Gallery, Ghent (BE) </li>
+        <li>2015 ‘Enlightened Fountains’ at Galerij Jan Colle, Ghent (BE) </li>
+        <li>2015 ‘Art Brussels’ with Tatjana Pieters Gallery, Brussels (BE) </li>
+        <li>2015 ‘The originals season 1’ at Tatjana Pieters Gallery, Ghent (BE) </li>
+        <li>2014 ‘The Grand scheme’ at social harmony, Ghent (BE) </li>
+        <li>
+      </ul>
+            </div>
+    </div>
+    <div class="writings">
+      <p>under construction</p></div>
+  </div>
+</body>
+    <script>
+        function modalClose(){
+            $(document).click(function(event){if(!$(event.target).closest(".box img, #prev, #next, .modal").length){$("body").find(".modal").empty();$("body").find(".overlay").hide();}})}
+        
+        function Open(x){
+            $('.'+x).fadeIn();
+            $('.'+x).siblings('div').hide();
+        }
+        $('.nav a, .title a').click(function(){
+          $(this).addClass('active');
+          $(this).siblings('a').removeClass('active');
+window.scrollTo(0,0);
+        });
+        
+        function modalChange(x){
+                var prev = $(x).parent('div').prev('div').children('img');
+                var next = $(x).parent('div').next('div').children('img');
+
+                    if (prev.length > 0){
+                        $('#prev').on("click",function(){
+                $(".modal").html('<img src="'+$(prev).attr("src")+'" height="100%">');
+                modalChange(prev);
+                    });
+                        $(document).keydown(function(e){
+    switch (e.which){
+    case 37:    //left arrow key
+ $(".modal").html('<img src="'+$(prev).attr("src")+'" height="100%">');
+                modalChange(prev);        break;
+    }
+});
+                    }
+                    else{  $('#prev').off('click');
+            }
+                 if (next.length > 0){ 
+                $('#next').on("click",function(){
+                $(".modal").html('<img src="'+$(next).attr("src")+'" height="100%">');
+                modalChange(next);
+            });
+                     $(document).keydown(function(e){
+    switch (e.which){
+    case 39:    //right arrow key
+
+                $(".modal").html('<img src="'+$(next).attr("src")+'" height="100%">');
+                modalChange(next);        break;
+    }
+});
+                    }
+                    else{$('#next').off('click');
+            }         
+            }
+        
+        $(".box").click(function(){
+            var aanwezig = $(this).children('img:visible');
+            
+            if (aanwezig.is(':last-of-type')){
+                $(this).children(':first-of-type').css('display','block');  
+                            aanwezig.hide();
+            }
+            else{
+            aanwezig.hide();
+            aanwezig.next('img').css('display','block');  
+            }
+            
+});
+            
+        
+</script>
+</html>

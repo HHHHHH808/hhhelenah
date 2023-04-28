@@ -1,0 +1,161 @@
+<div class="content">
+    <h5>A live re­cord­ing of a live accompan­i­ment for a silent movie I did during ‘De Gentse Feest­en’. Quite messy in the begin­ning, but full of use­ful mat­erial.
+</h5>
+    <audio>
+      Your browser does not support HTML 5 Player.
+    </audio><button class="pp">1</button>
+   <input
+  type="range"
+  id="progress-bar"
+  min="0"
+  max=""
+  value="0"
+/> 
+      <ul>      
+  <li><a href="#" class="audio play" data-music-id="fili-1">Track 1</a><p>02:09</p></li>
+  <li><a href="#" class="audio play" data-music-id="fili-2">Track 2</a><p>03:06</p></li>
+  <li><a href="#" class="audio play" data-music-id="fili-3">Track 3</a><p>03:06</p></li>
+  <li><a href="#" class="audio play" data-music-id="fili-4">Track 4</a><p>05:36</p></li>
+  <li><a href="#" class="audio play" data-music-id="fili-5">Track 5</a><p>03:29</p></li>
+  <li><a href="#" class="audio play" data-music-id="fili-6">Track 6</a><p>03:29</p></li>
+  <li><a href="#" class="audio play" data-music-id="fili-7">Track 7</a><p>05:36</p></li>
+  <li><a href="#" class="audio play" data-music-id="fili-8">Track 8</a><p>03:29</p></li>
+  <li><a href="#" class="audio play" data-music-id="fili-9">Track 9</a><p>03:06</p></li>
+  <li><a href="#" class="audio play" data-music-id="fili-a">Track 10</a><p>12:47</p></li>
+  <li><a href="#" class="audio play" data-music-id="fili-b">Track 11</a><p>11:21</p></li>
+  <li><a href="#" class="audio play" data-music-id="fili-c">Track 12</a><p>12:47</p></li>
+  <li><a href="#" class="audio play" data-music-id="fili-d">Track 13</a><p>04:25</p></li>
+    </ul>
+  </div>
+  <script>
+      
+window.Formaweb = window.Formaweb || {};
+
+window.Formaweb.Player = function() {
+  "use strict";
+
+  var audio;
+  var playlist;
+  var len;
+  var current;
+
+  init();
+  function init() {
+    current = 0;
+    audio = $("audio")[0];
+
+    playlist = [
+      { id: "fili-1" },
+      { id: "fili-2" },
+      { id: "fili-3" },
+      { id: "fili-4" },
+      { id: "fili-5" },
+      { id: "fili-6" },
+      { id: "fili-7" },
+      { id: "fili-8" },
+      { id: "fili-9" },
+      { id: "fili-a" },
+      { id: "fili-b" },
+      { id: "fili-c" },
+      { id: "fili-d" }
+    ];    len = playlist.length - 1;
+
+    // audio.volume = 0.10;
+    run(playlist[0], audio);
+
+    audio.addEventListener("ended", function(e) {
+      next();
+      run(playlist[current], audio);
+      audio.play();
+      $(".audio.play").removeClass("playing");
+    });
+
+    audio.addEventListener("play", function(e) {
+      var aan = playlist[current];
+      var zoeker = aan.id;
+      $(".audio.play").filter(function() {
+          return $(this)
+            .attr("data-music-id")
+            .match(zoeker);              }).addClass("playing");
+    });
+
+    $(".audio.play").on("click", function() {
+        $(this).parent("li").siblings().children(".play").removeClass("playing");
+         var aan = playlist[current];
+         var zoeker = aan.id;
+          var music_id = $(this).attr("data-music-id");
+        if (zoeker == music_id){ 
+             if(audio.paused){
+                    audio.play();                  
+                 $('.pp').html('&#10074;&#10074;');
+            } else {
+                    audio.pause();
+                    $('.pp').html('1');  
+            }
+        }
+        else {
+             var music_id = $(this).attr("data-music-id");
+            if (music_id != undefined) {
+                    playById(music_id);
+            }
+           audio.play();
+                             $('.pp').html('&#10074;&#10074;');
+        }
+      
+        return false;
+    });
+      
+    $('.pp').on("click", function(){
+  if(audio.paused){
+    audio.play();
+          $(this).html('&#10074;&#10074;');
+      return false;
+  } else {
+    audio.pause();
+    $(this).html('1');
+            return false;
+  }    });  
+  } 
+  function run(music, player) {
+    var path = "assets/autonoom/filibus/" + music.id + ".mp3";
+    player.src = path;
+    audio.load();
+  }
+
+  function next() {
+    current++;
+    if (current > len) current = 0;
+  }
+
+  function playById(id) {
+    var playlist_id = undefined;
+    $.each(playlist, function(index, value) {
+      if (value.id == id) {
+        playlist_id = index;
+      }
+    });
+
+    if (playlist_id != undefined) {
+      current = playlist_id;
+      run(playlist[current], audio);
+    }
+  }
+  }   
+
+function updateProgressValue() {
+    progressBar.max = audio.duration;
+    progressBar.value = audio.currentTime;
+}
+setInterval(updateProgressValue, 500);
+var progressBar = document.querySelector('#progress-bar'); 
+audio = $('audio')[0];
+progressBar.addEventListener('input', (event) => {
+                                audio.currentTime = progressBar.value;});
+      
+progressBar.addEventListener('click', (event) => {
+  event.stopPropagation();
+});
+$(document).ready(function() {
+  var player = window.Formaweb.Player();
+});
+    </script>

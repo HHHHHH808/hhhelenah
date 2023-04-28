@@ -1,0 +1,155 @@
+<div class="content">
+    <h5>A selec­tion of demo's from a broad­er whole of songs. Each of them re­corded in my studio and played by myself. Non-sensi­cal vo­cals included.</h5>
+    <audio>
+      Your browser does not support HTML 5 Player.
+    </audio><button class="pp">1</button>
+   <input
+  type="range"
+  id="progress-bar"
+  min="0"
+  max=""
+  value="0"
+/> 
+      <ul>      
+  <li><a href="#" class="audio play" data-music-id="s-1">Fishlike Men</a><p>03:46</p></li>
+  <li><a href="#" class="audio play" data-music-id="s-2">Ma Belle</a><p>04:09</p></li>
+  <li><a href="#" class="audio play" data-music-id="s-3">Stupid Boy</a><p>03:51</p></li>
+  <li><a href="#" class="audio play" data-music-id="s-4">808Test</a><p>04:20</p></li>
+  <li><a href="#" class="audio play" data-music-id="s-5">Blue Cheddar</a><p>04:06</p></li>
+  <li><a href="#" class="audio play" data-music-id="s-6">Mess</a><p>03:38</p></li>
+  <li><a href="#" class="audio play" data-music-id="s-7">Love</a><p>04:54</p></li>
+  <li><a href="#" class="audio play" data-music-id="s-8">Ignorantango</a><p>03:35</p></li>
+  <li><a href="#" class="audio play" data-music-id="s-9">Verplicht</a><p>03:37</p></li>
+  <li><a href="#" class="audio play" data-music-id="s1-1">Rocheltje</a><p>02:47</p></li>
+  <li><a href="#" class="audio play" data-music-id="s1-2">My Heart Belongs To</a><p>03:31</p></li>
+
+    </ul>
+  </div>
+  <script>
+      
+window.Formaweb = window.Formaweb || {};
+
+window.Formaweb.Player = function() {
+  "use strict";
+
+  var audio;
+  var playlist;
+  var len;
+  var current;
+
+  init();
+  function init() {
+    current = 0;
+    audio = $("audio")[0];
+
+    playlist = [
+      { id: "s-1" },
+      { id: "s-2" },
+      { id: "s-3" },
+      { id: "s-4" },
+      { id: "s-5" },
+      { id: "s-6" },
+      { id: "s-7" },
+      { id: "s-8" },
+      { id: "s-9" },
+    ];    len = playlist.length - 1;
+
+    // audio.volume = 0.10;
+    run(playlist[0], audio);
+
+    audio.addEventListener("ended", function(e) {
+      next();
+      run(playlist[current], audio);
+      audio.play();
+      $(".audio.play").removeClass("playing");
+    });
+
+    audio.addEventListener("play", function(e) {
+      var aan = playlist[current];
+      var zoeker = aan.id;
+      $(".audio.play").filter(function() {
+          return $(this)
+            .attr("data-music-id")
+            .match(zoeker);              }).addClass("playing");
+    });
+
+    $(".audio.play").on("click", function() {
+        $(this).parent("li").siblings().children(".play").removeClass("playing");
+         var aan = playlist[current];
+         var zoeker = aan.id;
+          var music_id = $(this).attr("data-music-id");
+        if (zoeker == music_id){ 
+             if(audio.paused){
+                    audio.play();                  
+                 $('.pp').html('&#10074;&#10074;');
+            } else {
+                    audio.pause();
+                    $('.pp').html('1');  
+            }
+        }
+        else {
+             var music_id = $(this).attr("data-music-id");
+            if (music_id != undefined) {
+                    playById(music_id);
+            }
+           audio.play();
+                             $('.pp').html('&#10074;&#10074;');
+        }
+      
+        return false;
+    });
+      
+    $('.pp').on("click", function(){
+  if(audio.paused){
+    audio.play();
+          $(this).html('&#10074;&#10074;');
+      return false;
+  } else {
+    audio.pause();
+    $(this).html('1');
+            return false;
+  }    });  
+  } 
+  function run(music, player) {
+    var path = "assets/autonoom/songs/" + music.id + ".mp3";
+    player.src = path;
+    audio.load();
+  }
+
+  function next() {
+    current++;
+    if (current > len) current = 0;
+  }
+
+  function playById(id) {
+    var playlist_id = undefined;
+    $.each(playlist, function(index, value) {
+      if (value.id == id) {
+        playlist_id = index;
+      }
+    });
+
+    if (playlist_id != undefined) {
+      current = playlist_id;
+      run(playlist[current], audio);
+    }
+  }
+  }   
+
+function updateProgressValue() {
+    progressBar.max = audio.duration;
+    progressBar.value = audio.currentTime;
+}
+setInterval(updateProgressValue, 500);
+var progressBar = document.querySelector('#progress-bar'); 
+audio = $('audio')[0];
+progressBar.addEventListener('input', (event) => {
+                                audio.currentTime = progressBar.value;});
+      
+progressBar.addEventListener('click', (event) => {
+  event.stopPropagation();
+});
+$(document).ready(function() {
+  var player = window.Formaweb.Player();
+});
+    </script>

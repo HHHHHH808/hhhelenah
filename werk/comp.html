@@ -1,0 +1,185 @@
+<div class="content">
+    <h5>A series of songs made between ’16 ’17, so­nically bundled by various tape & com­pression emu­la­tions.</h5>
+    <audio>
+      Your browser does not support HTML 5 Player.
+    </audio><button class="pp">&#9658;</button>
+   <input
+  type="range"
+  id="progress-bar"
+  min="0"
+  max=""
+  value="0"
+/> 
+      <ul>      
+  <li><a href="#" class="audio play" data-music-id="comp1">Blue</a><p>02:33</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp2">Hi Tim</a><p>03:39</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp3">We Had To Take Every­thing Since The Bag Ripp­ed</a><p>03:56</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp4">Sour</a><p>00:23</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp5">Conservatory</a><p>06:07</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp6">Charisma</a><p>03:53</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp7">Far</a><p>04:21</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp8">Reminiscence</a><p>06:59</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp9">Tom</a><p>02:58</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp-a">Lip Service - Together Remix</a><p>9:59</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp-b">Cry</a><p>07:18</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp-c">Abba</a><p>02:56</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp-d">Litefeet</a><p>03:59</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp-e">The Sun Is Crying</a><p>03:37</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp-f">Dance Wimme</a><p>04:18</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp-g">Between The Brakes</a><p>01:50</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp-h">The Movie With Roses</a><p>05:23</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp-i">Chauvinist Anthem</a><p>10:00</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp-j">Myxolydian</a><p>02:07</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp-k">No Impro</a><p>04:21</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp-l">Whei Whu</a><p>02:04</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp-m">Test</a><p>04:38</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp-n">Music To Cut Your Perineum To</a><p>04:52</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp-o">For You, To Play In Your Dj Sets</a><p>11:58</p></li>
+  <li><a href="#" class="audio play" data-music-id="comp-p">Talk To Me</a><p>13:40</p></li>
+    </ul>
+    
+  </div>
+  <script>
+      
+window.Formaweb = window.Formaweb || {};
+
+window.Formaweb.Player = function() {
+  "use strict";
+
+  var audio;
+  var playlist;
+  var len;
+  var current;
+
+  init();
+  function init() {
+    current = 0;
+    audio = $("audio")[0];
+
+    playlist = [
+      { id: "comp1" },
+      { id: "comp2" },
+      { id: "comp3" },
+      { id: "comp4" },
+      { id: "comp5" },
+      { id: "comp6" },
+      { id: "comp7" },
+      { id: "comp8" },
+      { id: "comp9" },
+      { id: "comp-a" },
+      { id: "comp-b" },
+      { id: "comp-c" },
+      { id: "comp-d" },
+      { id: "comp-e" },
+      { id: "comp-f" },
+      { id: "comp-g" },
+      { id: "comp-h" },
+      { id: "comp-i" },
+      { id: "comp-j" },
+      { id: "comp-k" },
+      { id: "comp-l" },
+      { id: "comp-m" },
+      { id: "comp-n" },
+      { id: "comp-o" },
+      { id: "comp-p" },
+    ];    len = playlist.length - 1;
+
+    // audio.volume = 0.10;
+    run(playlist[0], audio);
+
+    audio.addEventListener("ended", function(e) {
+      next();
+      run(playlist[current], audio);
+      audio.play();
+      $(".audio.play").removeClass("playing");
+    });
+
+    audio.addEventListener("play", function(e) {
+      var aan = playlist[current];
+      var zoeker = aan.id;
+      $(".audio.play").filter(function() {
+          return $(this)
+            .attr("data-music-id")
+            .match(zoeker);              }).addClass("playing");
+    });
+
+    $(".audio.play").on("click", function() {
+        $(this).parent("li").siblings().children(".play").removeClass("playing");
+         var aan = playlist[current];
+         var zoeker = aan.id;
+          var music_id = $(this).attr("data-music-id");
+        if (zoeker == music_id){ 
+             if(audio.paused){
+                    audio.play();                  
+                 $('.pp').html('2');
+            } else {
+                    audio.pause();
+                    $('.pp').html('&#9658;');  
+            }
+        }
+        else {
+             var music_id = $(this).attr("data-music-id");
+            if (music_id != undefined) {
+                    playById(music_id);
+            }
+           audio.play();
+                             $('.pp').html('2');
+        }
+      
+        return false;
+    });
+      
+    $('.pp').on("click", function(){
+  if(audio.paused){
+    audio.play();
+          $(this).html('2');
+      return false;
+  } else {
+    audio.pause();
+    $(this).html('&#9658;');
+            return false;
+  }    });  
+  } 
+  function run(music, player) {
+    var path = "assets/autonoom/comp/" + music.id + ".mp3";
+    player.src = path;
+    audio.load();
+  }
+
+  function next() {
+    current++;
+    if (current > len) current = 0;
+  }
+
+  function playById(id) {
+    var playlist_id = undefined;
+    $.each(playlist, function(index, value) {
+      if (value.id == id) {
+        playlist_id = index;
+      }
+    });
+
+    if (playlist_id != undefined) {
+      current = playlist_id;
+      run(playlist[current], audio);
+    }
+  }
+  }   
+
+function updateProgressValue() {
+    progressBar.max = audio.duration;
+    progressBar.value = audio.currentTime;
+}
+setInterval(updateProgressValue, 500);
+var progressBar = document.querySelector('#progress-bar'); 
+audio = $('audio')[0];
+progressBar.addEventListener('input', (event) => {
+                                audio.currentTime = progressBar.value;});
+      
+progressBar.addEventListener('click', (event) => {
+  event.stopPropagation();
+});
+$(document).ready(function() {
+  var player = window.Formaweb.Player();
+});
+    </script>

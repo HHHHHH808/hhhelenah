@@ -1,0 +1,141 @@
+
+  <div class="content">
+      <h5>Vocal coach­ing, re­cor­ding, mix­ing and sound­tracks for StuBru's Warmathon.</h5>
+    <audio>
+      Your browser does not support HTML 5 Player.
+    </audio>
+<button class="pp">1</button>
+   <input
+  type="range"
+  id="progress-bar"
+  min="0"
+  max=""
+  value="0"
+/>
+    <ul>
+      <li><a href="#" class="audio play" data-music-id="warmathon1">Van De Steene</a><p>0:30</p></li>
+         <li><a href="#" class="audio play" data-music-id="sbdank1">Bedanking</a><p>0:42</p></li>
+    </ul>
+  </div>
+
+  <script>
+        window.Formaweb = window.Formaweb || {};
+
+window.Formaweb.Player = function() {
+  'use strict';
+  
+  var audio;
+  var playlist;
+  var len;
+  var current;
+
+  init();
+  function init(){
+    current = 0;
+    audio = $('audio')[0];
+    
+    playlist = [
+      {id: 'warmathon1'},
+              { id: 'sbdank1' }
+    ];
+    len = playlist.length - 1;
+
+    // audio.volume = 0.10;
+    run(playlist[0], audio);
+
+    audio.addEventListener("ended", function(e) {
+      next();
+      run(playlist[current], audio);
+      $(".audio.play").removeClass("playing");
+                            $('.pp').html('1');  
+    });
+
+    audio.addEventListener("play", function(e) {
+      var aan = playlist[current];
+      var zoeker = aan.id;
+      $(".audio.play").filter(function() {
+          return $(this)
+            .attr("data-music-id")
+            .match(zoeker);              }).addClass("playing");
+    });
+
+    $(".audio.play").on("click", function() {
+        $(this).parent("li").siblings().children(".play").removeClass("playing");
+         var aan = playlist[current];
+         var zoeker = aan.id;
+          var music_id = $(this).attr("data-music-id");
+        if (zoeker == music_id){ 
+             if(audio.paused){
+                    audio.play();                  
+                 $('.pp').html('2');
+            } else {
+                    audio.pause();
+                    $('.pp').html('1');  
+            }
+        }
+        else {
+             var music_id = $(this).attr("data-music-id");
+            if (music_id != undefined) {
+                    playById(music_id);
+            }
+           audio.play();
+                             $('.pp').html('2');
+        }
+      
+        return false;
+    });
+      
+    $('.pp').on("click", function(){
+  if(audio.paused){
+    audio.play();
+          $(this).html('2');
+      return false;
+  } else {
+    audio.pause();
+    $(this).html('1');
+            return false;
+  }    });  
+  } 
+  function run(music, player) {
+    var path = "assets/werk/" + music.id + ".mp3";
+    player.src = path;
+    audio.load();
+  }
+
+  function next() {
+    current++;
+    if (current > len) current = 0;
+  }
+
+  function playById(id) {
+    var playlist_id = undefined;
+    $.each(playlist, function(index, value) {
+      if (value.id == id) {
+        playlist_id = index;
+      }
+    });
+
+    if (playlist_id != undefined) {
+      current = playlist_id;
+      run(playlist[current], audio);
+    }
+  }
+  }   
+
+function updateProgressValue() {
+    progressBar.max = audio.duration;
+    progressBar.value = audio.currentTime;
+}
+setInterval(updateProgressValue, 500);
+var progressBar = document.querySelector('#progress-bar'); 
+audio = $('audio')[0];
+progressBar.addEventListener('input', (event) => {
+                                audio.currentTime = progressBar.value;});
+      
+progressBar.addEventListener('click', (event) => {
+  event.stopPropagation();
+});
+$(document).ready(function() {
+  var player = window.Formaweb.Player();
+});
+    </script>
