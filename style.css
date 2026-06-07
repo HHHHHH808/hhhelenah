@@ -320,7 +320,6 @@ min-height: 0vw;
   cursor: pointer;
     background-color: white;
       opacity: 1;
-  filter: grayscale(100%) blur(4px);
 }
 .activate {
   opacity: 1;
@@ -334,10 +333,19 @@ min-height: 0vw;
     background-position: center top;
       transition: width 0.5s, background-position 0.5s, filter 0.4s ease;
 }
-/* Geopend: kleur + scherp, met een vloeiende overgang (zie transition hierboven). */
-.item.activate,
-.itam.active-itam {
+/* Het grijswaarden+blur-effect hoort enkel bij de AFBEELDING, niet bij de
+   scheidingslijn (border-right) of titel (h4) — die blijven altijd in
+   kleur en scherp, gesloten of niet (zie .item img / .itam img filter). */
+.item.activate img,
+.itam.active-itam img {
   filter: grayscale(0%) blur(0px);
+}
+/* Geopend: de cirkel komt gecentreerd te staan in de verbrede kolom
+   (i.p.v. rechts uitgelijnd zoals in gesloten toestand). */
+.item.activate img {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
 }
 .item.activate,
 .itam.active-itam {
@@ -363,7 +371,6 @@ min-height: 0vw;
   width: 20vw;
   margin-right: 1em;
   border-radius: 50%;
-  filter: grayscale(100%) blur(4px);
 }
 .active-itam {
   opacity: 1;
@@ -384,9 +391,9 @@ min-height: 0vw;
     min-width: 15rem;
   max-width: 25rem;
   width: 25rem;  padding: 0 3rem;
-  /* Ruimte vrijhouden onder de vaste cirkel (zie .item img: 14rem hoogte
+  /* Ruimte vrijhouden onder de vaste cirkel (zie .item img: 18rem hoogte
      + ruimte). */
-  margin-top: 15rem;
+  margin-top: 19rem;
   box-sizing: border-box;
 }         
 .life .content {
@@ -536,12 +543,21 @@ img {
   opacity: 1;
   position: absolute;
   top: 0;
-  left: 50%;
-  width: 14rem;
-  height: 14rem;
+  /* Rechts uitgelijnd i.p.v. gecentreerd: enkel de rechterkant van de
+     cirkel (~35%, want kolom 7rem t.o.v. cirkel 18rem) blijft zichtbaar
+     binnen de smalle gesloten kolom — net als in de OG-layout, en dat
+     geeft wat witruimte i.p.v. een "drukke" gecentreerde cirkel. */
+  left: auto;
+  right: 0;
+  width: 18rem;
+  height: 18rem;
   border-radius: 50%;
   object-fit: cover;
-  transform: translateX(-50%);
+  transform: none;
+  /* Het grijswaarden+blur-effect zit op de afbeelding zelf (niet op de
+     kolom), zodat scheidingslijn en titel altijd in kleur/scherp blijven.
+     Blur iets minder heftig dan voorheen (2px i.p.v. 4px). */
+  filter: grayscale(100%) blur(2px);
   transition: filter 0.4s ease;
   /* object-position wordt per item ingesteld via JS, op basis van
      het optionele "afbeeldingPositie"-veld in PROJECTS (default "center"). */
@@ -763,6 +779,7 @@ background-position: left top;
   position: relative;
   top: auto;
   left: auto;
+  right: auto;
   width: 4rem;
   height: 4rem;
   min-width: 4rem;
