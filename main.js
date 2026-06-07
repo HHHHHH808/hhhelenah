@@ -9,7 +9,7 @@ const PROJECTS = {
       id: "wayout",
       titel: "Andrea Murtas",
       categorieen: ["mixing", "production"],
-      afbeelding: "assets/wide-circ/blur/circ-wayout.png",
+      afbeelding: "assets/Images/Work/wide-circ/blur/circ-wayout.png",
       type: "audio",
       beschrijving: "Mixing for Andrea Murtas: The Way Out. Client: Sonhouse.",
       nummers: [
@@ -20,7 +20,7 @@ const PROJECTS = {
       id: "ww",
       titel: "Warmste Week 2019",
       categorieen: ["sonic-branding", "sound-design"],
-      afbeelding: "assets/wide-circ/blur/circ-ww.png",
+      afbeelding: "assets/Images/Work/wide-circ/blur/circ-ww.png",
       type: "audio",
       beschrijving: "Soundtrack for StuBru's promotional campaign for 'De Warmste Week 2019'.",
       nummers: [
@@ -41,7 +41,7 @@ const PROJECTS = {
       id: "siebert",
       titel: "Truck",
       categorieen: ["soundtracks", "sound-design"],
-      afbeelding: "assets/wide-circ/blur/circ-truck.png",
+      afbeelding: "assets/Images/Work/wide-circ/blur/circ-truck.png",
       type: "embed",
       embedUrl: "https://player.vimeo.com/video/348057330",
       beschrijving: "Soundtrack for Siebert Mispelons videowork, 'Truck'."
@@ -50,7 +50,7 @@ const PROJECTS = {
       id: "burnout",
       titel: "Burnout",
       categorieen: ["mastering"],
-      afbeelding: "assets/wide-circ/blur/circ-burnout.png",
+      afbeelding: "assets/Images/Work/wide-circ/blur/circ-burnout.png",
       type: "embed",
       embedUrl: "https://www.youtube.com/embed/eq25I4exauE",
       beschrijving: "Mastering for Epong's soundtrack of Rik Chaubet's film, 'Burnout'."
@@ -59,7 +59,7 @@ const PROJECTS = {
       id: "ivy",
       titel: "Ivy Falls",
       categorieen: ["production"],
-      afbeelding: "assets/wide-circ/blur/circ-ivy.png",
+      afbeelding: "assets/Images/Work/wide-circ/blur/circ-ivy.png",
       type: "embed",
       embedUrl: "https://open.spotify.com/embed/track/1iQnPzwIEkNyG0B5zPwIUn",
       beschrijving: "Production of 'Beautiful Stranger' by Ivy Falls with Kasper Cornelus."
@@ -68,7 +68,7 @@ const PROJECTS = {
       id: "schob",
       titel: "Schobbee",
       categorieen: ["mastering"],
-      afbeelding: "assets/wide-circ/blur/schob.png",
+      afbeelding: "assets/Images/Work/wide-circ/blur/schob.png",
       type: "embed",
       embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=202891063",
       beschrijving: "Mastering for 'Poe's Law' by Schobbee."
@@ -77,7 +77,7 @@ const PROJECTS = {
       id: "people",
       titel: "People's People",
       categorieen: ["sound-design"],
-      afbeelding: "assets/wide-circ/blur/circ-people.jpg",
+      afbeelding: "assets/Images/Work/wide-circ/blur/circ-people.jpg",
       type: "embed",
       embedUrl: "https://www.youtube.com/embed/FD35-NHz7BI",
       beschrijving: "Sound design and extra arrangements for Lip Service's EP 'People's People'."
@@ -86,7 +86,7 @@ const PROJECTS = {
       id: "green",
       titel: "Green Greener Greenest",
       categorieen: ["mastering", "mixing", "production", "sound-design", "soundtracks"],
-      afbeelding: "assets/wide-circ/blur/circ-green.jpg",
+      afbeelding: "assets/Images/Work/wide-circ/blur/circ-green.jpg",
       type: "embed",
       embedUrl: "https://player.vimeo.com/video/221453555",
       beschrijving: "Sound-design voor Senne Marquenie's short movie 'Green, Greener, Greenest'."
@@ -98,7 +98,7 @@ const PROJECTS = {
       id: "comp",
       titel: "Compressed '16-'17",
       status: "released",
-      afbeelding: "/assets/logocompressed.jpg",
+      afbeelding: "assets/Images/Life/logocompressed.jpg",
       beschrijving: "A series of songs made between '16 '17, sonically bundled by various tape & compression emulations.",
       nummers: [
         { id: "comp1", titel: "Blue", duur: "02:33" },
@@ -132,7 +132,7 @@ const PROJECTS = {
       id: "hhh",
       titel: "Helenah",
       status: "released",
-      afbeelding: "/assets/logo12.jpg",
+      afbeelding: "assets/Images/Life/logo12.jpg",
       beschrijving: "Debut album on the Brussels based label 'Montage'.",
       nummers: [
         { id: "intro", titel: "Intro", duur: "01:46" },
@@ -156,7 +156,7 @@ const PROJECTS = {
       id: "ora",
       titel: "Ora et Labora",
       status: "forthcoming",
-      afbeelding: "/assets/logo-ora.jpg",
+      afbeelding: "assets/Images/Life/logo-ora.jpg",
       beschrijving: "Demo of EP with Tore Snauwaert & Gergana Velikova.",
       nummers: [
         { id: "ora1", titel: "Ora Et Labora", duur: "08:22" }
@@ -166,7 +166,7 @@ const PROJECTS = {
       id: "fili",
       titel: "Filibus LP",
       status: "forthcoming",
-      afbeelding: "/assets/logofili.jpg",
+      afbeelding: "assets/Images/Life/logofili.jpg",
       beschrijving: "A live recording of a live accompaniment for a silent movie.",
       nummers: [
         { id: "fili-1", titel: "Track 1", duur: "02:09" },
@@ -249,7 +249,7 @@ const isMobile = () => window.matchMedia('(max-width: 700px)').matches;
 // (werk/*.html en life/*.html bestaan niet meer).
 // ============================================================
 
-// De audiomappen onder assets/autonoom/ gebruiken niet altijd
+// De audiomappen onder assets/Audio/Life/ gebruiken niet altijd
 // dezelfde naam als het project-id (bv. id "hhh" -> map "helenah").
 const LIFE_AUDIO_FOLDERS = {
   comp: "comp",
@@ -263,13 +263,13 @@ function findProject(list, id) {
 }
 
 function workAudioPath(trackId) {
-  return "assets/werk/" + trackId + ".mp3";
+  return "assets/Audio/Work/" + trackId + ".mp3";
 }
 
 function lifeAudioPath(project) {
   var folder = LIFE_AUDIO_FOLDERS[project.id] || project.id;
   return function (trackId) {
-    return "assets/autonoom/" + folder + "/" + trackId + ".mp3";
+    return "assets/Audio/Life/" + folder + "/" + trackId + ".mp3";
   };
 }
 
