@@ -571,7 +571,7 @@ img {
      klikbare gebied tot binnen de cirkel — geen "dode hoeken" van de
      vierkante hitbox meer buiten de ronde rand. Iets kleiner dan 50%
      zodat het klikgevoel strikt aanvoelt, ook met de muis. */
-  clip-path: circle(46%);
+  clip-path: circle(38%);
   object-fit: cover;
   transform: none;
   /* Het grijswaarden+blur-effect zit op de afbeelding zelf (niet op de
