@@ -664,23 +664,34 @@ $(document).ready(function () {
     $(".itam").removeClass("active-itam").children(".music").empty().hide();
   });
 
-  $(".item").on("click", function () {
+  // Klik enkel op de afbeelding opent/sluit een item — niet ergens in de
+  // hele kolom. Zo blijft de cursor in de rest van het rayon de gewone
+  // pijl (geen verwarrende "klikbaar"-wijsvinger overal), en kan de
+  // gebruiker er ook gewoon verticaal doorheen scrollen (bv. bij een
+  // lange tracklist) zonder per ongeluk te klikken.
+  $(".item").on("click", "img", function (e) {
+    e.stopPropagation();
+    var $item = $(this).closest(".item");
 
-      if ($(this).hasClass('activate')){
-      }else{
-    //overlapschuif
-   $(this).addClass("activate");
-   $(".item").not(this).children(".music").empty().hide();
-
-   $(".item").not(this).removeClass("activate");
-    //music
-    // Mobiel faadt de player in over 300ms, desktop over 500ms (bewust verschil).
-    var itemFadeDuration = isMobile() ? 300 : 500;
-    var project = findProject(PROJECTS.work, $(this).attr("id"));
-    var $music = $(this).children(".music");
-    loadProjectContent($music, project, workAudioPath);
-    $music.fadeIn(itemFadeDuration);
-  }
+    if ($item.hasClass('activate')) {
+      // Tweede klik op dezelfde afbeelding: sluit het item terug.
+      $item.removeClass("activate");
+      $item.children(".music").fadeOut(200, function () {
+        $(this).empty();
+      });
+    } else {
+      //overlapschuif
+      $item.addClass("activate");
+      $(".item").not($item).children(".music").empty().hide();
+      $(".item").not($item).removeClass("activate");
+      //music
+      // Mobiel faadt de player in over 300ms, desktop over 500ms (bewust verschil).
+      var itemFadeDuration = isMobile() ? 300 : 500;
+      var project = findProject(PROJECTS.work, $item.attr("id"));
+      var $music = $item.children(".music");
+      loadProjectContent($music, project, workAudioPath);
+      $music.fadeIn(itemFadeDuration);
+    }
   });
 
   $(".itam").on("click", function () {

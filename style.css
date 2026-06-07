@@ -288,12 +288,16 @@ min-height: 0vw;
   padding-right: 1em;
   text-align: left;
   position: absolute;
-  bottom: 0.5em;
+  /* "top" i.p.v. "bottom" gebruiken (en in beide staten een concrete
+     waarde, nooit "auto") zodat de overgang tussen gesloten/geopend
+     vloeiend interpoleert i.p.v. abrupt te springen — "bottom" en "top"
+     kunnen niet samen smooth animeren wanneer de andere op "auto" staat. */
+  top: calc(100% - 2.5em);
   width: 7vw;
     right: 0;
     white-space: nowrap;
     writing-mode: vertical-rl;
-        transition: top 0.5s, bottom 0.5s;
+        transition: top 0.5s ease;
 }
 .life h4 {
   width: 20vw;
@@ -317,7 +321,11 @@ min-height: 0vw;
     min-width: 4rem;
   max-width: 7rem;
     width: 7rem;
-  cursor: pointer;
+  /* Niet de hele kolom is klikbaar — enkel de afbeelding (zie "img"
+     regel: cursor:pointer staat daar al globaal op). Zo blijft de cursor
+     in de rest van het rayon de gewone pijl, en kan er ook gewoon
+     verticaal doorheen gescrolld worden (bv. lange tracklist). */
+  cursor: default;
     background-color: white;
       opacity: 1;
 }
@@ -354,7 +362,6 @@ min-height: 0vw;
 }
 .activate h4{
                 top: 3em;
-                bottom: auto;
             }
 .hiding {
   width: 0;
@@ -793,9 +800,12 @@ background-position: left top;
   writing-mode: horizontal-tb;
   text-align: left;
   width: auto;
-  top: auto;
+  /* "top: 0" i.p.v. "auto", zodat de overgang naar .activate h4 (top:
+     0.5rem) vloeiend kan interpoleren i.p.v. abrupt te springen. */
+  top: 0;
   right: auto;
   bottom: auto;
+  transition: top 0.5s ease;
 }
 /* Geopend item op mobile: de afbeelding blijft een kleine cirkel, maar
    wordt in-flow geplaatst (geen absolute centrering nodig — de kolom is
@@ -828,8 +838,6 @@ background-position: left top;
 }         
 .activate h4{
                 top: 0.5rem;
-                bottom: auto;
-    transition: top 0.5s, bottom 0.5s;
             }
 .itam {
   text-align: left;
