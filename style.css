@@ -336,8 +336,10 @@ min-height: 0vw;
   width: 25rem;
   height: 100%;
   /* De "wand" schuift open: de kolom verbreedt waardoor de volledige
-     cirkel zichtbaar wordt (i.p.v. enkel de bovenste helft). */
-  overflow: visible;
+     cirkel zichtbaar wordt (i.p.v. enkel de bovenste helft). overflow
+     blijft bewust "hidden" (zelfde als .item): zo groeit de clip-grens
+     in lockstep mee met de width-transitie en is de scheidingslijn de
+     "drager" van de animatie — geen losse pop-glitch van de cirkel. */
     background-position: center top;
       transition: width 0.5s, background-position 0.5s, filter 0.4s ease;
 }
