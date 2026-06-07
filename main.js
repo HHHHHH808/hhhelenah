@@ -47,18 +47,6 @@ const PROJECTS = {
       beschrijving: "Soundtrack for Siebert Mispelons videowork, 'Truck'."
     },
     {
-      id: "warmathon",
-      titel: "Warmathon",
-      categorieen: ["recording", "mixing", "soundtracks", "sound-design"],
-      afbeelding: "assets/wide-circ/blur/circ-warmathon.png",
-      type: "audio",
-      beschrijving: "Vocal coaching, recording, mixing and soundtracks for StuBru's Warmathon.",
-      nummers: [
-        { id: "warmathon1", titel: "Van De Steene", duur: "0:30" },
-        { id: "sbdank1", titel: "Bedanking", duur: "0:42" }
-      ]
-    },
-    {
       id: "burnout",
       titel: "Burnout",
       categorieen: ["mastering"],
@@ -86,33 +74,6 @@ const PROJECTS = {
       beschrijving: "Mastering for 'Poe's Law' by Schobbee."
     },
     {
-      id: "mnm",
-      titel: "MNM Mashups",
-      categorieen: ["editing"],
-      afbeelding: "assets/wide-circ/blur/circ-mnm.png",
-      type: "audio",
-      beschrijving: "Selection of hit mixes for MNM radio.",
-      nummers: [
-        { id: "mnm1", titel: "Countdown", duur: "2:42" },
-        { id: "mnm2", titel: "Top 20", duur: "1:00" }
-      ]
-    },
-    {
-      id: "sbpi",
-      titel: "Power Intro's",
-      categorieen: ["editing"],
-      afbeelding: "assets/wide-circ/blur/circ-stubru.png",
-      type: "audio",
-      beschrijving: "Selection of power intro's for StuBru radio.",
-      nummers: [
-        { id: "sbpi1", titel: "Camelphat", duur: "" },
-        { id: "sbpi2", titel: "Lous and The Yakuza", duur: "" },
-        { id: "sbpi3", titel: "Meduza", duur: "" },
-        { id: "sbpi4", titel: "Post Malone", duur: "" },
-        { id: "sbpi5", titel: "The Weeknd", duur: "" }
-      ]
-    },
-    {
       id: "people",
       titel: "People's People",
       categorieen: ["sound-design"],
@@ -120,15 +81,6 @@ const PROJECTS = {
       type: "embed",
       embedUrl: "https://www.youtube.com/embed/FD35-NHz7BI",
       beschrijving: "Sound design and extra arrangements for Lip Service's EP 'People's People'."
-    },
-    {
-      id: "kaatje",
-      titel: "Tellen met Viktor",
-      categorieen: ["recording"],
-      afbeelding: "assets/wide-circ/blur/circ-kaatje.png",
-      type: "video",
-      videoBestand: "/kaatje.mp4",
-      beschrijving: "Vocal recording with Philippe Liekens for Ketnet game."
     },
     {
       id: "green",
