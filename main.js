@@ -13,7 +13,7 @@ const PROJECTS = {
       type: "audio",
       beschrijving: "Mixing for Andrea Murtas: The Way Out. Client: Sonhouse.",
       nummers: [
-        { id: "flx1", titel: "The Way Out", duur: "6:44" }
+        { id: "andrea", titel: "The Way Out", duur: "6:44" }
       ]
     },
     {
