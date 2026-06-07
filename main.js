@@ -24,21 +24,21 @@
         endValue = filter + endBlur;
         filter += filter ? " blur(0px)" : "blur(0px)";
       }
-      data.target = target; 
-      data.interp = gsap.utils.interpolate(filter, endValue); 
+      data.target = target;
+      data.interp = gsap.utils.interpolate(filter, endValue);
 		},
 		render(progress, data) {
 			data.target.style[blurProperty] = data.interp(progress);
 		}
 	});
 })();
-        
+
         function isValid() {
   var password = document.getElementById("clue").value;
   if (password == "allislight") {
 $('.nav').removeClass('locked');
       $('.footer').fadeIn();
-$('.form').fadeOut(); 
+$('.form').fadeOut();
 } else {
     $('#wrong').fadeIn(100,'swing');
     $('#clue').val('');
@@ -47,23 +47,20 @@ $('.form').fadeOut();
     });
   }
 }
-        
-        
-        if(screen.width <= '700') {
 
+// Mobiel/desktop wordt bepaald via matchMedia (i.p.v. de oudere screen.width string-vergelijking),
+// zodat de check consistent en betrouwbaar is.
+const isMobile = () => window.matchMedia('(max-width: 700px)').matches;
 
 $(document).ready(function () {
-    
-  
-    
-    
+
   $("#clue").keypress(function (e) {
     if (e.which == 13) {
       $("#login").click();
       return false; //<---- Add this line
     }
   });
-    
+
   $(".tags-work label input").on("click", function () {
     $(".item").removeClass("activate").children(".music").empty().hide();
     var thistag = $(this).parent("label").text();
@@ -82,7 +79,7 @@ $(document).ready(function () {
         gsap.from(ni, {
           duration: 0.5,
           x: 300,
-          
+
           stagger: {
             from: "random",
             amount: 0.5
@@ -156,6 +153,7 @@ $(document).ready(function () {
       }
     }
   });
+
   $(".tags-life label input").on("click", function () {
     $(".itam").removeClass("active-itam").children(".music").empty().hide();
     var thistag = $(this).parent("label").text();
@@ -188,6 +186,13 @@ $(document).ready(function () {
 
 
   $("#work-btn,#life-btn").click(function () {
+    // Op desktop wordt scroll-gedrag gereset en de nav-zoom teruggezet via gsap;
+    // op mobiel is dat niet nodig (geen zoom-effect op de nav).
+    if (!isMobile()) {
+      $("body").on("scroll");
+      gsap.to(".nav", { duration: 0.3, zoom: 1 });
+    }
+
     $(this).removeClass("blur");
     $("h2").not(this).addClass("blur");
     $(".nav").removeClass("filler");
@@ -196,22 +201,24 @@ $(document).ready(function () {
     $(".bio, .press").fadeOut();
 
         //UNZOOM STILL MISSING
+    // Mobiel gebruikt een expliciete fade-duur (200ms); desktop gebruikt de jQuery-default.
+    var workLifeFadeDuration = isMobile() ? 200 : undefined;
     if ($(this).is('#work-btn')){
-     $(".work, .tags-work").fadeIn(200);
-     $(".life, .tags-life").fadeOut(200);
+     $(".work, .tags-work").fadeIn(workLifeFadeDuration);
+     $(".life, .tags-life").fadeOut(workLifeFadeDuration);
      }
       else if($(this).is('#life-btn')){
-        $(".work, .tags-work").fadeOut(200);
-        $(".life, .tags-life").fadeIn(200);
+        $(".work, .tags-work").fadeOut(workLifeFadeDuration);
+        $(".life, .tags-life").fadeIn(workLifeFadeDuration);
       }
-      
+
     //reset work
     var ni = $(".hidden-repo .item");
     $(".shown").append(ni);
     gsap.from(ni, {
       duration: 0.5,
       x: 300,
-      
+
       stagger: {
         from: "random",
         amount: 0.5
@@ -225,8 +232,9 @@ $(document).ready(function () {
     $(".item").removeClass("activate").children(".music").empty().hide();
     $(".itam").removeClass("active-itam").children(".music").empty().hide();
   });
+
   $(".item").on("click", function () {
-      
+
       if ($(this).hasClass('activate')){
       }else{
     //overlapschuif
@@ -235,262 +243,59 @@ $(document).ready(function () {
 
    $(".item").not(this).removeClass("activate");
     //music
-    $(this).children(".music").load("werk/" + $(this).attr("id") + ".html").fadeIn(300);
+    // Mobiel faadt de player in over 300ms, desktop over 500ms (bewust verschil).
+    var itemFadeDuration = isMobile() ? 300 : 500;
+    $(this).children(".music").load("werk/" + $(this).attr("id") + ".html").fadeIn(itemFadeDuration);
   }
   });
-    
+
   $(".itam").on("click", function () {
     //overlapschuif
     $(this).addClass("active-itam");
-    //  $(this).children(".music").toggle();
-    $(".itam").not(this).removeClass("active-itam");
-    //music
-    $(this)
-      .children(".music")
-      .load("life/" + $(this).attr("id") + ".html")
-      .fadeIn(500);
-    $(".itam").not(this).children(".music").empty().hide();
+    if (isMobile()) {
+      // Mobiel: leegmaken/verbergen van de andere players, dan de nieuwe player infaden.
+      $(".itam").not(this).children(".music").empty().hide();
+      $(".itam").not(this).removeClass("active-itam");
+      //music
+      $(this)
+        .children(".music")
+        .load("life/" + $(this).attr("id") + ".html")
+        .fadeIn(500);
+    } else {
+      // Desktop: de andere players faden uit en leegmaken, dan de nieuwe player tonen.
+      //  $(this).children(".music").toggle();
+      $(".itam").not(this).children(".music").fadeOut().empty();
+      $(".itam").not(this).removeClass("active-itam");
+      //music
+      $(this)
+        .children(".music")
+        .load("life/" + $(this).attr("id") + ".html")
+        .show();
+    }
   });
-    
-    $('#press-btn').on('click', function(){
+
+  $('#press-btn').on('click', function(){
   $('.press').fadeIn();
 $(".tags-work, .tags-life, .life, .work").fadeOut();
 $('h2').addClass('blur');
     });
-    
-       $('#bio-btn').on('click', function(e){
-  $('.bio').fadeToggle(300);
-    });
 
-    $('.bio').on('click',function(){
-        $('.bio').fadeOut(300);
-    });
-    $('.bio-box').on('click',function(e){
+  $('#bio-btn').on('click', function(e){
+    $('.bio').fadeToggle(300);
+    // Op desktop wordt de click-bubbling expliciet tegengehouden; op mobiel was dat niet nodig.
+    if (!isMobile()) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  });
+
+  $('.bio').on('click',function(){
+      $('.bio').fadeOut(300);
+  });
+
+  $('.bio-box').on('click',function(e){
     e.stopPropagation();
     e.preventDefault();
-    });
+  });
+
 });
-
-}
-else{
-
-$(document).ready(function () {
-  
-  $(".tags-work label input").on("click", function () {
-      //klap items toe
-    $(".item").removeClass("activate").children(".music").empty().hide();
-      //zoek aangevinkten
-    var thistag = $(this).parent("label").text();
-    var oldtag = $("label input:checked")
-      .not(this)
-      .parent("label")
-      .text()
-      .split(" ");
-    oldtag.pop();
-    oldtag.push("Kiwi");
-//all-work
-    if ($(this).is(".oll")) {
-      if ($(this).is(":checked")) {
-        var ni = $(".hidden-repo .item");
-        $(".shown").append(ni);
-        gsap.from(ni, {
-          duration: 0.5,
-          x: 300,
-          
-          stagger: {
-            from: "random",
-            amount: 0.5
-          }
-        });
-        $(".tags-work label input").not(this).prop("checked", false);
-      } else {
-        $(".tags-work .oll").prop("checked", false);
-        $(".shown .item")
-          .addClass("hiding")
-          .fadeOut(500, function () {
-            $(this)
-              .appendTo(".hidden-repo")
-              .fadeIn(300)
-              .removeClass("hiding activate")
-              .children(".music")
-              .empty();
-          });
-      }
-    } else {
-      //productietag aangevinkt
-      if ($(this).is(":checked")) {
-        if ($(".tags-work .oll").is(":checked")) {
-          $(".tags-work .oll").prop("checked", false);
-          $(".item")
-            .not("." + thistag)
-            .addClass("hiding")
-            .fadeOut(500, function () {
-              $(this)
-                .appendTo(".hidden-repo")
-                .fadeIn(300)
-                .removeClass("hiding activate")
-                .children(".music")
-                .empty();
-            });
-        }
-        $("." + thistag).each(function () {
-          //aanwezig=niets
-          if ($(this).is(":visible")) {
-          } else {
-            //afwezig= voeg toe
-            $(".shown").append(this);
-            gsap.from(this, { duration: 0.5, x: 300});
-          }
-        });
-      } else {
-        //productietag leeggevinkt
-        $("." + thistag).each(function () {
-          var classes = "\\b(" + oldtag.join("|") + ")\\b",
-            regex = new RegExp(classes, "i");
-          var elClasses = " " + $(this).attr("class").replace(/\s+/, " ") + " ";
-          console.log(elClasses, regex);
-          //als overeenkomstig met oude tags= niets
-          if (regex.test(elClasses)) {
-          } else {
-            //zoniet= weg
-            //  gsap.to(this, { duration: 0.5, width: 0, opacity: 0 });
-            //$(this).appendTo('.hidden-repo');
-            $(this)
-              .addClass("hiding")
-              .fadeOut(500, function () {
-                $(this)
-                  .appendTo(".hidden-repo")
-                  .fadeIn(300)
-                  .removeClass("hiding activate")
-                  .children(".music")
-                  .empty();
-              });
-          }
-        });
-      }
-    }
-  });
-  $(".tags-life label input").on("click", function () {
-    $(".itam").removeClass("active-itam").children(".music").empty().hide();
-    var thistag = $(this).parent("label").text();
-    var thislp = $("." + thistag);
-    var oldtag = $("label input:checked").not(this).parent("label").text();
-    var oldlp = $("." + oldtag);
-    if ($(this).is(".oll")) {
-      if ($(this).is(":checked")) {
-        $(".tags-life .itam").fadeIn(100);
-        $(".tags-life label input").not(this).prop("checked", false);
-      } else {
-        $(this).prop("checked", false);
-        $(".tags-life .itam").fadeOut(100);
-      }
-    } else {
-      $(".tags-life .oll").prop("checked", false);
-      if ($("#forthcoming").is(":checked")) {
-        $(".forthcoming").fadeIn(100);
-      } else {
-        $(".forthcoming").fadeOut(100);
-      }
-
-      if ($("#released").is(":checked")) {
-        $(".released").fadeIn(100);
-      } else {
-        $(".released").fadeOut(100);
-      }
-    }
-  });
-  $("#clue").keypress(function (e) {
-    if (e.which == 13) {
-      $("#login").click();
-      return false; //<---- Add this line
-    }
-  });
-  
-  $("#work-btn,#life-btn").click(function () {
-    $("body").on("scroll");
-    $(this).removeClass("blur");
-    $("h2").not(this).addClass("blur");
-    $(".nav").removeClass("filler");
-
-      $("h2").removeClass('spot');
-      $("h1").removeClass('spot');
-    $(".bio, .press").fadeOut();
-    gsap.to(".nav", { duration: 0.3, zoom: 1 });
-
-    if ($(this).is('#work-btn')){
-     $(".work, .tags-work").fadeIn();
-     $(".life, .tags-life").fadeOut();
-     }
-      else if($(this).is('#life-btn')){
-        $(".work, .tags-work").fadeOut();
-        $(".life, .tags-life").fadeIn();
-      }
-    //reset work
-    var ni = $(".hidden-repo .item");
-    $(".shown").append(ni);
-    gsap.from(ni, {
-      duration: 0.5,
-      x: 300,
-      stagger: {
-        from: "random",
-        amount: 0.5
-      }
-    });
-    $(".oll").prop("checked", true);
-    $("label input").not(".oll").prop("checked", false);
-    //reset life
-    $(".life .itam").fadeIn(100);
-    //stop players
-    $(".item").removeClass("activate").children(".music").empty().hide();
-    $(".itam").removeClass("active-itam").children(".music").empty().hide();
-  });
-  $(".item").on("click", function () {
-      
-      if ($(this).hasClass('activate')){
-      }else{
-    //overlapschuif   
-          $(".item").not(this).removeClass("activate");
-
-   $(this).addClass("activate");
-   $(".item").not(this).children(".music").empty().hide();
-
-   $(".item").not(this).removeClass("activate");
-    //music
-    $(this).children(".music").load("werk/" + $(this).attr("id") + ".html").fadeIn(500);
-  }
-  });
-  $(".itam").on("click", function () {
-    //overlapschuif
-    $(this).addClass("active-itam");
- // $(this).children(".music").toggle();
-    $(".itam").not(this).children(".music").fadeOut().empty();
-    $(".itam").not(this).removeClass("active-itam");
-    //music
-    $(this)
-      .children(".music")
-      .load("life/" + $(this).attr("id") + ".html")
-      .show();
-  });
-    
-    $('#press-btn').on('click', function(){
-  $('.press').fadeIn();
-$(".tags-work, .tags-life, .life, .work").fadeOut();
-$('h2').addClass('blur');
-    });
-     $('#bio-btn').on('click', function(e){
-  $('.bio').fadeToggle(300);
-    e.stopPropagation();
-    e.preventDefault();
-    });
- $('.bio-box').on('click',function(e){
-        alert();
-    e.stopPropagation();
-    e.preventDefault();
-    });
-    $('.bio').on('click',function(){
-        $('.bio').fadeOut(300);
-    });
-   
-});
-}
-
