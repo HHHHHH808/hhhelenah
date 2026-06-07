@@ -306,15 +306,15 @@ min-height: 0vw;
   overflow: hidden;
     height: 100%;
   padding: 0;
-  transition: width 0.5s, height 1s, background-position 0.5s;
+  transition: width 0.5s, height 1s, background-position 0.5s, filter 0.4s ease;
     min-width: 4rem;
   max-width: 7rem;
     width: 7vw;
   cursor: pointer;
-    background-color: white;    
-  background-repeat: no-repeat;
-  background-size: 20em auto;
+    background-color: white;
       opacity: 1;
+  border-radius: 50%;
+  filter: grayscale(100%) blur(4px);
 }
 .activate {
   opacity: 1;
@@ -323,8 +323,13 @@ min-height: 0vw;
   width: 25rem;
   overflow: visible;
     background-position: center top;
-      transition: width 0.5s, height 1s, background-position 0.5s;
-}         
+      transition: width 0.5s, height 1s, background-position 0.5s, filter 0.4s ease;
+}
+/* Geopend: kleur + scherp, met een vloeiende overgang (zie transition hierboven). */
+.item.activate,
+.itam.active-itam {
+  filter: grayscale(0%) blur(0px);
+}
 .activate h4{
                 top: 3em;
                 bottom: auto;
@@ -340,9 +345,11 @@ min-height: 0vw;
   height: 40vw;
   position: relative;
   padding: 0;
-  transition: width 0.5s, height 0.5s;
+  transition: width 0.5s, height 0.5s, filter 0.4s ease;
   width: 20vw;
   margin-right: 1em;
+  border-radius: 50%;
+  filter: grayscale(100%) blur(4px);
 }
 .active-itam {
   opacity: 1;
@@ -487,10 +494,15 @@ button {
 img {
   cursor: pointer;
 }
+.item img,
 .itam img {
+  display: block;
   opacity: 1;
-  height: 20vw;
-  width: 20vw;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* object-position wordt per item ingesteld via JS, op basis van
+     het optionele "afbeeldingPositie"-veld in PROJECTS (default "center"). */
 }
 
 
@@ -569,52 +581,12 @@ label .checkmark:after {
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
-           
-#mnm{
-background-image: url('assets/wide-circ/blur/circ-mnm.png');
-}
-#kerstre{
-background-image: url('assets/wide-circ/blur/circ-eenpng.png');
-}
-#ww{
-background-image: url('assets/wide-circ/blur/circ-ww.png');
-}
-#siebert{
-background-image: url('assets/wide-circ/blur/circ-truck.png');
-}
-#warmathon{
-background-image: url('assets/wide-circ/blur/circ-warmathon.png');
-}
-#burnout{
-background-image: url('assets/wide-circ/blur/circ-burnout.png');
-}
-#ivy{
-background-image: url('assets/wide-circ/blur/circ-ivy.png');
-}
-#schob{
-background-image: url('assets/wide-circ/blur/schob.png');
-}
 
-#flx{
-background-image: url('assets/wide-circ/blur/circ-flx.png');
-}
-#sbpi{
-background-image: url('assets/wide-circ/blur/circ-stubru.png');
-}
-#kaatje{
-background-image: url('assets/wide-circ/blur/circ-kaatje.png');
-}
-#green{
-background-image: url('assets/wide-circ/blur/circ-green.jpg');
-}
-#people{
-background-image: url('assets/wide-circ/blur/circ-people.jpg');
-}  
-#wayout{
-background-image: url('assets/wide-circ/blur/circ-wayout.png');
-}  
-           
-            
+/* De vroegere per-id background-image regels (dubbele blur/normaal-
+   afbeeldingen per item) zijn vervangen door één <img> per item
+   (geladen vanuit PROJECTS.afbeelding) met een CSS grayscale+blur-
+   filter dat overgaat bij het openen — zie .item / .itam hierboven. */
+
              @media screen and (max-width: 768px) {
                  
 /*BASIC-MOB*/              
@@ -791,11 +763,11 @@ background-position: left top;
   transition: display 0.5s;
 }           
     
-/*MEDIA-MOB*/      
+/*MEDIA-MOB*/
 .itam img {
-  width: 40vw;
-  height: auto;
-} 
+  width: 100%;
+  height: 100%;
+}
 .item iframe,
 .item video {
     padding: 0.5em;

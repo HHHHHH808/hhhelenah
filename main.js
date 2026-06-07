@@ -86,17 +86,6 @@ const PROJECTS = {
       beschrijving: "Mastering for 'Poe's Law' by Schobbee."
     },
     {
-      id: "flx",
-      titel: "Fluxys",
-      categorieen: ["recording", "mixing"],
-      afbeelding: "assets/wide-circ/blur/circ-flx.png",
-      type: "audio",
-      beschrijving: "Recording and mixing for Fluxys Energy. Client: Sonhouse.",
-      nummers: [
-        { id: "flx1", titel: "Fluxys", duur: "1:46" }
-      ]
-    },
-    {
       id: "mnm",
       titel: "MNM Mashups",
       categorieen: ["editing"],
@@ -121,21 +110,6 @@ const PROJECTS = {
         { id: "sbpi3", titel: "Meduza", duur: "" },
         { id: "sbpi4", titel: "Post Malone", duur: "" },
         { id: "sbpi5", titel: "The Weeknd", duur: "" }
-      ]
-    },
-    {
-      id: "kerstre",
-      titel: "Eén rebranding",
-      categorieen: ["sonic-branding"],
-      afbeelding: "assets/wide-circ/blur/circ-eenpng.png",
-      type: "audio",
-      beschrijving: "",
-      nummers: [
-        { id: "ekr1", titel: "No Logo", duur: "" },
-        { id: "ekr2", titel: "V1", duur: "" },
-        { id: "ekr3", titel: "No Logo Bass", duur: "" },
-        { id: "ekr4", titel: "V1", duur: "" },
-        { id: "ekr5", titel: "V2", duur: "" }
       ]
     },
     {
@@ -347,10 +321,17 @@ function lifeAudioPath(project) {
   };
 }
 
+function buildProjectImage(project) {
+  return $('<img>')
+    .attr('src', project.afbeelding)
+    .css('object-position', project.afbeeldingPositie || 'center');
+}
+
 function buildWorkItem(project) {
   var $item = $('<div class="item"></div>')
     .attr('id', project.id)
     .addClass((project.categorieen || []).join(' '))
+    .append(buildProjectImage(project))
     .append('<div class="music"></div>')
     .append($('<h4></h4>').text(project.titel));
   return $item;
@@ -360,7 +341,7 @@ function buildLifeItem(project) {
   var $itam = $('<div class="itam"></div>')
     .attr('id', project.id)
     .addClass(project.status)
-    .append($('<img>').attr('src', project.afbeelding).attr('width', 200).attr('height', 200))
+    .append(buildProjectImage(project))
     .append('<div class="music"></div>')
     .append($('<h4></h4>').html(project.titel));
   return $itam;
