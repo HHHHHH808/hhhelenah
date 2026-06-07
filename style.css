@@ -305,12 +305,16 @@ min-height: 0vw;
   border-right: 1px solid red;
   flex-shrink: 0;
   overflow: hidden;
-    height: 100%;
+  /* Klein, vast cirkeltje wanneer gesloten (zoals in de oude layout) —
+     niet de volledige kolomhoogte, anders ontstaat een grote, uitgerekte
+     "pil"-vorm i.p.v. een cirkel, en springt de afbeelding lelijk van
+     groot naar klein bij het openen. */
+  height: 7rem;
   padding: 0;
-  transition: width 0.5s, height 1s, background-position 0.5s, filter 0.4s ease;
+  transition: width 0.5s, height 0.5s, background-position 0.5s, filter 0.4s ease;
     min-width: 4rem;
   max-width: 7rem;
-    width: 7vw;
+    width: 7rem;
   cursor: pointer;
     background-color: white;
       opacity: 1;
@@ -322,9 +326,11 @@ min-height: 0vw;
     min-width: 15rem;
   max-width: 25rem;
   width: 25rem;
+  height: auto;
+  min-height: 7rem;
   overflow: visible;
     background-position: center top;
-      transition: width 0.5s, height 1s, background-position 0.5s, filter 0.4s ease;
+      transition: width 0.5s, height 0.5s, background-position 0.5s, filter 0.4s ease;
 }
 /* Geopend: kleur + scherp, met een vloeiende overgang (zie transition hierboven). */
 .item.activate,
