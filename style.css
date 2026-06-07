@@ -371,7 +371,9 @@ min-height: 0vw;
     min-width: 15rem;
   max-width: 25rem;
   width: 25rem;  padding: 0 3rem;
-  margin-top: 18rem;
+  /* Ruimte vrijhouden onder de gekrompen cirkel (zie .item.activate img:
+     1rem top + 10rem hoogte + 1rem tussenruimte). */
+  margin-top: 12rem;
   box-sizing: border-box;
 }         
 .life .content {
@@ -505,8 +507,21 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, transform 0.5s;
   /* object-position wordt per item ingesteld via JS, op basis van
      het optionele "afbeeldingPositie"-veld in PROJECTS (default "center"). */
+}
+
+/* Geopend werk-item: de cirkel krimpt naar een vaste afmeting en komt
+   gecentreerd bovenaan in de kolom te staan; titel/tekst/tracklist
+   (".content", binnenin ".music") krijgen hun eigen ruimte eronder
+   (zie .work .content margin-top). */
+.item.activate img {
+  top: 1rem;
+  left: 50%;
+  width: 10rem;
+  height: 10rem;
+  transform: translateX(-50%);
 }
 
 
