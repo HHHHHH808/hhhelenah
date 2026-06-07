@@ -35,7 +35,7 @@ width: 100vw;
     height: 0px;
 }
 ::-webkit-scrollbar-track {
-  background: transparant; 
+  background: transparent;
       width: 1px;
 }
  ::-webkit-scrollbar-thumb {
@@ -499,7 +499,7 @@ img {
 .tags-life {     
 display: none;
 grid-area: 2 / 1 / 4 / 2; 
-overflow: hidden:}
+overflow: hidden;}
 .tags-work { 
 display: none;
 grid-area: 2 / 1 / 4 / 2;
@@ -684,12 +684,6 @@ h2 {
   to {filter: blur(0px);
       transform: scale(1);}
 }
-@keyframes wow {
-  from {filter: blur(3px);
-    transform: scale(1);}
-  to {filter: blur(0px);
-      transform: scale(1.1);}
-}
                  .spot{
                      padding: 1rem 2rem;
                          transition: padding 0.5s;
@@ -810,10 +804,6 @@ background-position: left top;
   max-width: 100vw;
   width: 100%;
   height: 45vw;}
-.item iframe:first-of-type,
-.item video:first-of-type {
-}
-                 
 .item iframe:first-of-type,
 .item video:first-of-type {
     margin-top: 20vw;

@@ -483,7 +483,6 @@ $('h2').addClass('blur');
     e.preventDefault();
     });
  $('.bio-box').on('click',function(e){
-        alert();
     e.stopPropagation();
     e.preventDefault();
     });
