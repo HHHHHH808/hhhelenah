@@ -1,3 +1,266 @@
+// ============================================================
+// PROJECTEN-CONFIGURATIE
+// Eén centrale bron voor alle work- en life-content. De site
+// wordt hieruit automatisch opgebouwd (zie verdere stappen).
+// ============================================================
+const PROJECTS = {
+  work: [
+    {
+      id: "wayout",
+      titel: "Andrea Murtas",
+      categorieen: ["mixing", "production"],
+      afbeelding: "assets/wide-circ/blur/circ-wayout.png",
+      type: "audio",
+      beschrijving: "Mixing for Andrea Murtas: The Way Out. Client: Sonhouse.",
+      nummers: [
+        { id: "flx1", titel: "The Way Out", duur: "6:44" }
+      ]
+    },
+    {
+      id: "ww",
+      titel: "Warmste Week 2019",
+      categorieen: ["sonic-branding", "sound-design"],
+      afbeelding: "assets/wide-circ/blur/circ-ww.png",
+      type: "audio",
+      beschrijving: "Soundtrack for StuBru's promotional campaign for 'De Warmste Week 2019'.",
+      nummers: [
+        { id: "warmweek", titel: "Warmste Week", duur: "0:07" },
+        { id: "sba1", titel: "Harp Fall", duur: "0:11" },
+        { id: "sba2", titel: "4ths", duur: "0:07" },
+        { id: "sba3", titel: "Dumb 2", duur: "0:07" },
+        { id: "sba4", titel: "Dumb 3", duur: "0:07" },
+        { id: "sba5", titel: "Koor", duur: "0:08" },
+        { id: "sba6", titel: "Explosion", duur: "0:07" },
+        { id: "sba7", titel: "Riff 1", duur: "0:07" },
+        { id: "sba8", titel: "Riff 2", duur: "0:07" },
+        { id: "sbe1", titel: "Euphoria Long", duur: "0:08" },
+        { id: "sbe2", titel: "Euphoria Voice", duur: "0:07" }
+      ]
+    },
+    {
+      id: "siebert",
+      titel: "Truck",
+      categorieen: ["soundtracks", "sound-design"],
+      afbeelding: "assets/wide-circ/blur/circ-truck.png",
+      type: "embed",
+      embedUrl: "https://player.vimeo.com/video/348057330",
+      beschrijving: "Soundtrack for Siebert Mispelons videowork, 'Truck'."
+    },
+    {
+      id: "warmathon",
+      titel: "Warmathon",
+      categorieen: ["recording", "mixing", "soundtracks", "sound-design"],
+      afbeelding: "assets/wide-circ/blur/circ-warmathon.png",
+      type: "audio",
+      beschrijving: "Vocal coaching, recording, mixing and soundtracks for StuBru's Warmathon.",
+      nummers: [
+        { id: "warmathon1", titel: "Van De Steene", duur: "0:30" },
+        { id: "sbdank1", titel: "Bedanking", duur: "0:42" }
+      ]
+    },
+    {
+      id: "burnout",
+      titel: "Burnout",
+      categorieen: ["mastering"],
+      afbeelding: "assets/wide-circ/blur/circ-burnout.png",
+      type: "embed",
+      embedUrl: "https://www.youtube.com/embed/eq25I4exauE",
+      beschrijving: "Mastering for Epong's soundtrack of Rik Chaubet's film, 'Burnout'."
+    },
+    {
+      id: "ivy",
+      titel: "Ivy Falls",
+      categorieen: ["production"],
+      afbeelding: "assets/wide-circ/blur/circ-ivy.png",
+      type: "embed",
+      embedUrl: "https://open.spotify.com/embed/track/1iQnPzwIEkNyG0B5zPwIUn",
+      beschrijving: "Production of 'Beautiful Stranger' by Ivy Falls with Kasper Cornelus."
+    },
+    {
+      id: "schob",
+      titel: "Schobbee",
+      categorieen: ["mastering"],
+      afbeelding: "assets/wide-circ/blur/schob.png",
+      type: "embed",
+      embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=202891063",
+      beschrijving: "Mastering for 'Poe's Law' by Schobbee."
+    },
+    {
+      id: "flx",
+      titel: "Fluxys",
+      categorieen: ["recording", "mixing"],
+      afbeelding: "assets/wide-circ/blur/circ-flx.png",
+      type: "audio",
+      beschrijving: "Recording and mixing for Fluxys Energy. Client: Sonhouse.",
+      nummers: [
+        { id: "flx1", titel: "Fluxys", duur: "1:46" }
+      ]
+    },
+    {
+      id: "mnm",
+      titel: "MNM Mashups",
+      categorieen: ["editing"],
+      afbeelding: "assets/wide-circ/blur/circ-mnm.png",
+      type: "audio",
+      beschrijving: "Selection of hit mixes for MNM radio.",
+      nummers: [
+        { id: "mnm1", titel: "Countdown", duur: "2:42" },
+        { id: "mnm2", titel: "Top 20", duur: "1:00" }
+      ]
+    },
+    {
+      id: "sbpi",
+      titel: "Power Intro's",
+      categorieen: ["editing"],
+      afbeelding: "assets/wide-circ/blur/circ-stubru.png",
+      type: "audio",
+      beschrijving: "Selection of power intro's for StuBru radio.",
+      nummers: [
+        { id: "sbpi1", titel: "Camelphat", duur: "" },
+        { id: "sbpi2", titel: "Lous and The Yakuza", duur: "" },
+        { id: "sbpi3", titel: "Meduza", duur: "" },
+        { id: "sbpi4", titel: "Post Malone", duur: "" },
+        { id: "sbpi5", titel: "The Weeknd", duur: "" }
+      ]
+    },
+    {
+      id: "kerstre",
+      titel: "Eén rebranding",
+      categorieen: ["sonic-branding"],
+      afbeelding: "assets/wide-circ/blur/circ-eenpng.png",
+      type: "audio",
+      beschrijving: "",
+      nummers: [
+        { id: "ekr1", titel: "No Logo", duur: "" },
+        { id: "ekr2", titel: "V1", duur: "" },
+        { id: "ekr3", titel: "No Logo Bass", duur: "" },
+        { id: "ekr4", titel: "V1", duur: "" },
+        { id: "ekr5", titel: "V2", duur: "" }
+      ]
+    },
+    {
+      id: "people",
+      titel: "People's People",
+      categorieen: ["sound-design"],
+      afbeelding: "assets/wide-circ/blur/circ-people.jpg",
+      type: "embed",
+      embedUrl: "https://www.youtube.com/embed/FD35-NHz7BI",
+      beschrijving: "Sound design and extra arrangements for Lip Service's EP 'People's People'."
+    },
+    {
+      id: "kaatje",
+      titel: "Tellen met Viktor",
+      categorieen: ["recording"],
+      afbeelding: "assets/wide-circ/blur/circ-kaatje.png",
+      type: "video",
+      videoBestand: "/kaatje.mp4",
+      beschrijving: "Vocal recording with Philippe Liekens for Ketnet game."
+    },
+    {
+      id: "green",
+      titel: "Green Greener Greenest",
+      categorieen: ["mastering", "mixing", "production", "sound-design", "soundtracks"],
+      afbeelding: "assets/wide-circ/blur/circ-green.jpg",
+      type: "embed",
+      embedUrl: "https://player.vimeo.com/video/221453555",
+      beschrijving: "Sound-design voor Senne Marquenie's short movie 'Green, Greener, Greenest'."
+    }
+  ],
+
+  life: [
+    {
+      id: "comp",
+      titel: "Compressed '16-'17",
+      status: "released",
+      afbeelding: "/assets/logocompressed.jpg",
+      beschrijving: "A series of songs made between '16 '17, sonically bundled by various tape & compression emulations.",
+      nummers: [
+        { id: "comp1", titel: "Blue", duur: "02:33" },
+        { id: "comp2", titel: "Hi Tim", duur: "03:39" },
+        { id: "comp3", titel: "We Had To Take Everything Since The Bag Ripped", duur: "03:56" },
+        { id: "comp4", titel: "Sour", duur: "00:23" },
+        { id: "comp5", titel: "Conservatory", duur: "06:07" },
+        { id: "comp6", titel: "Charisma", duur: "03:53" },
+        { id: "comp7", titel: "Far", duur: "04:21" },
+        { id: "comp8", titel: "Reminiscence", duur: "06:59" },
+        { id: "comp9", titel: "Tom", duur: "02:58" },
+        { id: "comp-a", titel: "Lip Service - Together Remix", duur: "9:59" },
+        { id: "comp-b", titel: "Cry", duur: "07:18" },
+        { id: "comp-c", titel: "Abba", duur: "02:56" },
+        { id: "comp-d", titel: "Litefeet", duur: "03:59" },
+        { id: "comp-e", titel: "The Sun Is Crying", duur: "03:37" },
+        { id: "comp-f", titel: "Dance Wimme", duur: "04:18" },
+        { id: "comp-g", titel: "Between The Brakes", duur: "01:50" },
+        { id: "comp-h", titel: "The Movie With Roses", duur: "05:23" },
+        { id: "comp-i", titel: "Chauvinist Anthem", duur: "10:00" },
+        { id: "comp-j", titel: "Myxolydian", duur: "02:07" },
+        { id: "comp-k", titel: "No Impro", duur: "04:21" },
+        { id: "comp-l", titel: "Whei Whu", duur: "02:04" },
+        { id: "comp-m", titel: "Test", duur: "04:38" },
+        { id: "comp-n", titel: "Music To Cut Your Perineum To", duur: "04:52" },
+        { id: "comp-o", titel: "For You To Play In Your Dj Sets", duur: "11:58" },
+        { id: "comp-p", titel: "Talk To Me", duur: "13:40" }
+      ]
+    },
+    {
+      id: "hhh",
+      titel: "Helenah",
+      status: "released",
+      afbeelding: "/assets/logo12.jpg",
+      beschrijving: "Debut album on the Brussels based label 'Montage'.",
+      nummers: [
+        { id: "intro", titel: "Intro", duur: "01:46" },
+        { id: "hysteria", titel: "Hysteria", duur: "02:29" },
+        { id: "santiago", titel: "Santiago", duur: "01:35" },
+        { id: "interludea", titel: "Interlude I", duur: "01:28" },
+        { id: "ott", titel: "OTT", duur: "00:57" },
+        { id: "wdyi", titel: "Who Do You Is", duur: "03:37" },
+        { id: "interludeb", titel: "Interlude II", duur: "01:02" },
+        { id: "soil", titel: "Soil", duur: "03:14" },
+        { id: "greenhorn", titel: "Greenhorn", duur: "05:44" },
+        { id: "interludec", titel: "Interlude III", duur: "01:15" },
+        { id: "futurism", titel: "Futurism", duur: "06:09" },
+        { id: "ghq", titel: "GHQ", duur: "05:07" },
+        { id: "interd", titel: "Interlude IV", duur: "00:41" },
+        { id: "schurft", titel: "Schurft", duur: "03:18" },
+        { id: "tlgm", titel: "TLGFM", duur: "03:43" }
+      ]
+    },
+    {
+      id: "ora",
+      titel: "Ora et Labora",
+      status: "forthcoming",
+      afbeelding: "/assets/logo-ora.jpg",
+      beschrijving: "Demo of EP with Tore Snauwaert & Gergana Velikova.",
+      nummers: [
+        { id: "ora1", titel: "Ora Et Labora", duur: "08:22" }
+      ]
+    },
+    {
+      id: "fili",
+      titel: "Filibus LP",
+      status: "forthcoming",
+      afbeelding: "/assets/logofili.jpg",
+      beschrijving: "A live recording of a live accompaniment for a silent movie.",
+      nummers: [
+        { id: "fili-1", titel: "Track 1", duur: "02:09" },
+        { id: "fili-2", titel: "Track 2", duur: "03:06" },
+        { id: "fili-3", titel: "Track 3", duur: "03:06" },
+        { id: "fili-4", titel: "Track 4", duur: "05:36" },
+        { id: "fili-5", titel: "Track 5", duur: "03:29" },
+        { id: "fili-6", titel: "Track 6", duur: "03:29" },
+        { id: "fili-7", titel: "Track 7", duur: "05:36" },
+        { id: "fili-8", titel: "Track 8", duur: "03:29" },
+        { id: "fili-9", titel: "Track 9", duur: "03:06" },
+        { id: "fili-a", titel: "Track 10", duur: "12:47" },
+        { id: "fili-b", titel: "Track 11", duur: "11:21" },
+        { id: "fili-c", titel: "Track 12", duur: "12:47" },
+        { id: "fili-d", titel: "Track 13", duur: "04:25" }
+      ]
+    }
+  ]
+};
+
         (function() {
 	const blurProperty = gsap.utils.checkPrefix("filter"),
 		    blurExp = /blur\((.+)?px\)/,
@@ -52,7 +315,236 @@ $('.form').fadeOut();
 // zodat de check consistent en betrouwbaar is.
 const isMobile = () => window.matchMedia('(max-width: 700px)').matches;
 
+// ============================================================
+// SITE-OPBOUW VANUIT PROJECTS
+// De onderstaande helpers bouwen de work- en life-items en hun
+// inhoud (audiospeler / embed / video) volledig op uit de
+// PROJECTS-array. Er wordt niets meer extern ingeladen
+// (werk/*.html en life/*.html bestaan niet meer).
+// ============================================================
+
+// De audiomappen onder assets/autonoom/ gebruiken niet altijd
+// dezelfde naam als het project-id (bv. id "hhh" -> map "helenah").
+const LIFE_AUDIO_FOLDERS = {
+  comp: "comp",
+  hhh: "helenah",
+  ora: "ora",
+  fili: "filibus"
+};
+
+function findProject(list, id) {
+  return list.filter(function (p) { return p.id === id; })[0];
+}
+
+function workAudioPath(trackId) {
+  return "assets/werk/" + trackId + ".mp3";
+}
+
+function lifeAudioPath(project) {
+  var folder = LIFE_AUDIO_FOLDERS[project.id] || project.id;
+  return function (trackId) {
+    return "assets/autonoom/" + folder + "/" + trackId + ".mp3";
+  };
+}
+
+function buildWorkItem(project) {
+  var $item = $('<div class="item"></div>')
+    .attr('id', project.id)
+    .addClass((project.categorieen || []).join(' '))
+    .append('<div class="music"></div>')
+    .append($('<h4></h4>').text(project.titel));
+  return $item;
+}
+
+function buildLifeItem(project) {
+  var $itam = $('<div class="itam"></div>')
+    .attr('id', project.id)
+    .addClass(project.status)
+    .append($('<img>').attr('src', project.afbeelding).attr('width', 200).attr('height', 200))
+    .append('<div class="music"></div>')
+    .append($('<h4></h4>').html(project.titel));
+  return $itam;
+}
+
+function renderWorkItems() {
+  var $repo = $('.hidden-repo');
+  PROJECTS.work.forEach(function (project) {
+    $repo.append(buildWorkItem(project));
+  });
+}
+
+function renderLifeItems() {
+  var $albums = $('.albums');
+  PROJECTS.life.forEach(function (project) {
+    $albums.append(buildLifeItem(project));
+  });
+}
+
+// Bouwt het basis-spelermarkup (audio-element, play/pause-knop, progressbar)
+function buildPlayerMarkup() {
+  return '<audio>Your browser does not support HTML 5 Player.</audio>' +
+    '<button class="pp">&#9658;</button>' +
+    '<input type="range" id="progress-bar" min="0" max="" value="0" />';
+}
+
+function buildTrackList(nummers) {
+  var $ul = $('<ul></ul>');
+  nummers.forEach(function (track) {
+    $ul.append(
+      $('<li></li>').append(
+        $('<a href="#" class="audio play"></a>')
+          .attr('data-music-id', track.id)
+          .text(track.titel),
+        $('<p></p>').text(track.duur)
+      )
+    );
+  });
+  return $ul;
+}
+
+// Generieke embed-wrapper (Vimeo/YouTube/Spotify/Bandcamp werken allemaal
+// met deze gangbare iframe-attributen).
+function buildEmbed(embedUrl) {
+  return $('<iframe frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
+    .attr('src', embedUrl);
+}
+
+function buildVideo(videoBestand) {
+  return $('<video width="100%" height="auto" controls></video>')
+    .append($('<source type="video/mp4">').attr('src', videoBestand))
+    .append('Your browser does not support the video tag.');
+}
+
+// Herbruikbare audiospeler-logica (gebaseerd op de oorspronkelijke
+// window.Formaweb.Player uit de werk/life-snippets), nu data-driven
+// vanuit de "nummers"-array van een project.
+function initAudioPlayer($content, nummers, pathFn) {
+  var audio = $content.find('audio')[0];
+  var $pp = $content.find('.pp');
+  var progressBar = $content.find('#progress-bar')[0];
+  var playlist = nummers.map(function (track) { return { id: track.id }; });
+  var len = playlist.length - 1;
+  var current = 0;
+
+  function run(music) {
+    audio.src = pathFn(music.id);
+    audio.load();
+  }
+  function next() {
+    current++;
+    if (current > len) current = 0;
+  }
+  function playById(id) {
+    var idx;
+    $.each(playlist, function (i, v) {
+      if (v.id == id) idx = i;
+    });
+    if (idx !== undefined) {
+      current = idx;
+      run(playlist[current]);
+    }
+  }
+
+  run(playlist[0]);
+
+  audio.addEventListener('ended', function () {
+    next();
+    run(playlist[current]);
+    audio.play();
+    $content.find('.audio.play').removeClass('playing');
+  });
+
+  audio.addEventListener('play', function () {
+    var zoeker = playlist[current].id;
+    $content.find('.audio.play').filter(function () {
+      return $(this).attr('data-music-id').match(zoeker);
+    }).addClass('playing');
+  });
+
+  $content.find('.audio.play').on('click', function () {
+    $(this).parent('li').siblings().children('.play').removeClass('playing');
+    var zoeker = playlist[current].id;
+    var music_id = $(this).attr('data-music-id');
+    if (zoeker == music_id) {
+      if (audio.paused) {
+        audio.play();
+        $pp.html('&#10074;&#10074;');
+      } else {
+        audio.pause();
+        $pp.html('&#9658;');
+      }
+    } else {
+      playById(music_id);
+      audio.play();
+      $pp.html('&#10074;&#10074;');
+    }
+    return false;
+  });
+
+  $pp.on('click', function () {
+    if (audio.paused) {
+      audio.play();
+      $(this).html('&#10074;&#10074;');
+    } else {
+      audio.pause();
+      $(this).html('&#9658;');
+    }
+    return false;
+  });
+
+  function updateProgressValue() {
+    if (audio.duration) {
+      progressBar.max = audio.duration;
+      progressBar.value = audio.currentTime;
+    }
+  }
+  setInterval(updateProgressValue, 500);
+  progressBar.addEventListener('input', function () {
+    audio.currentTime = progressBar.value;
+  });
+  progressBar.addEventListener('click', function (e) {
+    e.stopPropagation();
+  });
+}
+
+// Vult een ".music"-container met de inhoud van een project
+// (beschrijving + speler/embed/video), volledig opgebouwd uit data.
+function loadProjectContent($music, project, pathFn) {
+  $music.empty();
+
+  // Life-projects hebben geen "type"-veld (ze zijn altijd audio-albums),
+  // dus detecteren we audio-content op basis van de aanwezigheid van "nummers".
+  var isAudio = project.type === 'audio' || (!project.type && Array.isArray(project.nummers));
+
+  var $content = $('<div class="content"></div>').append(
+    $('<h5></h5>').text(project.beschrijving)
+  );
+
+  if (isAudio) {
+    $content.append(buildPlayerMarkup());
+    $content.append(buildTrackList(project.nummers));
+  }
+
+  $music.append($content);
+
+  if (project.type === 'embed') {
+    $music.append(buildEmbed(project.embedUrl));
+  } else if (project.type === 'video') {
+    $music.append(buildVideo(project.videoBestand));
+  }
+
+  if (isAudio) {
+    initAudioPlayer($content, project.nummers, pathFn);
+  }
+}
+
+
 $(document).ready(function () {
+
+  // Bouw de work- en life-items op vanuit PROJECTS, vóórdat alle
+  // hieronder volgende handlers eraan gekoppeld worden.
+  renderWorkItems();
+  renderLifeItems();
 
   $("#clue").keypress(function (e) {
     if (e.which == 13) {
@@ -245,32 +737,34 @@ $(document).ready(function () {
     //music
     // Mobiel faadt de player in over 300ms, desktop over 500ms (bewust verschil).
     var itemFadeDuration = isMobile() ? 300 : 500;
-    $(this).children(".music").load("werk/" + $(this).attr("id") + ".html").fadeIn(itemFadeDuration);
+    var project = findProject(PROJECTS.work, $(this).attr("id"));
+    var $music = $(this).children(".music");
+    loadProjectContent($music, project, workAudioPath);
+    $music.fadeIn(itemFadeDuration);
   }
   });
 
   $(".itam").on("click", function () {
     //overlapschuif
     $(this).addClass("active-itam");
+    var project = findProject(PROJECTS.life, $(this).attr("id"));
+    var $music = $(this).children(".music");
+    var pathFn = lifeAudioPath(project);
     if (isMobile()) {
       // Mobiel: leegmaken/verbergen van de andere players, dan de nieuwe player infaden.
       $(".itam").not(this).children(".music").empty().hide();
       $(".itam").not(this).removeClass("active-itam");
       //music
-      $(this)
-        .children(".music")
-        .load("life/" + $(this).attr("id") + ".html")
-        .fadeIn(500);
+      loadProjectContent($music, project, pathFn);
+      $music.fadeIn(500);
     } else {
       // Desktop: de andere players faden uit en leegmaken, dan de nieuwe player tonen.
       //  $(this).children(".music").toggle();
       $(".itam").not(this).children(".music").fadeOut().empty();
       $(".itam").not(this).removeClass("active-itam");
       //music
-      $(this)
-        .children(".music")
-        .load("life/" + $(this).attr("id") + ".html")
-        .show();
+      loadProjectContent($music, project, pathFn);
+      $music.show();
     }
   });
 
