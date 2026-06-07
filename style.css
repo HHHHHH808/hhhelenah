@@ -304,21 +304,22 @@ min-height: 0vw;
   position: relative;
   border-right: 1px solid red;
   flex-shrink: 0;
+  /* "Platenbak"-effect: de kolom is smal en clipt (overflow: hidden) een
+     grote cirkel zodat enkel de bovenste helft zichtbaar is — als
+     labels die net boven de vinyl uitsteken (zie OG-screenshot). De
+     afbeelding zelf (zie .item img) heeft een vaste grootte die niet
+     verandert bij het openen, enkel de kolom verbreedt/clipt anders —
+     zo geen lelijke groei/krimp-glitch meer. */
   overflow: hidden;
-  /* Klein, vast cirkeltje wanneer gesloten (zoals in de oude layout) —
-     niet de volledige kolomhoogte, anders ontstaat een grote, uitgerekte
-     "pil"-vorm i.p.v. een cirkel, en springt de afbeelding lelijk van
-     groot naar klein bij het openen. */
-  height: 7rem;
+  height: 100%;
   padding: 0;
-  transition: width 0.5s, height 0.5s, background-position 0.5s, filter 0.4s ease;
+  transition: width 0.5s, background-position 0.5s, filter 0.4s ease;
     min-width: 4rem;
   max-width: 7rem;
     width: 7rem;
   cursor: pointer;
     background-color: white;
       opacity: 1;
-  border-radius: 50%;
   filter: grayscale(100%) blur(4px);
 }
 .activate {
@@ -326,22 +327,18 @@ min-height: 0vw;
     min-width: 15rem;
   max-width: 25rem;
   width: 25rem;
-  height: auto;
-  min-height: 7rem;
+  height: 100%;
+  /* De "wand" schuift open: de kolom verbreedt waardoor de volledige
+     cirkel zichtbaar wordt (i.p.v. enkel de bovenste helft). */
   overflow: visible;
     background-position: center top;
-      transition: width 0.5s, height 0.5s, background-position 0.5s, filter 0.4s ease;
+      transition: width 0.5s, background-position 0.5s, filter 0.4s ease;
 }
 /* Geopend: kleur + scherp, met een vloeiende overgang (zie transition hierboven). */
 .item.activate,
 .itam.active-itam {
   filter: grayscale(0%) blur(0px);
 }
-/* De cirkelvorm (border-radius + rode rand) hoort bij het GESLOTEN item.
-   Eenmaal geopend wordt de kolom een gewone rechthoek (de "wand" schuift
-   open) zodat er geen grote rode ovaal-omkadering meer rond de hele
-   kolom zichtbaar blijft — enkel de verkleinde afbeelding (zie
-   .item.activate img) blijft cirkelvormig. */
 .item.activate,
 .itam.active-itam {
   border-radius: 0;
@@ -387,9 +384,9 @@ min-height: 0vw;
     min-width: 15rem;
   max-width: 25rem;
   width: 25rem;  padding: 0 3rem;
-  /* Ruimte vrijhouden onder de gekrompen cirkel (zie .item.activate img:
-     1rem top + 10rem hoogte + 1rem tussenruimte). */
-  margin-top: 12rem;
+  /* Ruimte vrijhouden onder de vaste cirkel (zie .item img: 14rem hoogte
+     + ruimte). */
+  margin-top: 15rem;
   box-sizing: border-box;
 }         
 .life .content {
@@ -513,7 +510,6 @@ button {
 img {
   cursor: pointer;
 }
-.item img,
 .itam img {
   display: block;
   opacity: 1;
@@ -528,19 +524,32 @@ img {
      het optionele "afbeeldingPositie"-veld in PROJECTS (default "center"). */
 }
 
-/* Geopend werk-item: de cirkel krimpt naar een vaste afmeting en komt
-   gecentreerd bovenaan in de kolom te staan; titel/tekst/tracklist
-   (".content", binnenin ".music") krijgen hun eigen ruimte eronder
-   (zie .work .content margin-top). */
-.item.activate img {
-  top: 1rem;
+/* De afbeelding van een work-item heeft altijd dezelfde vaste grootte en
+   vorm (cirkel), gecentreerd bovenaan in de kolom — gesloten of geopend.
+   Enkel de kolom (.item) zelf clipt (overflow: hidden) deze cirkel tot
+   de bovenste helft wanneer hij dicht is ("platenbak"-effect, zie OG-
+   screenshot); bij het openen verbreedt de kolom (overflow: visible) en
+   wordt de volledige cirkel zichtbaar. Omdat de afbeelding zelf nooit
+   van grootte verandert, is er geen groei/krimp-glitch meer. */
+.item img {
+  display: block;
+  opacity: 1;
+  position: absolute;
+  top: 0;
   left: 50%;
-  width: 10rem;
-  height: 10rem;
+  width: 14rem;
+  height: 14rem;
   border-radius: 50%;
-  overflow: hidden;
+  object-fit: cover;
   transform: translateX(-50%);
+  transition: filter 0.4s ease;
+  /* object-position wordt per item ingesteld via JS, op basis van
+     het optionele "afbeeldingPositie"-veld in PROJECTS (default "center"). */
 }
+
+/* Titel/tekst/tracklist (".content", binnenin ".music") krijgen hun
+   eigen ruimte onder de cirkel zodra het item open is (zie .work .content
+   margin-top: 1rem boven + 14rem hoogte + 1rem tussenruimte = 16rem). */
 
 
 
@@ -754,9 +763,9 @@ background-position: left top;
   position: relative;
   top: auto;
   left: auto;
-  width: 3rem;
-  height: 3rem;
-  min-width: 3rem;
+  width: 4rem;
+  height: 4rem;
+  min-width: 4rem;
   margin-right: 1rem;
   border-radius: 50%;
   transform: none;
@@ -780,8 +789,8 @@ background-position: left top;
   position: relative;
   top: auto;
   left: auto;
-  width: 6rem;
-  height: 6rem;
+  width: 4rem;
+  height: 4rem;
   margin: 0.5rem auto;
   display: block;
   transform: none;
