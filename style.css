@@ -331,6 +331,16 @@ min-height: 0vw;
 .itam.active-itam {
   filter: grayscale(0%) blur(0px);
 }
+/* De cirkelvorm (border-radius + rode rand) hoort bij het GESLOTEN item.
+   Eenmaal geopend wordt de kolom een gewone rechthoek (de "wand" schuift
+   open) zodat er geen grote rode ovaal-omkadering meer rond de hele
+   kolom zichtbaar blijft — enkel de verkleinde afbeelding (zie
+   .item.activate img) blijft cirkelvormig. */
+.item.activate,
+.itam.active-itam {
+  border-radius: 0;
+  background-color: transparent;
+}
 .activate h4{
                 top: 3em;
                 bottom: auto;
@@ -521,6 +531,8 @@ img {
   left: 50%;
   width: 10rem;
   height: 10rem;
+  border-radius: 50%;
+  overflow: hidden;
   transform: translateX(-50%);
 }
 
@@ -725,6 +737,48 @@ right: 0;  box-sizing: border-box;
   box-sizing: border-box;
       background-size: 45% auto;
 background-position: left top;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+}
+/* Gesloten item op mobile: klein rond miniatuurtje links + titel ernaast,
+   in plaats van een brede balk met border-radius:50% (die een uitgerokken
+   ovaal-vorm geeft). Zo blijft de cirkel klein, zoals in de oude layout. */
+.item img {
+  position: relative;
+  top: auto;
+  left: auto;
+  width: 3rem;
+  height: 3rem;
+  min-width: 3rem;
+  margin-right: 1rem;
+  border-radius: 50%;
+  transform: none;
+}
+.item h4 {
+  position: relative;
+  writing-mode: horizontal-tb;
+  text-align: left;
+  width: auto;
+  top: auto;
+  right: auto;
+  bottom: auto;
+}
+/* Geopend item op mobile: de afbeelding blijft een kleine cirkel, maar
+   wordt in-flow geplaatst (geen absolute centrering nodig — de kolom is
+   al smal/100% breed) zodat de tekst/tracklist er gewoon onder verschijnt. */
+.item.activate {
+  display: block;
+}
+.item.activate img {
+  position: relative;
+  top: auto;
+  left: auto;
+  width: 6rem;
+  height: 6rem;
+  margin: 0.5rem auto;
+  display: block;
+  transform: none;
 }
 .hiding {
   width: auto;
@@ -760,12 +814,13 @@ background-position: left top;
   transition: top 0.5s;
 }
 .work .content {
-    float: right;
-    min-width: 55%;
-  width: 55%;
+    float: none;
+    min-width: 100%;
+  width: 100%;
   height: auto;
   margin: 0;
-    padding: 2rem 2rem 0rem 0rem;
+    padding: 1rem 0 0 0;
+  box-sizing: border-box;
 }
 .life .music {
   height: auto;
