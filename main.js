@@ -474,6 +474,12 @@ function loadProjectContent($music, project, pathFn) {
 
 $(document).ready(function () {
 
+  // TIJDELIJKE BYPASS: het wachtwoordscherm is voorlopig niet nodig.
+  // Verwijder dit blokje om het wachtwoordscherm terug te activeren.
+  $('.nav').removeClass('locked');
+  $('.footer').fadeIn();
+  $('.form').fadeOut();
+
   // Bouw de work- en life-items op vanuit PROJECTS, vóórdat alle
   // hieronder volgende handlers eraan gekoppeld worden.
   renderWorkItems();
