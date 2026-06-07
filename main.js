@@ -315,7 +315,236 @@ $('.form').fadeOut();
 // zodat de check consistent en betrouwbaar is.
 const isMobile = () => window.matchMedia('(max-width: 700px)').matches;
 
+// ============================================================
+// SITE-OPBOUW VANUIT PROJECTS
+// De onderstaande helpers bouwen de work- en life-items en hun
+// inhoud (audiospeler / embed / video) volledig op uit de
+// PROJECTS-array. Er wordt niets meer extern ingeladen
+// (werk/*.html en life/*.html bestaan niet meer).
+// ============================================================
+
+// De audiomappen onder assets/autonoom/ gebruiken niet altijd
+// dezelfde naam als het project-id (bv. id "hhh" -> map "helenah").
+const LIFE_AUDIO_FOLDERS = {
+  comp: "comp",
+  hhh: "helenah",
+  ora: "ora",
+  fili: "filibus"
+};
+
+function findProject(list, id) {
+  return list.filter(function (p) { return p.id === id; })[0];
+}
+
+function workAudioPath(trackId) {
+  return "assets/werk/" + trackId + ".mp3";
+}
+
+function lifeAudioPath(project) {
+  var folder = LIFE_AUDIO_FOLDERS[project.id] || project.id;
+  return function (trackId) {
+    return "assets/autonoom/" + folder + "/" + trackId + ".mp3";
+  };
+}
+
+function buildWorkItem(project) {
+  var $item = $('<div class="item"></div>')
+    .attr('id', project.id)
+    .addClass((project.categorieen || []).join(' '))
+    .append('<div class="music"></div>')
+    .append($('<h4></h4>').text(project.titel));
+  return $item;
+}
+
+function buildLifeItem(project) {
+  var $itam = $('<div class="itam"></div>')
+    .attr('id', project.id)
+    .addClass(project.status)
+    .append($('<img>').attr('src', project.afbeelding).attr('width', 200).attr('height', 200))
+    .append('<div class="music"></div>')
+    .append($('<h4></h4>').html(project.titel));
+  return $itam;
+}
+
+function renderWorkItems() {
+  var $repo = $('.hidden-repo');
+  PROJECTS.work.forEach(function (project) {
+    $repo.append(buildWorkItem(project));
+  });
+}
+
+function renderLifeItems() {
+  var $albums = $('.albums');
+  PROJECTS.life.forEach(function (project) {
+    $albums.append(buildLifeItem(project));
+  });
+}
+
+// Bouwt het basis-spelermarkup (audio-element, play/pause-knop, progressbar)
+function buildPlayerMarkup() {
+  return '<audio>Your browser does not support HTML 5 Player.</audio>' +
+    '<button class="pp">&#9658;</button>' +
+    '<input type="range" id="progress-bar" min="0" max="" value="0" />';
+}
+
+function buildTrackList(nummers) {
+  var $ul = $('<ul></ul>');
+  nummers.forEach(function (track) {
+    $ul.append(
+      $('<li></li>').append(
+        $('<a href="#" class="audio play"></a>')
+          .attr('data-music-id', track.id)
+          .text(track.titel),
+        $('<p></p>').text(track.duur)
+      )
+    );
+  });
+  return $ul;
+}
+
+// Generieke embed-wrapper (Vimeo/YouTube/Spotify/Bandcamp werken allemaal
+// met deze gangbare iframe-attributen).
+function buildEmbed(embedUrl) {
+  return $('<iframe frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
+    .attr('src', embedUrl);
+}
+
+function buildVideo(videoBestand) {
+  return $('<video width="100%" height="auto" controls></video>')
+    .append($('<source type="video/mp4">').attr('src', videoBestand))
+    .append('Your browser does not support the video tag.');
+}
+
+// Herbruikbare audiospeler-logica (gebaseerd op de oorspronkelijke
+// window.Formaweb.Player uit de werk/life-snippets), nu data-driven
+// vanuit de "nummers"-array van een project.
+function initAudioPlayer($content, nummers, pathFn) {
+  var audio = $content.find('audio')[0];
+  var $pp = $content.find('.pp');
+  var progressBar = $content.find('#progress-bar')[0];
+  var playlist = nummers.map(function (track) { return { id: track.id }; });
+  var len = playlist.length - 1;
+  var current = 0;
+
+  function run(music) {
+    audio.src = pathFn(music.id);
+    audio.load();
+  }
+  function next() {
+    current++;
+    if (current > len) current = 0;
+  }
+  function playById(id) {
+    var idx;
+    $.each(playlist, function (i, v) {
+      if (v.id == id) idx = i;
+    });
+    if (idx !== undefined) {
+      current = idx;
+      run(playlist[current]);
+    }
+  }
+
+  run(playlist[0]);
+
+  audio.addEventListener('ended', function () {
+    next();
+    run(playlist[current]);
+    audio.play();
+    $content.find('.audio.play').removeClass('playing');
+  });
+
+  audio.addEventListener('play', function () {
+    var zoeker = playlist[current].id;
+    $content.find('.audio.play').filter(function () {
+      return $(this).attr('data-music-id').match(zoeker);
+    }).addClass('playing');
+  });
+
+  $content.find('.audio.play').on('click', function () {
+    $(this).parent('li').siblings().children('.play').removeClass('playing');
+    var zoeker = playlist[current].id;
+    var music_id = $(this).attr('data-music-id');
+    if (zoeker == music_id) {
+      if (audio.paused) {
+        audio.play();
+        $pp.html('&#10074;&#10074;');
+      } else {
+        audio.pause();
+        $pp.html('&#9658;');
+      }
+    } else {
+      playById(music_id);
+      audio.play();
+      $pp.html('&#10074;&#10074;');
+    }
+    return false;
+  });
+
+  $pp.on('click', function () {
+    if (audio.paused) {
+      audio.play();
+      $(this).html('&#10074;&#10074;');
+    } else {
+      audio.pause();
+      $(this).html('&#9658;');
+    }
+    return false;
+  });
+
+  function updateProgressValue() {
+    if (audio.duration) {
+      progressBar.max = audio.duration;
+      progressBar.value = audio.currentTime;
+    }
+  }
+  setInterval(updateProgressValue, 500);
+  progressBar.addEventListener('input', function () {
+    audio.currentTime = progressBar.value;
+  });
+  progressBar.addEventListener('click', function (e) {
+    e.stopPropagation();
+  });
+}
+
+// Vult een ".music"-container met de inhoud van een project
+// (beschrijving + speler/embed/video), volledig opgebouwd uit data.
+function loadProjectContent($music, project, pathFn) {
+  $music.empty();
+
+  // Life-projects hebben geen "type"-veld (ze zijn altijd audio-albums),
+  // dus detecteren we audio-content op basis van de aanwezigheid van "nummers".
+  var isAudio = project.type === 'audio' || (!project.type && Array.isArray(project.nummers));
+
+  var $content = $('<div class="content"></div>').append(
+    $('<h5></h5>').text(project.beschrijving)
+  );
+
+  if (isAudio) {
+    $content.append(buildPlayerMarkup());
+    $content.append(buildTrackList(project.nummers));
+  }
+
+  $music.append($content);
+
+  if (project.type === 'embed') {
+    $music.append(buildEmbed(project.embedUrl));
+  } else if (project.type === 'video') {
+    $music.append(buildVideo(project.videoBestand));
+  }
+
+  if (isAudio) {
+    initAudioPlayer($content, project.nummers, pathFn);
+  }
+}
+
+
 $(document).ready(function () {
+
+  // Bouw de work- en life-items op vanuit PROJECTS, vóórdat alle
+  // hieronder volgende handlers eraan gekoppeld worden.
+  renderWorkItems();
+  renderLifeItems();
 
   $("#clue").keypress(function (e) {
     if (e.which == 13) {
@@ -508,32 +737,34 @@ $(document).ready(function () {
     //music
     // Mobiel faadt de player in over 300ms, desktop over 500ms (bewust verschil).
     var itemFadeDuration = isMobile() ? 300 : 500;
-    $(this).children(".music").load("werk/" + $(this).attr("id") + ".html").fadeIn(itemFadeDuration);
+    var project = findProject(PROJECTS.work, $(this).attr("id"));
+    var $music = $(this).children(".music");
+    loadProjectContent($music, project, workAudioPath);
+    $music.fadeIn(itemFadeDuration);
   }
   });
 
   $(".itam").on("click", function () {
     //overlapschuif
     $(this).addClass("active-itam");
+    var project = findProject(PROJECTS.life, $(this).attr("id"));
+    var $music = $(this).children(".music");
+    var pathFn = lifeAudioPath(project);
     if (isMobile()) {
       // Mobiel: leegmaken/verbergen van de andere players, dan de nieuwe player infaden.
       $(".itam").not(this).children(".music").empty().hide();
       $(".itam").not(this).removeClass("active-itam");
       //music
-      $(this)
-        .children(".music")
-        .load("life/" + $(this).attr("id") + ".html")
-        .fadeIn(500);
+      loadProjectContent($music, project, pathFn);
+      $music.fadeIn(500);
     } else {
       // Desktop: de andere players faden uit en leegmaken, dan de nieuwe player tonen.
       //  $(this).children(".music").toggle();
       $(".itam").not(this).children(".music").fadeOut().empty();
       $(".itam").not(this).removeClass("active-itam");
       //music
-      $(this)
-        .children(".music")
-        .load("life/" + $(this).attr("id") + ".html")
-        .show();
+      loadProjectContent($music, project, pathFn);
+      $music.show();
     }
   });
 
