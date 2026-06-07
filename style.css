@@ -543,12 +543,13 @@ img {
   opacity: 1;
   position: absolute;
   top: 0;
-  /* Rechts uitgelijnd i.p.v. gecentreerd: enkel de rechterkant van de
-     cirkel (~35%, want kolom 7rem t.o.v. cirkel 18rem) blijft zichtbaar
-     binnen de smalle gesloten kolom — net als in de OG-layout, en dat
-     geeft wat witruimte i.p.v. een "drukke" gecentreerde cirkel. */
-  left: auto;
-  right: 0;
+  /* Links uitgelijnd i.p.v. gecentreerd: de cirkel begint aan de
+     linkerkant van de kolom en loopt door naar rechts, waar hij
+     wegvalt achter de scheidingslijn (~35% blijft zichtbaar: kolom
+     7rem t.o.v. cirkel 18rem) — net als in de OG-layout, en dat geeft
+     wat witruimte i.p.v. een "drukke" gecentreerde cirkel. */
+  left: 0;
+  right: auto;
   width: 18rem;
   height: 18rem;
   border-radius: 50%;
