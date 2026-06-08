@@ -478,6 +478,9 @@ font-family: 'Roboto', sans-serif;
      komt zo BOVEN de tijdsbalk te staan i.p.v. ernaast — geeft wat meer
      ademruimte/visuele rust, zoals gevraagd. */
   display: block;
+  /* Gecentreerd i.p.v. links uitgelijnd, zodat de knop erboven (".pp",
+     ook gecentreerd via "margin: 0 auto") er recht boven kan staan. */
+  margin: 0 auto;
   height: 0.5em;
   background: red;
   outline: none;
@@ -527,7 +530,9 @@ button {
   display: block;
   width: 1.4em;
   height: 1.4em;
-  margin: 0 0 0.4em 0;
+  /* Gecentreerd boven de tijdsbalk i.p.v. links uitgelijnd (de tijdsbalk
+     hierboven kreeg om diezelfde reden ook "margin: 0 auto"). */
+  margin: 0 auto 0.4em auto;
 }
 .pp::before,
 .pp::after {
@@ -918,6 +923,11 @@ background-position: left top;
   max-height: 30rem;
   transition: height 0.5s ease;
   overflow-y: auto;
+  /* Geeft de scrollbar-thumb (zie ".item.activate::-webkit-scrollbar-thumb"
+     hieronder) een eigen "track" die niet helemaal tot tegen de
+     scheidingslijnen boven/onder de rij komt. */
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
   /* Desktop maakt ".item.activate" transparant — op mobile dekt de
      (ondoorzichtige) achtergrond van elk item net het overstekende stuk
      van de cirkel van het VORIGE item af (zie ".item": align-items:
@@ -1009,14 +1019,42 @@ background-position: left top;
   transition: display 0.5s;
 }           
     
+/* Eigen scrollbar voor open items: iets dikker dan de site-brede 1px,
+   afgeronde hoek, en een doorzichtige rand rond de "duim" (samen met
+   "background-clip: padding-box") zodat ze niet helemaal tegen de
+   kolomranden/scheidingslijnen aansluit. Verschijnt — net als in Chrome —
+   alleen TERWIJL je scrolt: ".is-scrolling" wordt door "main.js" kort
+   toegevoegd bij een scroll-event en nadien automatisch weer verwijderd. */
+.item.activate::-webkit-scrollbar {
+  width: 0.3rem;
+}
+.item.activate::-webkit-scrollbar-track {
+  background: transparent;
+}
+.item.activate::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 0.2s ease;
+}
+.item.activate.is-scrolling::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 0, 0, 0.4);
+}
+/* Firefox: dunne, transparante scrollbar i.p.v. de klassieke brede. Firefox
+   ondersteunt geen aparte hover/scroll-state voor de duim, dus blijft die
+   hier subtiel zichtbaar (beste haalbare benadering van "auto-hide"). */
+.item.activate {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 0, 0, 0.4) transparent;
+}
+
 /*MEDIA-MOB*/
 .music {
-  /* Laat horizontaal scrollen toe binnen de open rij: de Bandcamp-iframe
-     (zie ".item iframe" verderop) krijgt bewust een vaste min-breedte van
-     350px zodat zijn EIGEN tekst niet afgesneden wordt — op smalle
-     schermen (< 350px) steekt hij dan net buiten de kolom. Met
-     "overflow-x: auto" kan je er gewoon naartoe scrollen i.p.v. dat de
-     tekst onbereikbaar verdwijnt achter de rand. */
+  /* Algemene veiligheidsnet tegen horizontale overloop (bv. een embed dat
+     toch breder uitvalt dan verwacht): liever scrollbaar dan afgesneden.
+     De Bandcamp-iframe zelf wordt intussen proportioneel geschaald om
+     binnen de kolom te passen — zie ".embed-scale-wrapper" verderop. */
   overflow-x: auto;
 }
 .itam img {
@@ -1027,17 +1065,30 @@ background-position: left top;
 .item video {
     padding: 0.5em;
     z-index: 20;
-    /* Bandcamp (en sommige andere embeds) renderen hun inhoud server-side
-       op een vaste breedte van ca. 350px — dat is binnen de iframe zelf zo
-       opgebouwd en dus niet via onze CSS te "verantwoordelijk" maken.
-       Drukken we de iframe smaller (bv. 90vw op een 375px-scherm = 337px),
-       dan snijdt Bandcamp's EIGEN layout zijn tekst af. Daarom hier een
-       vaste min-breedte die hun layout net past, gecombineerd met
-       horizontale scroll op ".music" hieronder zodat niets verloren gaat. */
-    min-width: 350px;
+    min-width: 90vw;
   max-width: 100vw;
   width: 100%;
   height: 45vw;}
+/* Bandcamp's ingesloten speler wordt server-side op een VASTE breedte
+   (~350px) opgebouwd en past zich niet aan een smallere iframe aan — zijn
+   eigen tekst liep dan over zijn rand. "buildEmbed" (main.js) wikkelt zo'n
+   embed daarom in ".embed-scale-wrapper" en schaalt de iframe als geheel
+   proportioneel terug (incl. tekst) tot de beschikbare breedte, zodat alles
+   binnen de kolomranden blijft i.p.v. afgesneden of bescroll-baar te zijn. */
+.embed-scale-wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+.embed-scale-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+  min-width: 0;
+  max-width: none;
+  padding: 0;
+}
 .item iframe:first-of-type,
 .item video:first-of-type {
     margin-top: 20vw;

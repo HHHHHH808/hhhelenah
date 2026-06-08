@@ -359,8 +359,46 @@ function buildTrackList(nummers) {
 // Generieke embed-wrapper (Vimeo/YouTube/Spotify/Bandcamp werken allemaal
 // met deze gangbare iframe-attributen).
 function buildEmbed(embedUrl) {
-  return $('<iframe frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
+  var $iframe = $('<iframe frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
     .attr('src', embedUrl);
+
+  // Bandcamp's ingesloten speler wordt server-side op een VASTE breedte
+  // (~350px) opgebouwd en is niet "responsive" — knijpen we de iframe
+  // smaller, dan loopt Bandcamp's eigen tekst over zijn rand. In plaats
+  // van dat te laten gebeuren (of de gebruiker te laten scrollen, wat
+  // buiten de kolomranden voelde), schalen we de iframe als geheel
+  // proportioneel terug tot de beschikbare breedte: alles — inclusief de
+  // tekst — krimpt mee, en blijft dus volledig binnen de lijnen.
+  if (/bandcamp\.com/.test(embedUrl)) {
+    // Bandcamp's embed-layout reageert WEL op de breedte van zijn eigen
+    // iframe (knoppen als "buy"/"share"/vorige-volgende verschuiven of
+    // verdwijnen pas bij smallere breedtes), maar blijft intern altijd op
+    // zijn eigen, voor ons onbekende breedte uitgaan — bij 350 of 400px
+    // liep er steeds een stukje (tekst, knoppen) over de rand. We geven 'm
+    // daarom ruim baan (700px, breed genoeg voor alle elementen naast
+    // elkaar) en schalen het geheel proportioneel terug — dat garandeert
+    // dat NIETS wordt afgesneden, ongeacht hoe Bandcamp het intern opbouwt.
+    var NATIVE_WIDTH = 700;
+    var NATIVE_HEIGHT = 120;
+    var $wrapper = $('<div class="embed-scale-wrapper"></div>');
+    $iframe.css({ width: NATIVE_WIDTH + 'px', height: NATIVE_HEIGHT + 'px' });
+    $wrapper.append($iframe);
+
+    function applyScale() {
+      var available = $wrapper.parent().width() || $wrapper.width();
+      if (!available) return;
+      var scale = Math.min(available / NATIVE_WIDTH, 1);
+      $iframe.css('transform', 'scale(' + scale + ')');
+      $wrapper.css('height', (NATIVE_HEIGHT * scale) + 'px');
+    }
+    // Eenmaal nu, en opnieuw bij elke resize (bv. rotatie van het toestel).
+    setTimeout(applyScale, 0);
+    $(window).on('resize', applyScale);
+
+    return $wrapper;
+  }
+
+  return $iframe;
 }
 
 function buildVideo(videoBestand) {
@@ -446,8 +484,14 @@ function initAudioPlayer($content, nummers, pathFn) {
     return false;
   });
 
+  // "isSeeking" voorkomt dat de 500ms-poll de balk (en dus de indruk van
+  // de afspeelpositie) terugzet TERWIJL de gebruiker aan het slepen/tikken
+  // is — zonder deze vlag overschreef "updateProgressValue" de net-versleepte
+  // waarde met de (nog niet bijgewerkte) "audio.currentTime", wat voelde
+  // alsof het nummer "terugsprong".
+  var isSeeking = false;
   function updateProgressValue() {
-    if (audio.duration) {
+    if (audio.duration && !isSeeking) {
       progressBar.max = audio.duration;
       progressBar.value = audio.currentTime;
     }
@@ -460,10 +504,34 @@ function initAudioPlayer($content, nummers, pathFn) {
   // leek dan "opnieuw te beginnen".
   audio.addEventListener('loadedmetadata', updateProgressValue);
   audio.addEventListener('durationchange', updateProgressValue);
-  progressBar.addEventListener('input', function () {
+
+  function seekTo(value) {
     if (audio.duration) {
-      audio.currentTime = progressBar.value;
+      audio.currentTime = value;
     }
+  }
+  // "pointerdown"/"touchstart" markeren het begin van een sleep/tik op de
+  // balk; "pointerup"/"touchend" (en "change", als laatste vangnet) sluiten
+  // het af. Op sommige mobiele browsers vuurt een eenvoudige TIK op de
+  // balk geen "input" maar enkel "change" — vandaar dat we op BEIDE
+  // luisteren i.p.v. enkel op "input".
+  ['pointerdown', 'touchstart', 'mousedown'].forEach(function (evt) {
+    progressBar.addEventListener(evt, function () { isSeeking = true; });
+  });
+  ['pointerup', 'touchend', 'mouseup'].forEach(function (evt) {
+    progressBar.addEventListener(evt, function () {
+      // Kleine vertraging: geeft de browser de kans om de uiteindelijke
+      // "input"/"change"-waarde nog te verwerken vóór de poll terug actief wordt.
+      setTimeout(function () { isSeeking = false; }, 100);
+    });
+  });
+  progressBar.addEventListener('input', function () {
+    isSeeking = true;
+    seekTo(progressBar.value);
+  });
+  progressBar.addEventListener('change', function () {
+    seekTo(progressBar.value);
+    isSeeking = false;
   });
   progressBar.addEventListener('click', function (e) {
     e.stopPropagation();
@@ -692,6 +760,20 @@ $(document).ready(function () {
     //stop players
     $(".item").removeClass("activate").children(".music").empty().hide();
     $(".itam").removeClass("active-itam").children(".music").empty().hide();
+  });
+
+  // Scrollbar van een open item enkel TONEN terwijl er effectief gescrold
+  // wordt (".is-scrolling", zie style.css) — net als de overlay-scrollbars
+  // in Chrome, die ook vanzelf weer verdwijnen zodra je stopt met scrollen.
+  var scrollbarHideTimers = {};
+  $(".item").on("scroll", function () {
+    var $item = $(this);
+    var key = $item.attr("id");
+    $item.addClass("is-scrolling");
+    clearTimeout(scrollbarHideTimers[key]);
+    scrollbarHideTimers[key] = setTimeout(function () {
+      $item.removeClass("is-scrolling");
+    }, 800);
   });
 
   // Klik enkel op de afbeelding opent/sluit een item — niet ergens in de
