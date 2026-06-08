@@ -782,7 +782,7 @@ right: 0;  box-sizing: border-box;
   width: 100%;
     min-width: 100%;
     max-width: 100%;
-  height: 5.2rem;
+  height: 6.5rem;
   border-right: none;
   border-bottom: 1px solid red;
   padding-top: 0rem;
@@ -814,13 +814,15 @@ background-position: left top;
   top: auto;
   left: auto;
   right: auto;
-  /* Cirkel (8rem) t.o.v. item-hoogte (5.2rem): het overstekende deel
-     onderaan = 8 - 5.2 = 2.8rem = 35% van de cirkel — dat duikt de
+  /* Cirkel (9rem) groter t.o.v. item-hoogte (6.5rem): overstekend deel
+     onderaan = 9 - 6.5 = 2.5rem (~28% van de cirkel) — dat duikt de
      volgende rij in en wordt door diens ondoorzichtige achtergrond
-     bedekt (zie toelichting bij ".item" / align-items: flex-start). */
-  width: 8rem;
-  height: 8rem;
-  min-width: 8rem;
+     bedekt (zie toelichting bij ".item" / align-items: flex-start).
+     Groter geheel + minder dramatische overlap dan de vorige 8/5.2-ratio,
+     die als "te veel uitstekend" aanvoelde. */
+  width: 9rem;
+  height: 9rem;
+  min-width: 9rem;
   margin: 0 1rem 0 0;
   border-radius: 50%;
   object-fit: cover;
@@ -849,6 +851,12 @@ background-position: left top;
    al smal/100% breed) zodat de tekst/tracklist er gewoon onder verschijnt. */
 .item.activate {
   display: block;
+  /* Desktop maakt ".item.activate" transparant — op mobile dekt de
+     (ondoorzichtige) achtergrond van elk item net het overstekende stuk
+     van de cirkel van het VORIGE item af (zie ".item": align-items:
+     flex-start + overlap-uitleg). Transparant betekent dat die cirkel door
+     de geopende inhoud heen "lekt". Daarom hier expliciet wit behouden. */
+  background-color: white;
 }
 /* Net als op desktop verandert de afbeelding zelf niet van grootte bij
    het openen — enkel de filter gaat over. Maar de desktop-regel
