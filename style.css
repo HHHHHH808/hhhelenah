@@ -782,7 +782,7 @@ right: 0;  box-sizing: border-box;
   width: 100%;
     min-width: 100%;
     max-width: 100%;
-  height: 3.5rem;
+  height: 3.85rem;
   border-right: none;
   border-bottom: 1px solid red;
   padding-top: 0rem;
@@ -790,19 +790,18 @@ right: 0;  box-sizing: border-box;
       background-size: 45% auto;
 background-position: left top;
   border-radius: 0;
-  /* De desktop-regel ".item { overflow: hidden }" (regel ~317) clipte hier
-     het deel van de cirkel dat bewust boven de eigen lijn uitsteekt — het
-     resultaat was een "afgeplat" halve cirkel i.p.v. een vrij overlappende.
-     "visible" laat de overlap nu effectief zien (net als bij ".activate"). */
-  overflow: visible;
+  /* TERUG naar "hidden" (zoals desktop): de bedoeling is net dat de eigen
+     scheidingslijn de cirkel AFSNIJDT — enkel het bovenste ~35% blijft
+     zichtbaar binnen de rij, de rest wordt door de rand van deze kolom
+     geclipt (i.p.v. dat de cirkel zelf over de lijn heen tekent, wat met
+     "visible" gebeurde). */
+  overflow: hidden;
   display: flex;
-  /* "flex-start": de cirkel hangt boven aan de rij en steekt onderaan ~35%
-     over de eigen scheidingslijn (border-bottom) heen, de volgende rij in.
-     Omdat elk volgend ".item" later in de DOM zit, tekent zijn ondoorzichtige
-     achtergrond zich automatisch OVER dat overstekende stuk — de cirkel
-     "duikt" er letterlijk achter weg, exact het gestapelde "platenbak"-
-     gevoel van de OG-foto's (geen losse z-index-trucs nodig: gewone
-     paint-volgorde van DOM-siblings regelt dit vanzelf). */
+  /* "flex-start": de cirkel hangt boven aan de rij. Samen met
+     "overflow: hidden" op ".item" zorgt dat ervoor dat enkel het bovenste
+     ~35% van de (veel grotere) cirkel binnen de rij zichtbaar blijft — de
+     rand van de kolom / de eigen scheidingslijn "snijdt" de rest af, net
+     als bij de desktop-"platenbak" (zie ".item" overflow: hidden). */
   align-items: flex-start;
 }
 /* Gesloten item op mobile: ronde afbeelding links uitgelijnd en onderaan
@@ -814,15 +813,14 @@ background-position: left top;
   top: auto;
   left: auto;
   right: auto;
-  /* Cirkel (9rem) groter t.o.v. item-hoogte (6.5rem): overstekend deel
-     onderaan = 9 - 6.5 = 2.5rem (~28% van de cirkel) — dat duikt de
-     volgende rij in en wordt door diens ondoorzichtige achtergrond
-     bedekt (zie toelichting bij ".item" / align-items: flex-start).
-     Groter geheel + minder dramatische overlap dan de vorige 8/5.2-ratio,
-     die als "te veel uitstekend" aanvoelde. */
-  width: 10rem;
-  height: 10rem;
-  min-width: 10rem;
+  /* Cirkel (11rem) vs. item-hoogte (3.85rem): de rand van de kolom
+     (".item", overflow: hidden) snijdt de cirkel af zodat enkel het
+     bovenste ~35% (3.85 / 11) binnen de rij zichtbaar blijft — de eigen
+     scheidingslijn "knipt" de cirkel dus letterlijk af i.p.v. dat de
+     cirkel over de lijn heen tekent. */
+  width: 11rem;
+  height: 11rem;
+  min-width: 11rem;
   margin: 0 1rem 0 0;
   border-radius: 50%;
   object-fit: cover;
