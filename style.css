@@ -807,9 +807,13 @@ background-position: left top;
   top: auto;
   left: auto;
   right: auto;
-  width: 7rem;
-  height: 7rem;
-  min-width: 7rem;
+  /* Met "align-items: flex-end" rust de cirkel onderaan tegen de eigen
+     scheidingslijn (item-hoogte 4rem). Het stuk dat boven de lijn uitsteekt
+     is (cirkelhoogte - 4rem). Voor ~35% overlap moet de cirkelhoogte dus
+     ~4rem / 0.65 zijn — vandaar 6.15rem i.p.v. 7rem (dat gaf >40% overlap). */
+  width: 6.15rem;
+  height: 6.15rem;
+  min-width: 6.15rem;
   margin: 0 1rem 0 0;
   border-radius: 50%;
   object-fit: cover;
