@@ -669,11 +669,30 @@ $(document).ready(function () {
   // pijl (geen verwarrende "klikbaar"-wijsvinger overal), en kan de
   // gebruiker er ook gewoon verticaal doorheen scrollen (bv. bij een
   // lange tracklist) zonder per ongeluk te klikken.
-  $(".item").on("click", "img", function (e) {
-    e.stopPropagation();
-    var $item = $(this).closest(".item");
+  $(".item").on("click", function (e) {
+    var $item = $(this);
+    var isOpen = $item.hasClass('activate');
 
-    if ($item.hasClass('activate')) {
+    if (isMobile()) {
+      // Mobiel: het volledige rayon (cirkel + titel) is klikbaar om te
+      // OPENEN — de zichtbare cirkel is door de scheidingslijn-clip vrij
+      // klein geworden, dus enkel de afbeelding als trigger zou lastig
+      // mikken zijn. Om te SLUITEN blijft de trigger beperkt tot de
+      // "kop" (cirkel + titel): klikken in de beschrijving/tracklist/
+      // player (SoundCloud-links e.d.) mag het item niet dichtklappen.
+      if (isOpen && !$(e.target).closest('img, h4').length) {
+        return;
+      }
+    } else {
+      // Desktop: ongewijzigd — enkel de afbeelding blijft de trigger.
+      if (!$(e.target).closest('img').length) {
+        return;
+      }
+    }
+
+    e.stopPropagation();
+
+    if (isOpen) {
       // Tweede klik op dezelfde afbeelding: sluit het item terug.
       $item.removeClass("activate");
       $item.children(".music").fadeOut(200, function () {
