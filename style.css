@@ -783,6 +783,15 @@ right: 0;  box-sizing: border-box;
     min-width: 100%;
     max-width: 100%;
   height: 3.85rem;
+  /* Net als op desktop (zie de "klem-glitch"-fix bij .item/.activate
+     min/max-width): min-height/max-height moeten in BEIDE staten gelijk
+     zijn, anders "klemt" de overgang i.p.v. vloeiend te animeren — enkel
+     "height" mag verschillen en dus animeren. De scheidingslijn (eigen
+     border-bottom) is zo de drager van de open/dicht-beweging, exact het
+     desktop-concept maar dan verticaal. */
+  min-height: 3.85rem;
+  max-height: 30rem;
+  transition: height 0.5s ease;
   border-right: none;
   border-bottom: 1px solid red;
   padding-top: 0rem;
@@ -849,6 +858,15 @@ background-position: left top;
    al smal/100% breed) zodat de tekst/tracklist er gewoon onder verschijnt. */
 .item.activate {
   display: block;
+  /* Vaste hoogte (i.p.v. "auto", dat ".activate" mobile zet — zie verderop):
+     "auto" kan niet smooth interpoleren met de "height: 3.85rem" van de
+     gesloten staat. Dezelfde min-/max-height als ".item" (zie aldaar)
+     voorkomt de klem-glitch — enkel "height" zelf animeert dan. */
+  height: 26rem;
+  min-height: 3.85rem;
+  max-height: 30rem;
+  transition: height 0.5s ease;
+  overflow-y: auto;
   /* Desktop maakt ".item.activate" transparant — op mobile dekt de
      (ondoorzichtige) achtergrond van elk item net het overstekende stuk
      van de cirkel van het VORIGE item af (zie ".item": align-items:
