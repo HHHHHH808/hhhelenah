@@ -796,12 +796,14 @@ background-position: left top;
      "visible" laat de overlap nu effectief zien (net als bij ".activate"). */
   overflow: visible;
   display: flex;
-  /* "flex-end" i.p.v. "center": de cirkel wordt nu onderaan tegen de eigen
-     scheidingslijn (border-bottom) uitgelijnd. Omdat de cirkel groter is
-     dan de rij-hoogte, steekt het bovenste deel — zo'n 35% — er vanzelf
-     bovenuit (i.p.v. gelijk verdeeld boven/onder zoals bij center-uitlijning,
-     wat de cirkel kleiner/gecentreerd deed aanvoelen dan in het origineel). */
-  align-items: flex-end;
+  /* "flex-start": de cirkel hangt boven aan de rij en steekt onderaan ~35%
+     over de eigen scheidingslijn (border-bottom) heen, de volgende rij in.
+     Omdat elk volgend ".item" later in de DOM zit, tekent zijn ondoorzichtige
+     achtergrond zich automatisch OVER dat overstekende stuk — de cirkel
+     "duikt" er letterlijk achter weg, exact het gestapelde "platenbak"-
+     gevoel van de OG-foto's (geen losse z-index-trucs nodig: gewone
+     paint-volgorde van DOM-siblings regelt dit vanzelf). */
+  align-items: flex-start;
 }
 /* Gesloten item op mobile: ronde afbeelding links uitgelijnd en onderaan
    tegen de eigen scheidingslijn, zodat de bovenkant er ~35% bovenuit piekt
@@ -812,11 +814,10 @@ background-position: left top;
   top: auto;
   left: auto;
   right: auto;
-  /* Grotere cirkel (dichter bij het origineel) + item-hoogte mee opgetrokken
-     naar 5.2rem, zodat de verhouding behouden blijft: het stuk dat boven de
-     eigen lijn uitsteekt = cirkelhoogte - itemhoogte = 8 - 5.2 = 2.8rem
-     (= 35% van 8rem). Vereist "overflow: visible" op .item (zie hierboven),
-     anders wordt dat overstekende deel afgeplat/weggeknipt. */
+  /* Cirkel (8rem) t.o.v. item-hoogte (5.2rem): het overstekende deel
+     onderaan = 8 - 5.2 = 2.8rem = 35% van de cirkel — dat duikt de
+     volgende rij in en wordt door diens ondoorzichtige achtergrond
+     bedekt (zie toelichting bij ".item" / align-items: flex-start). */
   width: 8rem;
   height: 8rem;
   min-width: 8rem;
