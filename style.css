@@ -474,12 +474,13 @@ font-family: 'Roboto', sans-serif;
 #progress-bar {
   -webkit-appearance: none;
   width: 80%;
-    display: inline;
+  /* "block" i.p.v. "inline": de play/pauze-knop (".pp", nu ook "block")
+     komt zo BOVEN de tijdsbalk te staan i.p.v. ernaast — geeft wat meer
+     ademruimte/visuele rust, zoals gevraagd. */
+  display: block;
   height: 0.5em;
   background: red;
   outline: none;
-  vertical-align: super;
-
 }
 #progress-bar::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -514,9 +515,59 @@ button {
   height:auto;
   cursor: pointer;
 } 
-.pp{
-      font-family: media;          
-            }
+/* Play/pauze-icoon zuiver met CSS getekend (i.p.v. tekst-glyphs uit het
+   "media"-icoonfont, "&#9658;" vs "&#10074;&#10074;" — die renderden op
+   duidelijk verschillende groottes, wat de knop deed "springen" en de
+   tekst ernaast deed verschuiven bij het wisselen tussen afspelen/pauze).
+   Vaste, identieke bounding box (1.4em vierkant) voor beide standen, en
+   "block" + margin i.p.v. "inline" naast de tijdsbalk: dat creëert wat
+   meer lucht/ruimte en oogt rustiger, zoals gevraagd. */
+.pp {
+  position: relative;
+  display: block;
+  width: 1.4em;
+  height: 1.4em;
+  margin: 0 0 0.4em 0;
+}
+.pp::before,
+.pp::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  background: red;
+}
+/* Afspelen (standaard): één driehoek, met borders getekend zodat de
+   bounding box exact even groot blijft als de pauze-vorm hieronder. */
+.pp::before {
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: transparent;
+  border-style: solid;
+  border-width: 0.6em 0 0.6em 1em;
+  border-color: transparent transparent transparent red;
+  transform: translate(-35%, -50%);
+}
+.pp::after {
+  display: none;
+}
+/* Pauze (".is-playing"): twee gelijke balkjes i.p.v. de driehoek — exact
+   dezelfde bounding box/maat, dus geen visuele sprong meer. */
+.pp.is-playing::before {
+  left: 38%;
+  width: 0.35em;
+  height: 1.2em;
+  background: red;
+  border: none;
+  transform: translate(-50%, -50%);
+}
+.pp.is-playing::after {
+  display: block;
+  left: 68%;
+  width: 0.35em;
+  height: 1.2em;
+  transform: translate(-50%, -50%);
+}
 .item iframe,
 .item video {
     padding: 0.5em;
@@ -959,6 +1010,15 @@ background-position: left top;
 }           
     
 /*MEDIA-MOB*/
+.music {
+  /* Laat horizontaal scrollen toe binnen de open rij: de Bandcamp-iframe
+     (zie ".item iframe" verderop) krijgt bewust een vaste min-breedte van
+     350px zodat zijn EIGEN tekst niet afgesneden wordt — op smalle
+     schermen (< 350px) steekt hij dan net buiten de kolom. Met
+     "overflow-x: auto" kan je er gewoon naartoe scrollen i.p.v. dat de
+     tekst onbereikbaar verdwijnt achter de rand. */
+  overflow-x: auto;
+}
 .itam img {
   width: 100%;
   height: 100%;
@@ -967,7 +1027,14 @@ background-position: left top;
 .item video {
     padding: 0.5em;
     z-index: 20;
-    min-width: 90vw;
+    /* Bandcamp (en sommige andere embeds) renderen hun inhoud server-side
+       op een vaste breedte van ca. 350px — dat is binnen de iframe zelf zo
+       opgebouwd en dus niet via onze CSS te "verantwoordelijk" maken.
+       Drukken we de iframe smaller (bv. 90vw op een 375px-scherm = 337px),
+       dan snijdt Bandcamp's EIGEN layout zijn tekst af. Daarom hier een
+       vaste min-breedte die hun layout net past, gecombineerd met
+       horizontale scroll op ".music" hieronder zodat niets verloren gaat. */
+    min-width: 350px;
   max-width: 100vw;
   width: 100%;
   height: 45vw;}

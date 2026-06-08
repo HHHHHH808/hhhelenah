@@ -70,6 +70,15 @@ const PROJECTS = {
       categorieen: ["mastering"],
       afbeelding: "assets/Images/Work/wide-circ/blur/schob.png",
       type: "embed",
+      // Bandcamp's embed-HTML wordt server-side op een vaste breedte
+      // (~350px) gerenderd binnen de iframe — dat is GEEN CSS-probleem aan
+      // onze kant (cross-origin, dus niet aanpasbaar): zodra de iframe
+      // smaller is dan die vaste breedte, loopt de tekst (tracktitel, duur)
+      // over zijn eigen rand en wordt ze afgesneden ("size=small" bleek nog
+      // slechter — die layout overlapt zichzelf in een smalle iframe). We
+      // geven de iframe daarom op mobiel een vaste min-breedte + horizontale
+      // scroll (zie ".item .music iframe" in style.css), zodat de inhoud
+      // intact blijft en de gebruiker er desnoods naar kan scrollen.
       embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=202891063",
       beschrijving: "Mastering for 'Poe's Law' by Schobbee."
     },
@@ -315,8 +324,20 @@ function renderLifeItems() {
 
 // Bouwt het basis-spelermarkup (audio-element, play/pause-knop, progressbar)
 function buildPlayerMarkup() {
-  return '<audio>Your browser does not support HTML 5 Player.</audio>' +
-    '<button class="pp">&#9658;</button>' +
+  // "preload=metadata" i.p.v. niets: zonder dit blijft "audio.duration"
+  // op mobiel vaak NaN totdat je effectief op play drukt. De tijdsbalk had
+  // dan nog zijn DEFAULT max (100), waardoor een tik ergens op de balk
+  // "audio.currentTime" instelde t.o.v. die verkeerde schaal — voor een
+  // nummer van bv. 6:44 (404s) sprong dat dus terug naar vlak bij het
+  // begin ("de song begint opnieuw"). Met preload=metadata is de duur
+  // (en dus "progressBar.max", zie hieronder) meteen correct.
+  return '<audio preload="metadata">Your browser does not support HTML 5 Player.</audio>' +
+    // Geen tekst-glyph meer (de "media"-iconenfont rendert "&#9658;" play
+    // en "&#10074;&#10074;" pauze op duidelijk verschillende groottes, wat
+    // de knop deed "springen" en de tekst ernaast deed verschuiven). Het
+    // icoon wordt nu zuiver met CSS getekend (".pp::before"/"::after"),
+    // op een vaste, identieke afmeting voor beide standen — zie style.css.
+    '<button class="pp" aria-label="Afspelen / pauzeren"></button>' +
     '<input type="range" id="progress-bar" min="0" max="" value="0" />';
 }
 
@@ -401,15 +422,15 @@ function initAudioPlayer($content, nummers, pathFn) {
     if (zoeker == music_id) {
       if (audio.paused) {
         audio.play();
-        $pp.html('&#10074;&#10074;');
+        $pp.addClass('is-playing');
       } else {
         audio.pause();
-        $pp.html('&#9658;');
+        $pp.removeClass('is-playing');
       }
     } else {
       playById(music_id);
       audio.play();
-      $pp.html('&#10074;&#10074;');
+      $pp.addClass('is-playing');
     }
     return false;
   });
@@ -417,10 +438,10 @@ function initAudioPlayer($content, nummers, pathFn) {
   $pp.on('click', function () {
     if (audio.paused) {
       audio.play();
-      $(this).html('&#10074;&#10074;');
+      $(this).addClass('is-playing');
     } else {
       audio.pause();
-      $(this).html('&#9658;');
+      $(this).removeClass('is-playing');
     }
     return false;
   });
@@ -432,8 +453,17 @@ function initAudioPlayer($content, nummers, pathFn) {
     }
   }
   setInterval(updateProgressValue, 500);
+  // Zet "progressBar.max" METEEN zodra de duur gekend is, i.p.v. te wachten
+  // op de volgende poll (elke 500ms). Zonder dit kon een tik op de balk
+  // vlak na het laden nog tegen de DEFAULT max (100) berekend worden,
+  // waardoor "audio.currentTime" een veel te lage waarde kreeg — de song
+  // leek dan "opnieuw te beginnen".
+  audio.addEventListener('loadedmetadata', updateProgressValue);
+  audio.addEventListener('durationchange', updateProgressValue);
   progressBar.addEventListener('input', function () {
-    audio.currentTime = progressBar.value;
+    if (audio.duration) {
+      audio.currentTime = progressBar.value;
+    }
   });
   progressBar.addEventListener('click', function (e) {
     e.stopPropagation();
