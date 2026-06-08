@@ -674,13 +674,12 @@ $(document).ready(function () {
     var isOpen = $item.hasClass('activate');
 
     if (isMobile()) {
-      // Mobiel: het volledige rayon (cirkel + titel) is klikbaar om te
-      // OPENEN — de zichtbare cirkel is door de scheidingslijn-clip vrij
-      // klein geworden, dus enkel de afbeelding als trigger zou lastig
-      // mikken zijn. Om te SLUITEN blijft de trigger beperkt tot de
-      // "kop" (cirkel + titel): klikken in de beschrijving/tracklist/
-      // player (SoundCloud-links e.d.) mag het item niet dichtklappen.
-      if (isOpen && !$(e.target).closest('img, h4').length) {
+      // Mobiel: het volledige rayon is klikbaar, zowel om te openen als
+      // (nogmaals klikken, eender waar op het item) terug te sluiten —
+      // enige uitzondering: links/embedded spelers (SoundCloud/Vimeo,
+      // tracklist-links, audio-knoppen), anders kun je niets meer
+      // afspelen of aanklikken zonder het item meteen dicht te klappen.
+      if ($(e.target).closest('a, iframe, .audio, .pp, .progressBar, button, input').length) {
         return;
       }
     } else {
