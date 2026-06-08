@@ -778,6 +778,7 @@ right: 0;  box-sizing: border-box;
   line-height: 1.4rem;
 }
 .item {
+  position: relative;
   width: 100%;
     min-width: 100%;
     max-width: 100%;
@@ -790,10 +791,15 @@ right: 0;  box-sizing: border-box;
 background-position: left top;
   border-radius: 0;
   display: flex;
-  align-items: center;
+  /* "flex-end" i.p.v. "center": de cirkel wordt nu onderaan tegen de eigen
+     scheidingslijn (border-bottom) uitgelijnd. Omdat de cirkel groter is
+     dan de rij-hoogte, steekt het bovenste deel — zo'n 35% — er vanzelf
+     bovenuit (i.p.v. gelijk verdeeld boven/onder zoals bij center-uitlijning,
+     wat de cirkel kleiner/gecentreerd deed aanvoelen dan in het origineel). */
+  align-items: flex-end;
 }
-/* Gesloten item op mobile: ronde afbeelding links uitgelijnd, die met een
-   negatieve verticale margin een stukje boven de scheidingslijn uitsteekt
+/* Gesloten item op mobile: ronde afbeelding links uitgelijnd en onderaan
+   tegen de eigen scheidingslijn, zodat de bovenkant er ~35% bovenuit piekt
    (zelfde "platenbak"-gevoel als op desktop, maar dan verticaal gestapeld
    — zie OG-screenshot). Grijswaarden + lichte blur tot het item opent. */
 .item img {
@@ -804,10 +810,7 @@ background-position: left top;
   width: 7rem;
   height: 7rem;
   min-width: 7rem;
-  /* ~35% van de cirkel steekt boven de eigen scheidingslijn uit (OG-gevoel) */
-  margin-top: -2.45rem;
-  margin-bottom: -2.45rem;
-  margin-right: 1rem;
+  margin: 0 1rem 0 0;
   border-radius: 50%;
   object-fit: cover;
   transform: none;
@@ -818,17 +821,17 @@ background-position: left top;
 .itam.active-itam img {
   filter: grayscale(0%) blur(0px);
 }
+/* Titel staat los van de flow, vast rechtsboven het item — zowel open als
+   dicht exact dezelfde positie, zodat ze nooit "springt" bij het open- of
+   dichtklappen (zie .item.activate h4 hieronder, identiek). */
 .item h4 {
-  position: relative;
+  position: absolute;
+  top: 0.5rem;
+  right: 0;
+  text-align: right;
   writing-mode: horizontal-tb;
-  text-align: left;
   width: auto;
-  /* "top: 0" i.p.v. "auto", zodat de overgang naar .activate h4 (top:
-     0.5rem) vloeiend kan interpoleren i.p.v. abrupt te springen. */
-  top: 0;
-  right: auto;
   bottom: auto;
-  transition: top 0.5s ease;
 }
 /* Geopend item op mobile: de afbeelding blijft een kleine cirkel, maar
    wordt in-flow geplaatst (geen absolute centrering nodig — de kolom is
