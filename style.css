@@ -801,11 +801,12 @@ background-position: left top;
   top: auto;
   left: auto;
   right: auto;
-  width: 5.5rem;
-  height: 5.5rem;
-  min-width: 5.5rem;
-  margin-top: -1.25rem;
-  margin-bottom: -1.25rem;
+  width: 7rem;
+  height: 7rem;
+  min-width: 7rem;
+  /* ~35% van de cirkel steekt boven de eigen scheidingslijn uit (OG-gevoel) */
+  margin-top: -2.45rem;
+  margin-bottom: -2.45rem;
   margin-right: 1rem;
   border-radius: 50%;
   object-fit: cover;
@@ -845,6 +846,12 @@ background-position: left top;
   left: auto;
   right: auto;
   transform: none;
+  /* Open: cirkel blijft links uitgelijnd, maar "float"-en i.p.v. de
+     negatieve verticale margins van de gesloten staat (die waren enkel
+     bedoeld om over de eigen scheidingslijn te pieken) — zo vloeit de
+     titel/beschrijving er natuurlijk naast i.p.v. eronder. */
+  float: left;
+  margin: 0 1rem 0.5rem 0;
 }
 .hiding {
   width: auto;
@@ -856,12 +863,24 @@ background-position: left top;
     min-height: 45vw;
   height: auto;
   transition: padding-top 0.5s;
-        overflow: hidden;
+  /* "visible" i.p.v. "hidden": anders knipt deze container het bovenste
+     stuk van de cirkel weg dat (bewust) boven de scheidingslijn uitsteekt
+     zodra het item open is — zie .item img margin-top hierboven. */
+        overflow: visible;
   max-width: 100%;
-}         
+}
 .activate h4{
                 top: 0.5rem;
             }
+/* Open: titel verhuist naar rechtsboven (los van de normale flow, naast
+   de cirkel) i.p.v. mee te stromen onder de afbeelding+beschrijving —
+   net zoals in de OG-layout. */
+.item.activate h4 {
+  position: absolute;
+  top: 0.5rem;
+  right: 0;
+  text-align: right;
+}
 .itam {
   text-align: left;
   margin: 1rem 0em;
