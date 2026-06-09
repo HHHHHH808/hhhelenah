@@ -289,7 +289,7 @@ function buildProjectImage(project) {
 }
 
 function buildWorkItem(project) {
-  var $item = $('<div class="item"></div>')
+  var $item = $('<div class="work-item"></div>')
     .attr('id', project.id)
     .addClass((project.categorieen || []).join(' '))
     .append(buildProjectImage(project))
@@ -299,7 +299,7 @@ function buildWorkItem(project) {
 }
 
 function buildLifeItem(project) {
-  var $itam = $('<div class="itam"></div>')
+  var $itam = $('<div class="life-item"></div>')
     .attr('id', project.id)
     .addClass(project.status)
     .append(buildProjectImage(project))
@@ -630,7 +630,8 @@ $(document).ready(function () {
   });
 
   $(".tags-work label input").on("click", function () {
-    $(".item").removeClass("activate").children(".music").empty().hide();
+    $(".work-item").removeClass("is-open").children(".music").empty().hide();
+    if (!isMobile()) { $(".work-item").find('h4').css('transform', ''); }
     var thistag = $(this).parent("label").text();
     var oldtag = $("label input:checked")
       .not(this)
@@ -642,47 +643,26 @@ $(document).ready(function () {
 
     if ($(this).is(".oll")) {
       if ($(this).is(":checked")) {
-        var ni = $(".hidden-repo .item");
+        var ni = $(".hidden-repo .work-item");
         $(".shown").append(ni);
-        gsap.from(ni, {
-          duration: 0.5,
-          x: 300,
-
-          stagger: {
-            from: "random",
-            amount: 0.5
-          }
-        });
         $(".tags-work label input").not(this).prop("checked", false);
       } else {
         $(".tags-work .oll").prop("checked", false);
-        $(".shown .item")
-          .addClass("hiding")
-          .fadeOut(500, function () {
-            $(this)
-              .appendTo(".hidden-repo")
-              .fadeIn(300)
-              .removeClass("hiding activate")
-              .children(".music")
-              .empty();
-          });
+        $(".shown .work-item")
+          .removeClass("hiding is-open")
+          .children(".music").empty().end()
+          .appendTo(".hidden-repo");
       }
     } else {
       //productietag aangevinkt
       if ($(this).is(":checked")) {
         if ($(".tags-work .oll").is(":checked")) {
           $(".tags-work .oll").prop("checked", false);
-          $(".item")
+          $(".work-item")
             .not("." + thistag)
-            .addClass("hiding")
-            .fadeOut(500, function () {
-              $(this)
-                .appendTo(".hidden-repo")
-                .fadeIn(300)
-                .removeClass("hiding activate")
-                .children(".music")
-                .empty();
-            });
+            .removeClass("hiding is-open")
+            .children(".music").empty().end()
+            .appendTo(".hidden-repo");
         }
         $("." + thistag).each(function () {
           //aanwezig=niets
@@ -690,7 +670,6 @@ $(document).ready(function () {
           } else {
             //afwezig= voeg toe
             $(".shown").append(this);
-            gsap.from(this, { duration: 0.5, x: 300});
           }
         });
       } else {
@@ -707,15 +686,9 @@ $(document).ready(function () {
             //  gsap.to(this, { duration: 0.5, width: 0, opacity: 0 });
             //$(this).appendTo('.hidden-repo');
             $(this)
-              .addClass("hiding")
-              .fadeOut(500, function () {
-                $(this)
-                  .appendTo(".hidden-repo")
-                  .fadeIn(300)
-                  .removeClass("hiding activate")
-                  .children(".music")
-                  .empty();
-              });
+              .removeClass("hiding is-open")
+              .children(".music").empty().end()
+              .appendTo(".hidden-repo");
           }
         });
       }
@@ -723,18 +696,19 @@ $(document).ready(function () {
   });
 
   $(".tags-life label input").on("click", function () {
-    $(".itam").removeClass("active-itam").children(".music").empty().hide();
+    $(".life-item").removeClass("is-open").children(".music").empty().hide();
+    if (!isMobile()) { $(".life-item").find('h4').css('transform', ''); }
     var thistag = $(this).parent("label").text();
     var thislp = $("." + thistag);
     var oldtag = $("label input:checked").not(this).parent("label").text();
     var oldlp = $("." + oldtag);
     if ($(this).is(".oll")) {
       if ($(this).is(":checked")) {
-        $(".tags-life .itam").fadeIn(100);
+        $(".life-item").fadeIn(100);
         $(".tags-life label input").not(this).prop("checked", false);
       } else {
         $(this).prop("checked", false);
-        $(".tags-life .itam").fadeOut(100);
+        $(".life-item").fadeOut(100);
       }
     } else {
       $(".tags-life .oll").prop("checked", false);
@@ -766,7 +740,7 @@ $(document).ready(function () {
     $(".nav").removeClass("filler");
       $("h2").removeClass('spot');
       $("h1").removeClass('spot');
-    $(".bio, .press").fadeOut();
+    $(".bio").fadeOut();
 
         //UNZOOM STILL MISSING
     // Mobiel gebruikt een expliciete fade-duur (200ms); desktop gebruikt de jQuery-default.
@@ -780,32 +754,27 @@ $(document).ready(function () {
         $(".life, .tags-life").fadeIn(workLifeFadeDuration);
       }
 
+    // Reset h4-transforms: titels die omhoog stonden (open item) terug naar onderaan
+    if (!isMobile()) {
+      $(".work-item, .life-item").find('h4').css('transform', '');
+    }
     //reset work
-    var ni = $(".hidden-repo .item");
+    var ni = $(".hidden-repo .work-item");
     $(".shown").append(ni);
-    gsap.from(ni, {
-      duration: 0.5,
-      x: 300,
-
-      stagger: {
-        from: "random",
-        amount: 0.5
-      }
-    });
     $(".oll").prop("checked", true);
     $("label input").not(".oll").prop("checked", false);
     //reset life
-    $(".life .itam").fadeIn(100);
+    $(".life .life-item").fadeIn(100);
     //stop players
-    $(".item").removeClass("activate").children(".music").empty().hide();
-    $(".itam").removeClass("active-itam").children(".music").empty().hide();
+    $(".work-item").removeClass("is-open").children(".music").empty().hide();
+    $(".life-item").removeClass("is-open").children(".music").empty().hide();
   });
 
   // Scrollbar van een open item enkel TONEN terwijl er effectief gescrold
   // wordt (".is-scrolling", zie style.css) — net als de overlay-scrollbars
   // in Chrome, die ook vanzelf weer verdwijnen zodra je stopt met scrollen.
   var scrollbarHideTimers = {};
-  $(".item").on("scroll", function () {
+  $(".work-item").on("scroll", function () {
     var $item = $(this);
     // Negeer scroll-events die de open-animatie zelf veroorzaakt (de
     // hoogte-transitie duurt ~0.5s en doet de browser soms een interne
@@ -820,14 +789,22 @@ $(document).ready(function () {
     }, 800);
   });
 
+  // Gedeelde hulpfunctie voor beide item-types: berekent de translateY (px)
+  // om de h4 van "bottom: 0.5rem" naar "top: 0.5rem" te brengen zonder
+  // afhankelijk te zijn van de visuele (geanimeerde) positie.
+  function calcH4Delta($wi) {
+    var rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    var offset = 0.5 * rem;
+    var itemH = $wi[0].offsetHeight;
+    var h4H = $wi.find('h4')[0].offsetHeight;
+    return offset - (itemH - offset - h4H); // negatief = omhoog
+  }
+
   // Klik enkel op de afbeelding opent/sluit een item — niet ergens in de
-  // hele kolom. Zo blijft de cursor in de rest van het rayon de gewone
-  // pijl (geen verwarrende "klikbaar"-wijsvinger overal), en kan de
-  // gebruiker er ook gewoon verticaal doorheen scrollen (bv. bij een
-  // lange tracklist) zonder per ongeluk te klikken.
-  $(".item").on("click", function (e) {
+  // hele kolom.
+  $(".work-item").on("click", function (e) {
     var $item = $(this);
-    var isOpen = $item.hasClass('activate');
+    var isOpen = $item.hasClass('is-open');
 
     // Zowel mobiel als desktop: enkel een tik/klik op de cirkel/afbeelding
     // (of de titel ernaast) opent/sluit het item — niet ergens anders in
@@ -847,104 +824,213 @@ $(document).ready(function () {
     if (!isMobile()) {
       // Desktop: de CSS width-transitie (7rem → 25rem) + flexbox regelen
       // de animatie volledig zelf — geen JS-hoogte-logica nodig.
+      var DESKTOP_DUR = 1500;
+      var FADE_OUT_DUR = 600;
+
       if (isOpen) {
-        $item.removeClass("activate");
-        $item.children(".music").fadeOut(200, function () { $(this).empty(); });
+        // Sluiten: positie vastzetten voor removeClass zodat .music niet springt
+        $item.children(".music").css({position:'absolute', top:'19rem', left:0, right:0, bottom:0});
+        $item.find('h4').css('transform', '');
+        $item.removeClass("is-open");
+        $item.children(".music").fadeOut(FADE_OUT_DUR, function () { $(this).empty().css({position:'',top:'',left:'',right:'',bottom:''}); });
       } else {
-        $item.addClass("activate");
-        $(".item").not($item).children(".music").empty().hide();
-        $(".item").not($item).removeClass("activate");
+        var $others = $(".work-item").not($item).filter(".is-open");
         var project0 = findProject(PROJECTS.work, $item.attr("id"));
         var $music0 = $item.children(".music");
-        loadProjectContent($music0, project0, workAudioPath);
-        $music0.fadeIn(500);
+        var delta = calcH4Delta($item);
+
+        // Positie van sluitende items vastzetten VOOR removeClass, zodat .music
+        // niet van absolute naar static "springt" tijdens de fadeOut.
+        $others.children(".music").css({position:'absolute', top:'19rem', left:0, right:0, bottom:0});
+
+        // Stap 1: beide klasse-wissels + titelbewegingen in exact hetzelfde
+        // animatieframe zodat alle CSS-transities simultaan starten.
+        requestAnimationFrame(function () {
+          $others.removeClass("is-open");
+          $item.addClass("is-open");
+          // Sluit-items: titel terug naar onderaan
+          $others.find('h4').css('transform', '');
+          // Open-item: titel naar bovenaan
+          $item.find('h4').css('transform', 'translateY(' + delta + 'px)');
+          $others.children(".music").fadeOut(FADE_OUT_DUR, function () { $(this).empty().css({position:'',top:'',left:'',right:'',bottom:''}); });
+
+          // Stap 2: DOM-manipulatie in het VOLGENDE frame, nadat alle
+          // transities al gestart zijn — zo verstoort content-laden de
+          // timing niet. Gebruik css+animate i.p.v. fadeIn om de 1-frame
+          // flash te vermijden (jQuery's fadeIn kan één frame tonen vóórdat
+          // opacity:0 gezet wordt).
+          requestAnimationFrame(function () {
+            $music0.css({ display: 'block', opacity: 0 });
+            loadProjectContent($music0, project0, workAudioPath);
+            $music0.animate({ opacity: 1 }, DESKTOP_DUR);
+          });
+        });
       }
       return;
     }
 
     // === MOBIEL: JS-hoogte-animatie zodat openen en sluiten synchroon lopen ===
-    var PX_PER_SEC = 600;
+    var MOBILE_DUR = 500; // vaste duur voor open én sluit — zo eindigen ze tegelijk
     var CLOSED_H = parseFloat($item.css('min-height')) || 61.6;
 
     if (isOpen) {
       // Sluiten via klik op zelfde cirkel.
       var fromH = $item[0].scrollHeight;
-      var dur = Math.round((fromH - CLOSED_H) / PX_PER_SEC * 1000);
       $item.css('height', fromH + 'px');
-      $item.children('.music').fadeOut(Math.round(dur * 0.4));
-      $item.animate({ height: CLOSED_H }, dur, 'swing', function () {
-        $item.removeClass('activate');
+      $item.children('.music').fadeOut(Math.round(MOBILE_DUR * 0.4));
+      $item.animate({ height: CLOSED_H }, MOBILE_DUR, 'swing', function () {
+        $item.removeClass('is-open');
         $item.css('height', '');
         $item.children('.music').empty().hide();
       });
     } else {
       $item.data("activatedAt", Date.now());
 
-      // === SLUITEN van het vorige open item — tegelijk met openen ===
-      var $others = $(".item").not($item).filter(".activate");
+      var $others = $(".work-item").not($item).filter(".is-open");
+
+      // === EERST alles meten en content laden VOOR de animaties starten ===
+      // Sluit-data verzamelen (scrollHeight nu, voor DOM-wijzigingen)
+      var closeData = [];
       $others.each(function () {
         var $o = $(this);
-        var fromH2 = this.scrollHeight;
-        var dur2 = Math.round((fromH2 - CLOSED_H) / PX_PER_SEC * 1000);
-        $o.css('height', fromH2 + 'px');
-        $o.children('.music').fadeOut(Math.round(dur2 * 0.4));
-        $o.animate({ height: CLOSED_H }, dur2, 'swing', function () {
-          $o.removeClass('activate');
-          $o.css('height', '');
-          $o.children('.music').empty().hide();
-        });
+        closeData.push({ $o: $o, fromH: this.scrollHeight });
+        $o.css('height', this.scrollHeight + 'px'); // hoogte vastzetten
       });
 
-      // === OPENEN van het nieuwe item — tegelijk met sluiten ===
+      // Open-item content laden en doelhoogte meten (onzichtbaar)
       var project = findProject(PROJECTS.work, $item.attr("id"));
       var $music = $item.children(".music");
-      $item.addClass("activate");
+      $item.addClass("is-open");
       loadProjectContent($music, project, workAudioPath);
       $music.css('visibility', 'hidden').show();
       var targetH = $item[0].scrollHeight;
       $music.css('visibility', '').hide();
       $item.css('height', CLOSED_H + 'px');
-      var durOpen = Math.round((targetH - CLOSED_H) / PX_PER_SEC * 1000);
-      $music.fadeIn(Math.round(durOpen * 0.5));
-      $item.animate({ height: targetH }, durOpen, 'swing', function () {
-        $item.css('height', 'auto');
-        var rect = $item[0].getBoundingClientRect();
-        var itemMiddle = rect.top + rect.height / 2;
-        var viewportMiddle = window.innerHeight / 2;
-        window.scrollBy({ top: itemMiddle - viewportMiddle, behavior: "smooth" });
+
+      // === Beide animaties starten in hetzelfde animatieframe ===
+      requestAnimationFrame(function () {
+        closeData.forEach(function (d) {
+          d.$o.children('.music').fadeOut(Math.round(MOBILE_DUR * 0.4));
+          d.$o.animate({ height: CLOSED_H }, MOBILE_DUR, 'swing', function () {
+            d.$o.removeClass('is-open');
+            d.$o.css('height', '');
+            d.$o.children('.music').empty().hide();
+          });
+        });
+
+        $music.css({ opacity: 0 }).show();
+        $music.animate({ opacity: 1 }, Math.round(MOBILE_DUR * 0.8));
+        $item.animate({ height: targetH }, MOBILE_DUR, 'swing', function () {
+          $item.css('height', 'auto');
+          var rect = $item[0].getBoundingClientRect();
+          var itemMiddle = rect.top + rect.height / 2;
+          var viewportMiddle = window.innerHeight / 2;
+          window.scrollBy({ top: itemMiddle - viewportMiddle, behavior: "smooth" });
+        });
+      }); // einde requestAnimationFrame
+    } // einde else (nieuw item openen)
+  }); // einde .work-item click handler
+
+  // Life-items: zelfde animatielogica als work-items, maar vierkante afbeeldingen
+  // en audio via lifeAudioPath. Klik enkel op afbeelding of titel.
+  $(".life-item").on("click", function (e) {
+    var $item = $(this);
+    var isOpen = $item.hasClass('is-open');
+
+    if (!$(e.target).closest('img, h4').length) { return; }
+    e.stopPropagation();
+
+    if (!isMobile()) {
+      var DESKTOP_DUR = 1500;
+      var FADE_OUT_DUR = 600;
+
+      if (isOpen) {
+        $item.children(".music").css({position:'absolute', top:'19rem', left:0, right:0, bottom:0});
+        $item.find('h4').css('transform', '');
+        $item.removeClass("is-open");
+        $item.children(".music").fadeOut(FADE_OUT_DUR, function () { $(this).empty().css({position:'',top:'',left:'',right:'',bottom:''}); });
+      } else {
+        var $others = $(".life-item").not($item).filter(".is-open");
+        var project0 = findProject(PROJECTS.life, $item.attr("id"));
+        var $music0 = $item.children(".music");
+        var pathFn0 = lifeAudioPath(project0);
+        var delta = calcH4Delta($item);
+
+        $others.children(".music").css({position:'absolute', top:'19rem', left:0, right:0, bottom:0});
+
+        requestAnimationFrame(function () {
+          $others.removeClass("is-open");
+          $item.addClass("is-open");
+          $others.find('h4').css('transform', '');
+          $item.find('h4').css('transform', 'translateY(' + delta + 'px)');
+          $others.children(".music").fadeOut(FADE_OUT_DUR, function () { $(this).empty().css({position:'',top:'',left:'',right:'',bottom:''}); });
+
+          requestAnimationFrame(function () {
+            $music0.css({ display: 'block', opacity: 0 });
+            loadProjectContent($music0, project0, pathFn0);
+            $music0.animate({ opacity: 1 }, DESKTOP_DUR);
+          });
+        });
+      }
+      return;
+    }
+
+    // Mobiel: zelfde hoogte-animatie als work-items
+    var MOBILE_DUR = 500;
+    var CLOSED_H = parseFloat($item.css('min-height')) || 61.6;
+
+    if (isOpen) {
+      var fromH = $item[0].scrollHeight;
+      $item.css('height', fromH + 'px');
+      $item.children('.music').fadeOut(Math.round(MOBILE_DUR * 0.4));
+      $item.animate({ height: CLOSED_H }, MOBILE_DUR, 'swing', function () {
+        $item.removeClass('is-open');
+        $item.css('height', '');
+        $item.children('.music').empty().hide();
+      });
+    } else {
+      $item.data("activatedAt", Date.now());
+      var $others2 = $(".life-item").not($item).filter(".is-open");
+
+      var closeData2 = [];
+      $others2.each(function () {
+        var $o = $(this);
+        closeData2.push({ $o: $o, fromH: this.scrollHeight });
+        $o.css('height', this.scrollHeight + 'px');
+      });
+
+      var project2 = findProject(PROJECTS.life, $item.attr("id"));
+      var $music2 = $item.children(".music");
+      var pathFn2 = lifeAudioPath(project2);
+      $item.addClass("is-open");
+      loadProjectContent($music2, project2, pathFn2);
+      $music2.css('visibility', 'hidden').show();
+      var targetH2 = $item[0].scrollHeight;
+      $music2.css('visibility', '').hide();
+      $item.css('height', CLOSED_H + 'px');
+
+      requestAnimationFrame(function () {
+        closeData2.forEach(function (d) {
+          d.$o.children('.music').fadeOut(Math.round(MOBILE_DUR * 0.4));
+          d.$o.animate({ height: CLOSED_H }, MOBILE_DUR, 'swing', function () {
+            d.$o.removeClass('is-open');
+            d.$o.css('height', '');
+            d.$o.children('.music').empty().hide();
+          });
+        });
+
+        $music2.css({ opacity: 0 }).show();
+        $music2.animate({ opacity: 1 }, Math.round(MOBILE_DUR * 0.8));
+        $item.animate({ height: targetH2 }, MOBILE_DUR, 'swing', function () {
+          $item.css('height', 'auto');
+          var rect = $item[0].getBoundingClientRect();
+          var itemMiddle = rect.top + rect.height / 2;
+          var viewportMiddle = window.innerHeight / 2;
+          window.scrollBy({ top: itemMiddle - viewportMiddle, behavior: "smooth" });
+        });
       });
     }
   });
-
-  $(".itam").on("click", function () {
-    //overlapschuif
-    $(this).addClass("active-itam");
-    var project = findProject(PROJECTS.life, $(this).attr("id"));
-    var $music = $(this).children(".music");
-    var pathFn = lifeAudioPath(project);
-    if (isMobile()) {
-      // Mobiel: leegmaken/verbergen van de andere players, dan de nieuwe player infaden.
-      $(".itam").not(this).children(".music").empty().hide();
-      $(".itam").not(this).removeClass("active-itam");
-      //music
-      loadProjectContent($music, project, pathFn);
-      $music.fadeIn(500);
-    } else {
-      // Desktop: de andere players faden uit en leegmaken, dan de nieuwe player tonen.
-      //  $(this).children(".music").toggle();
-      $(".itam").not(this).children(".music").fadeOut().empty();
-      $(".itam").not(this).removeClass("active-itam");
-      //music
-      loadProjectContent($music, project, pathFn);
-      $music.show();
-    }
-  });
-
-  $('#press-btn').on('click', function(){
-  $('.press').fadeIn();
-$(".tags-work, .tags-life, .life, .work").fadeOut();
-$('h2').addClass('blur');
-    });
 
   $('#bio-btn').on('click', function(e){
     $('.bio').fadeToggle(300);
