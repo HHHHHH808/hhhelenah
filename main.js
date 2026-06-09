@@ -144,7 +144,7 @@ const PROJECTS = {
       afbeelding: "assets/Images/Life/logo12.jpg",
       beschrijving: "Debut album on the Brussels based label 'Montage'.",
       type: "embed",
-      embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=1065259858/size=large/bgcol=ffffff/linkcol=de270f/artwork=small/transparent=true/"
+      embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=1065259858/size=large/bgcol=ffffff/linkcol=de270f/artwork=none/transparent=true/"
     }
   ]
 };
