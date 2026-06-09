@@ -917,7 +917,7 @@ $(document).ready(function () {
             if ($iframe.length) {
               var musicH = $music0[0].clientHeight;
               var contentH = $music0.find('.content')[0] ? $music0.find('.content')[0].offsetHeight : 0;
-              $iframe.css('height', Math.max(musicH - contentH, 80) + 'px');
+              $iframe.css('height', Math.max(musicH - contentH - 10, 80) + 'px');
             }
           });
         });
