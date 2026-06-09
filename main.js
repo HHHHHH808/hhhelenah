@@ -370,32 +370,22 @@ function buildEmbed(embedUrl) {
   // proportioneel terug tot de beschikbare breedte: alles — inclusief de
   // tekst — krimpt mee, en blijft dus volledig binnen de lijnen.
   if (/bandcamp\.com/.test(embedUrl)) {
-    // Bandcamp's embed-layout reageert WEL op de breedte van zijn eigen
-    // iframe (knoppen als "buy"/"share"/vorige-volgende verschuiven of
-    // verdwijnen pas bij smallere breedtes), maar blijft intern altijd op
-    // zijn eigen, voor ons onbekende breedte uitgaan — bij 350 of 400px
-    // liep er steeds een stukje (tekst, knoppen) over de rand. We geven 'm
-    // daarom ruim baan (700px, breed genoeg voor alle elementen naast
-    // elkaar) en schalen het geheel proportioneel terug — dat garandeert
-    // dat NIETS wordt afgesneden, ongeacht hoe Bandcamp het intern opbouwt.
-    var NATIVE_WIDTH = 700;
-    var NATIVE_HEIGHT = 120;
-    var $wrapper = $('<div class="embed-scale-wrapper"></div>');
-    $iframe.css({ width: NATIVE_WIDTH + 'px', height: NATIVE_HEIGHT + 'px' });
-    $wrapper.append($iframe);
-
-    function applyScale() {
-      var available = $wrapper.parent().width() || $wrapper.width();
-      if (!available) return;
-      var scale = Math.min(available / NATIVE_WIDTH, 1);
-      $iframe.css('transform', 'scale(' + scale + ')');
-      $wrapper.css('height', (NATIVE_HEIGHT * scale) + 'px');
-    }
-    // Eenmaal nu, en opnieuw bij elke resize (bv. rotatie van het toestel).
-    setTimeout(applyScale, 0);
-    $(window).on('resize', applyScale);
-
-    return $wrapper;
+    // EERDERE AANPAK (geschrapt): de iframe op een vaste, "voldoende
+    // brede" eigen breedte (700px) zetten en als geheel terugschalen tot
+    // de beschikbare kolombreedte. Dat ging ervan uit dat Bandcamp zijn
+    // embed intern altijd op diezelfde ~700px breedte opbouwt — maar
+    // Bandcamp kiest die interne lay-out blijkbaar OOK zelf op basis van
+    // viewport/toestel: op een echte telefoon bouwt het zijn eigen,
+    // compactere/mobiele variant op (vermoedelijk al rond de ~350px), die
+    // we dan ALSNOG eens extra verkleinden — vandaar de "piepkleine" speler.
+    // We kunnen die interne breedte niet uitlezen (cross-origin iframe),
+    // dus is "juist" terugschalen sowieso giswerk. In plaats daarvan laten
+    // we de iframe simpelweg de volledige beschikbare breedte innemen en
+    // vertrouwen op Bandcamp's EIGEN responsive gedrag — dat is exact het
+    // mechanisme dat deze speler default ook op de echte Bandcamp-site
+    // gebruikt op mobiel.
+    $iframe.css({ width: '100%', height: '120px' });
+    return $iframe;
   }
 
   return $iframe;
@@ -525,16 +515,48 @@ function initAudioPlayer($content, nummers, pathFn) {
       setTimeout(function () { isSeeking = false; }, 100);
     });
   });
+  // BELANGRIJK: tijdens het slepen ZELF niet meer bij elke "input" al
+  // "audio.currentTime" zetten. Op mobiel (zeker over mobiele data, met
+  // "preload=metadata") is er voorbij het reeds gebufferde stuk vaak nog
+  // niets geladen — herhaaldelijk, snel na elkaar zoeken naar nog niet
+  // gebufferde tijdstippen deed de browser telkens terugvallen naar het
+  // begin (currentTime sprong terug naar 0). De <input type="range">
+  // toont de sleep-positie zelf al visueel; we hoeven enkel de poll even
+  // stil te leggen ("isSeeking") en pas bij het LOSLATEN ("change", of het
+  // "vangnet" hieronder) één keer daadwerkelijk te zoeken.
   progressBar.addEventListener('input', function () {
     isSeeking = true;
-    seekTo(progressBar.value);
   });
   progressBar.addEventListener('change', function () {
     seekTo(progressBar.value);
-    isSeeking = false;
+    setTimeout(function () { isSeeking = false; }, 100);
   });
+  // Op de meeste mobiele browsers (o.a. Chrome op Android) doet TIKKEN op
+  // een willekeurig punt van een <input type="range"> NIETS — enkel het
+  // SLEPEN van de duim zelf wordt ondersteund (in tegenstelling tot
+  // desktop, waar een klik ergens op de balk de duim daarheen verplaatst).
+  // Dat is wat hier "niet werkt": een tik op een punt in de tijdsbalk om
+  // daarheen te springen. We berekenen de positie daarom zelf, op basis
+  // van waar de aanraking plaatsvond t.o.v. de breedte van de balk, en
+  // zoeken expliciet naar dat tijdstip.
+  function seekFromEvent(e) {
+    if (!audio.duration) { return; }
+    var oe = (e.originalEvent || e);
+    var clientX = (oe.touches && oe.touches.length) ? oe.touches[0].clientX
+      : (oe.changedTouches && oe.changedTouches.length) ? oe.changedTouches[0].clientX
+      : oe.clientX;
+    if (clientX === undefined) { return; }
+    var rect = progressBar.getBoundingClientRect();
+    var ratio = (clientX - rect.left) / rect.width;
+    ratio = Math.min(Math.max(ratio, 0), 1);
+    var value = ratio * audio.duration;
+    progressBar.value = value;
+    seekTo(value);
+  }
   progressBar.addEventListener('click', function (e) {
     e.stopPropagation();
+    seekFromEvent(e);
+    setTimeout(function () { isSeeking = false; }, 100);
   });
 }
 
@@ -551,12 +573,25 @@ function loadProjectContent($music, project, pathFn) {
     $('<h5></h5>').text(project.beschrijving)
   );
 
-  if (isAudio) {
-    $content.append(buildPlayerMarkup());
-    $content.append(buildTrackList(project.nummers));
-  }
-
   $music.append($content);
+
+  var $playerArea = null;
+  if (isAudio) {
+    // EERDER: speler + tracklist zaten IN ".content", samen met de
+    // beschrijving (".h5"). Daardoor gedroegen ze zich structureel anders
+    // dan ingesloten embeds (die als eigen ".music"-kind naast ".content"
+    // staan en zo - via "clear: both" - netjes onder de cirkel
+    // terechtkomen): de speler kon, afhankelijk van de lengte van de
+    // beschrijving, half over/naast de cirkel heen schuiven en oogde dan
+    // "awkward" t.o.v. de consistente plaatsing van embeds. Door de speler
+    // + tracklist in hun EIGEN, aan ".music" toegevoegde wrapper te zetten
+    // (".player-area", zie style.css "clear: both"), krijgen ze exact
+    // hetzelfde, voorspelbare gedrag als embeds.
+    $playerArea = $('<div class="player-area"></div>')
+      .append(buildPlayerMarkup())
+      .append(buildTrackList(project.nummers));
+    $music.append($playerArea);
+  }
 
   if (project.type === 'embed') {
     $music.append(buildEmbed(project.embedUrl));
@@ -565,7 +600,11 @@ function loadProjectContent($music, project, pathFn) {
   }
 
   if (isAudio) {
-    initAudioPlayer($content, project.nummers, pathFn);
+    // De speler-elementen (".pp", "#progress-bar", "audio", ".audio.play")
+    // staan nu in ".player-area" i.p.v. ".content" (zie hierboven — dat
+    // gaf de speler dezelfde, consistente plaatsing als embeds), dus moet
+    // "initAudioPlayer" ook in DIE container zoeken i.p.v. in ".content".
+    initAudioPlayer($playerArea, project.nummers, pathFn);
   }
 }
 
@@ -768,6 +807,11 @@ $(document).ready(function () {
   var scrollbarHideTimers = {};
   $(".item").on("scroll", function () {
     var $item = $(this);
+    // Negeer scroll-events die de open-animatie zelf veroorzaakt (de
+    // hoogte-transitie duurt ~0.5s en doet de browser soms een interne
+    // scrollpositie corrigeren — geen "echte" gebruikersscroll).
+    var activatedAt = $item.data("activatedAt") || 0;
+    if (Date.now() - activatedAt < 600) { return; }
     var key = $item.attr("id");
     $item.addClass("is-scrolling");
     clearTimeout(scrollbarHideTimers[key]);
@@ -785,20 +829,17 @@ $(document).ready(function () {
     var $item = $(this);
     var isOpen = $item.hasClass('activate');
 
-    if (isMobile()) {
-      // Mobiel: het volledige rayon is klikbaar, zowel om te openen als
-      // (nogmaals klikken, eender waar op het item) terug te sluiten —
-      // enige uitzondering: links/embedded spelers (SoundCloud/Vimeo,
-      // tracklist-links, audio-knoppen), anders kun je niets meer
-      // afspelen of aanklikken zonder het item meteen dicht te klappen.
-      if ($(e.target).closest('a, iframe, .audio, .pp, .progressBar, button, input').length) {
-        return;
-      }
-    } else {
-      // Desktop: ongewijzigd — enkel de afbeelding blijft de trigger.
-      if (!$(e.target).closest('img').length) {
-        return;
-      }
+    // Zowel mobiel als desktop: enkel een tik/klik op de cirkel/afbeelding
+    // (of de titel ernaast) opent/sluit het item — niet ergens anders in
+    // de kolom. Eerder liet mobiel het VOLLEDIGE rayon als trigger gelden,
+    // wat in de praktijk chaotisch aanvoelde: random tikken in de tekst,
+    // tracklist of zelfs lege ruimte deed het item soms onverwacht open- of
+    // dichtklappen. Door — net als op desktop — alleen de afbeelding/titel
+    // als trigger te gebruiken, weet je als gebruiker precies waar je moet
+    // tikken, en kan de rest van het item gewoon gelezen/bediend worden
+    // zonder per ongeluk te sluiten.
+    if (!$(e.target).closest('img, h4').length) {
+      return;
     }
 
     e.stopPropagation();
@@ -812,6 +853,10 @@ $(document).ready(function () {
     } else {
       //overlapschuif
       $item.addClass("activate");
+      // Tijdstip onthouden: de open-animatie (hoogte-transitie ~0.5s) vuurt
+      // zelf "scroll"-events af op de content — zonder deze guard zou de
+      // schuifbalk dus al verschijnen vóór de gebruiker effectief scrolt.
+      $item.data("activatedAt", Date.now());
       $(".item").not($item).children(".music").empty().hide();
       $(".item").not($item).removeClass("activate");
       //music
@@ -821,6 +866,19 @@ $(document).ready(function () {
       var $music = $item.children(".music");
       loadProjectContent($music, project, workAudioPath);
       $music.fadeIn(itemFadeDuration);
+
+      // Naar het midden van het geopende item scrollen: anders moet je,
+      // als het item niet toevallig al in beeld stond, eerst zelf nog naar
+      // beneden scrollen vóór je door de tracklist kan scrollen — dubbel
+      // werk. We wachten tot de hoogte-transitie (0.5s) goeddeels voorbij
+      // is, zodat we naar de UITEINDELIJKE (open) positie scrollen i.p.v.
+      // naar een tussentijdse.
+      setTimeout(function () {
+        var rect = $item[0].getBoundingClientRect();
+        var itemMiddle = rect.top + rect.height / 2;
+        var viewportMiddle = window.innerHeight / 2;
+        window.scrollBy({ top: itemMiddle - viewportMiddle, behavior: "smooth" });
+      }, 350);
     }
   });
 

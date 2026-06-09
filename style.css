@@ -917,12 +917,35 @@ background-position: left top;
   /* Vaste hoogte (i.p.v. "auto", dat ".activate" mobile zet — zie verderop):
      "auto" kan niet smooth interpoleren met de "height: 3.85rem" van de
      gesloten staat. Dezelfde min-/max-height als ".item" (zie aldaar)
-     voorkomt de klem-glitch — enkel "height" zelf animeert dan. */
-  height: 26rem;
+     voorkomt de klem-glitch — enkel "height" zelf animeert dan.
+
+     PROBLEEM met een vaste waarde hier: de werkelijke inhoud verschilt
+     flink per item (korte vs. lange beschrijving/tracklist, embed vs.
+     eigen speler...). "26rem" was voor de meeste items een paar pixels te
+     KRAP (vandaar het nutteloze interne scrollbalkje), maar "30rem"
+     (= max-height) is voor diezelfde items dan weer te ROYAAL (vandaar nu
+     net te VEEL witruimte onderaan). Er bestaat geen vaste waarde die voor
+     alle items tegelijk precies past.
+     Oplossing: "height: auto" — het vak past zich nu exact aan zijn eigen
+     inhoud aan (geen scroll, geen overtollige witruimte, voor élk item
+     afzonderlijk correct), met "max-height" nog als achtervang voor het
+     zeldzame geval dat de inhoud toch heel lang zou zijn. */
+  height: auto;
   min-height: 3.85rem;
   max-height: 30rem;
   transition: height 0.5s ease;
   overflow-y: auto;
+  /* Zonder dit voelt scrollen met de vinger in een "overflow: auto"-vak op
+     iOS Safari vaak alsof het niet werkt (log/haperend, soms helemaal
+     genegeerd) — dit zet de vertrouwde, vloeiende "momentum"-scroll aan. */
+  -webkit-overflow-scrolling: touch;
+  /* Zonder dit kan een vinger-sleep die op een link/knop in de tracklist
+     start (".audio", "a") door sommige Android-Chrome-versies als "dit is
+     geen scroll, dit element regelt zijn eigen aanraking" geïnterpreteerd
+     worden — waardoor verticaal scrollen door de lijst niet lukt zodra je
+     per ongeluk op een rij i.p.v. ertussen begint te slepen. Expliciet
+     "verticaal pannen toestaan" voorkomt dat. */
+  touch-action: pan-y;
   /* Geeft de scrollbar-thumb (zie ".item.activate::-webkit-scrollbar-thumb"
      hieronder) een eigen "track" die niet helemaal tot tegen de
      scheidingslijnen boven/onder de rij komt. */
@@ -951,6 +974,14 @@ background-position: left top;
      titel/beschrijving er natuurlijk naast i.p.v. eronder. */
   float: left;
   margin: 0 1rem 0.5rem 0;
+  /* "position: relative" + z-index: positioneerde elementen worden altijd
+     als laatste (bovenop alles) getekend — zo wint de cirkel ALTIJD de
+     tik, ongeacht of de ernaast liggende tekst/tracklist toevallig over
+     (een deel van) haar vlak heen ligt. Dat overlappen verschilt namelijk
+     per item (afhankelijk van de lengte van beschrijving/tracklist), dus
+     een "overflow: hidden"-fix op de tekst alleen loste dit niet overal op. */
+  position: relative;
+  z-index: 2;
 }
 .hiding {
   width: auto;
@@ -1004,6 +1035,48 @@ background-position: left top;
     padding: 1rem 0 0 0;
   box-sizing: border-box;
 }
+/* De beschrijving (h5) mag rond de naar links "float"-ende cirkel vloeien
+   (zie ".item.activate img"); de tracklist/embed die erop volgt moet er
+   echter altijd ONDER beginnen — nooit ernaast geperst worden in de
+   resterende, smalle ruimte naast de cirkel. "clear: both" forceert dat. */
+.work .content ul,
+.work .embed-scale-wrapper,
+.work .player-area {
+  /* Iframes/video's vermijden de "float"-ende cirkel automatisch (ze
+     vormen zelf een nieuwe layout-context als vervangen element), en
+     beginnen daardoor altijd pas onder de cirkel. De zelfgebouwde
+     audiospeler zat voorheen IN ".content" (samen met de beschrijving)
+     en gedroeg zich daardoor inconsistent — soms half over de cirkel heen.
+     Door hem in zijn eigen ".player-area" te plaatsen (zie main.js,
+     "loadProjectContent") en hier hetzelfde "clear: both" toe te passen
+     als bij embeds, is de plaatsing nu voor alle spelertypes identiek. */
+  clear: both;
+}
+.work .player-area {
+  /* Zelfde top-marge als ".item iframe:first-of-type" hierboven, zodat
+     de visuele afstand tussen beschrijving en speler gelijk is, ongeacht
+     of het om de eigen audiospeler of een ingesloten video/embed gaat. */
+  margin-top: 1rem;
+  /* Volledige breedte (los van de cirkel, want "clear: both" duwt deze
+     wrapper er al onder) + gecentreerde tekst/inhoud: zo komt de
+     play-knop (".pp", "margin: 0 auto") mooi MIDDEN onder de cirkel te
+     staan i.p.v. — zoals voorheen, toen hij nog binnenin ".content" zat —
+     verschoven/links uitgelijnd in de smalle ruimte naast de cirkel. */
+  width: 100%;
+  text-align: center;
+}
+/* Geeft de beschrijving wat lucht t.o.v. de cirkel ernaast i.p.v. er
+   meteen tegenaan te plakken. */
+.work .content h5 {
+  /* "overflow: hidden" geeft dit element een eigen layout-context die
+     z'n eigen kader om de naast liggende "float"-ende cirkel heen laat
+     krimpen i.p.v. eroverheen te lopen. Zonder dit bleef de ONZICHTBARE
+     rand van de h5 toch over de cirkel heen liggen — waardoor een tik op
+     (het bovenste deel van) de cirkel per ongeluk op de tekst landde,
+     en het sluiten van het item dus niet werkte op die plek. */
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
 .life .music {
   height: auto;
 }
@@ -1026,36 +1099,53 @@ background-position: left top;
    alleen TERWIJL je scrolt: ".is-scrolling" wordt door "main.js" kort
    toegevoegd bij een scroll-event en nadien automatisch weer verwijderd. */
 .item.activate::-webkit-scrollbar {
-  width: 0.3rem;
+  width: 0.5rem;
 }
 .item.activate::-webkit-scrollbar-track {
   background: transparent;
 }
+/* GEEN kleur op de basis-duim: anders blijft hij gewoon permanent zichtbaar
+   zodra het item opengaat. Pas de combinatie ".is-scrolling" (hieronder,
+   enkel kort aanwezig tijdens het scrollen, zie main.js) krijgt een kleur.
+   De afgeronde randen ("border-radius") staan WEL hier al klaar op de
+   basis-duim — sommige mobiele WebKit-builds passen "border-radius" enkel
+   toe als die meteen meegegeven wordt i.p.v. pas via een latere regel. De
+   transparante "border" + "background-clip: padding-box" geven de duim
+   bovendien een klein, doorzichtig randje t.o.v. de track: zo wordt de
+   afronding ook visueel duidelijk i.p.v. weg te vallen tegen even brede
+   randen. */
 .item.activate::-webkit-scrollbar-thumb {
   background-color: transparent;
   border-radius: 999px;
   border: 1px solid transparent;
   background-clip: padding-box;
-  transition: background-color 0.2s ease;
 }
 .item.activate.is-scrolling::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 0, 0, 0.4);
+  background-color: rgba(255, 0, 0, 0.45);
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
 }
-/* Firefox: dunne, transparante scrollbar i.p.v. de klassieke brede. Firefox
-   ondersteunt geen aparte hover/scroll-state voor de duim, dus blijft die
-   hier subtiel zichtbaar (beste haalbare benadering van "auto-hide"). */
-.item.activate {
+/* Firefox: "scrollbar-color" kent geen aparte hover/scroll-status — we
+   zetten 'm daarom ENKEL tijdens ".is-scrolling" (anders zou de balk daar
+   permanent zichtbaar blijven, net het probleem dat we willen vermijden).
+   Geen perfecte auto-hide op Firefox, maar wel de juiste kleur/gedrag op
+   alle Chromium-/WebKit-gebaseerde mobiele browsers (verreweg de meeste). */
+.item.activate.is-scrolling {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 0, 0, 0.4) transparent;
+  scrollbar-color: rgba(255, 0, 0, 0.45) transparent;
 }
 
 /*MEDIA-MOB*/
 .music {
-  /* Algemene veiligheidsnet tegen horizontale overloop (bv. een embed dat
-     toch breder uitvalt dan verwacht): liever scrollbaar dan afgesneden.
-     De Bandcamp-iframe zelf wordt intussen proportioneel geschaald om
-     binnen de kolom te passen — zie ".embed-scale-wrapper" verderop. */
-  overflow-x: auto;
+  /* GEEN "overflow-x: auto" (meer): dat zet een eigen layout-context op
+     die voorkwam dat de beschrijving (".content h5", binnenin ".music")
+     rond de — als sibling van ".music" — naar links "float"-ende cirkel
+     kon vloeien (zie ".item.activate img"); de tekst werd zo altijd onder
+     de cirkel geduwd i.p.v. ernaast, ongeacht de breedte van ".content".
+     De horizontale veiligheid die deze regel ooit bood is intussen
+     overbodig: de Bandcamp-iframe krijgt nu gewoon "width: 100%" (geen
+     vaste, te brede eigen maat meer) en kan dus niet meer overlopen. */
 }
 .itam img {
   width: 100%;
@@ -1080,10 +1170,14 @@ background-position: left top;
   overflow: hidden;
   width: 100%;
 }
-.embed-scale-wrapper iframe {
+.embed-scale-wrapper iframe,
+.embed-scale-wrapper iframe:first-of-type {
   position: absolute;
   top: 0;
   left: 0;
+  margin: 0 !important; /* overschrijft ".item iframe:first-of-type" (margin-top: 20vw)
+                hieronder — die duwde de geschaalde iframe buiten de
+                "overflow: hidden"-wrapper, waardoor er niets zichtbaar was */
   transform-origin: top left;
   min-width: 0;
   max-width: none;
@@ -1091,7 +1185,17 @@ background-position: left top;
 }
 .item iframe:first-of-type,
 .item video:first-of-type {
-    margin-top: 20vw;
+    /* Was "margin-top: 20vw" — een relict uit de oude lay-out, toen de
+       beschrijving nog ONDER de cirkel stond en deze marge nodig was om
+       de iframe/video onder de (hogere) cirkel te duwen. Nu de
+       beschrijving NAAST de cirkel staat en ".content ul"/
+       ".embed-scale-wrapper" toch al "clear: both" hebben (zie hierboven),
+       is zo'n grote marge niet meer nodig — en zorgde ze net voor veel
+       MEER witruimte boven iframes/video's (Bandcamp, YouTube, Vimeo,
+       Spotify) dan boven de zelfgebouwde audiospeler (".music", die geen
+       eigen top-marge heeft). Een kleine, vaste marge maakt de afstand nu
+       gelijk voor alle spelertypes. */
+    margin-top: 1rem;
     margin-bottom: 2rem;
 }
                  
