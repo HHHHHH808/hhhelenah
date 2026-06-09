@@ -79,7 +79,7 @@ const PROJECTS = {
       // geven de iframe daarom op mobiel een vaste min-breedte + horizontale
       // scroll (zie ".item .music iframe" in style.css), zodat de inhoud
       // intact blijft en de gebruiker er desnoods naar kan scrollen.
-      embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=202891063",
+      embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=202891063/size=large/bgcol=ffffff/linkcol=de270f/artwork=none/transparent=true/",
       beschrijving: "Mastering for 'Poe's Law' by Schobbee."
     },
     {
