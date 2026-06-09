@@ -461,7 +461,7 @@ min-height: 0vw;
 h5{
 font-family: 'Roboto', sans-serif;
     
-  font-size: min(max(0.9rem, 1.3vw), 1.3rem);
+  font-size: min(max(0.75rem, 1.1vw), 1.05rem);
 min-height: 0vw;
     
   font-weight: 400;   
