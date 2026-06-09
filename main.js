@@ -19,7 +19,7 @@ const PROJECTS = {
     {
       id: "ww",
       titel: "Warmste Week 2019",
-      categorieen: ["production", "sound-design"],
+      categorieen: ["production"],
       afbeelding: "assets/Images/Work/wide-circ/blur/circ-ww.png",
       type: "audio",
       beschrijving: "Soundtrack for StuBru's promotional campaign for 'De Warmste Week 2019'.",
@@ -40,7 +40,7 @@ const PROJECTS = {
     {
       id: "siebert",
       titel: "Truck",
-      categorieen: ["production", "sound-design"],
+      categorieen: ["production"],
       afbeelding: "assets/Images/Work/wide-circ/blur/circ-truck.png",
       type: "embed",
       embedUrl: "https://player.vimeo.com/video/348057330",
@@ -85,7 +85,7 @@ const PROJECTS = {
     {
       id: "people",
       titel: "People's People",
-      categorieen: ["sound-design"],
+      categorieen: ["production"],
       afbeelding: "assets/Images/Work/wide-circ/blur/circ-people.jpg",
       type: "embed",
       embedUrl: "https://www.youtube.com/embed/FD35-NHz7BI",
@@ -94,7 +94,7 @@ const PROJECTS = {
     {
       id: "green",
       titel: "Green Greener Greenest",
-      categorieen: ["mastering", "mixing", "production", "sound-design"],
+      categorieen: ["mastering", "mixing", "production"],
       afbeelding: "assets/Images/Work/wide-circ/blur/circ-green.jpg",
       type: "embed",
       embedUrl: "https://player.vimeo.com/video/221453555",
