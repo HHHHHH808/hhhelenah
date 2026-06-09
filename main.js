@@ -303,7 +303,7 @@ function buildEmbed(embedUrl) {
     // size=small (120px): wel een vaste height, want die speler heeft geen
     // eigen intrinsieke hoogte.
     if (/size=large/.test(embedUrl)) {
-      $iframe.css({ width: '100%' });
+      $iframe.css({ width: '100%', height: '472px' }); // desktop overschrijft dit via JS
     } else {
       $iframe.css({ width: '100%', height: '120px' });
     }
