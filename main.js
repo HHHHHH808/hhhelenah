@@ -910,6 +910,15 @@ $(document).ready(function () {
             $music0.css({ display: 'block', opacity: 0 });
             loadProjectContent($music0, project0, pathFn0);
             $music0.animate({ opacity: 1 }, DESKTOP_DUR);
+            // Stel iframe-hoogte in op beschikbare ruimte in .music
+            // (= .music hoogte minus beschrijving), zodat de embed
+            // nooit buiten het item valt maar ook geen witruimte laat.
+            var $iframe = $music0.find('iframe');
+            if ($iframe.length) {
+              var musicH = $music0[0].clientHeight;
+              var contentH = $music0.find('.content')[0] ? $music0.find('.content')[0].offsetHeight : 0;
+              $iframe.css('height', Math.max(musicH - contentH, 80) + 'px');
+            }
           });
         });
       }

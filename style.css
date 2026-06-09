@@ -401,10 +401,6 @@ min-height: 0vw;
   bottom: 0;
   overflow-y: auto;
   width: 100%;
-  /* Flex-kolom zodat een ingesloten iframe de resterende hoogte
-     (na de beschrijving) exact opvult i.p.v. een vaste px-hoogte te gebruiken. */
-  display: flex;
-  flex-direction: column;
 }
 /* Desktop: h4 transform wordt via JS gezet (zie main.js desktop-click-handler).
    Geen extra top/bottom regels nodig hier — transform doet het werk. */
@@ -617,10 +613,7 @@ button {
    van .music (flex-kolom) op na de beschrijving. min-height:0 is
    nodig zodat flex de vaste height uit buildEmbed mag overschrijven. */
 .life-item.is-open .music > iframe {
-  flex: 1;
-  min-height: 0;
   width: 100%;
-  height: auto !important;
 }
 .work-item iframe,
 .work-item video {
