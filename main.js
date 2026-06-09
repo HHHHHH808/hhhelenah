@@ -106,7 +106,7 @@ const PROJECTS = {
     {
       id: "comp",
       titel: "Compressed '16-'17",
-      status: "released",
+      status: "helenah",
       afbeelding: "assets/Images/Life/logocompressed.jpg",
       beschrijving: "A series of songs made between '16 '17, sonically bundled by various tape & compression emulations.",
       nummers: [
@@ -140,7 +140,7 @@ const PROJECTS = {
     {
       id: "hhh",
       titel: "Helenah",
-      status: "released",
+      status: "helenah",
       afbeelding: "assets/Images/Life/logo12.jpg",
       beschrijving: "Debut album on the Brussels based label 'Montage'.",
       nummers: [
@@ -159,38 +159,6 @@ const PROJECTS = {
         { id: "interd", titel: "Interlude IV", duur: "00:41" },
         { id: "schurft", titel: "Schurft", duur: "03:18" },
         { id: "tlgm", titel: "TLGFM", duur: "03:43" }
-      ]
-    },
-    {
-      id: "ora",
-      titel: "Ora et Labora",
-      status: "forthcoming",
-      afbeelding: "assets/Images/Life/logo-ora.jpg",
-      beschrijving: "Demo of EP with Tore Snauwaert & Gergana Velikova.",
-      nummers: [
-        { id: "ora1", titel: "Ora Et Labora", duur: "08:22" }
-      ]
-    },
-    {
-      id: "fili",
-      titel: "Filibus LP",
-      status: "forthcoming",
-      afbeelding: "assets/Images/Life/logofili.jpg",
-      beschrijving: "A live recording of a live accompaniment for a silent movie.",
-      nummers: [
-        { id: "fili-1", titel: "Track 1", duur: "02:09" },
-        { id: "fili-2", titel: "Track 2", duur: "03:06" },
-        { id: "fili-3", titel: "Track 3", duur: "03:06" },
-        { id: "fili-4", titel: "Track 4", duur: "05:36" },
-        { id: "fili-5", titel: "Track 5", duur: "03:29" },
-        { id: "fili-6", titel: "Track 6", duur: "03:29" },
-        { id: "fili-7", titel: "Track 7", duur: "05:36" },
-        { id: "fili-8", titel: "Track 8", duur: "03:29" },
-        { id: "fili-9", titel: "Track 9", duur: "03:06" },
-        { id: "fili-a", titel: "Track 10", duur: "12:47" },
-        { id: "fili-b", titel: "Track 11", duur: "11:21" },
-        { id: "fili-c", titel: "Track 12", duur: "12:47" },
-        { id: "fili-d", titel: "Track 13", duur: "04:25" }
       ]
     }
   ]
@@ -712,16 +680,10 @@ $(document).ready(function () {
       }
     } else {
       $(".tags-life .oll").prop("checked", false);
-      if ($("#forthcoming").is(":checked")) {
-        $(".forthcoming").fadeIn(100);
+      if ($("#helenah").is(":checked")) {
+        $(".helenah").fadeIn(100);
       } else {
-        $(".forthcoming").fadeOut(100);
-      }
-
-      if ($("#released").is(":checked")) {
-        $(".released").fadeIn(100);
-      } else {
-        $(".released").fadeOut(100);
+        $(".helenah").fadeOut(100);
       }
     }
   });
