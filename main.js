@@ -323,22 +323,15 @@ function buildEmbed(embedUrl) {
   // proportioneel terug tot de beschikbare breedte: alles — inclusief de
   // tekst — krimpt mee, en blijft dus volledig binnen de lijnen.
   if (/bandcamp\.com/.test(embedUrl)) {
-    var bcHeight = /size=large/.test(embedUrl) ? '472px' : '120px';
-    // EERDERE AANPAK (geschrapt): de iframe op een vaste, "voldoende
-    // brede" eigen breedte (700px) zetten en als geheel terugschalen tot
-    // de beschikbare kolombreedte. Dat ging ervan uit dat Bandcamp zijn
-    // embed intern altijd op diezelfde ~700px breedte opbouwt — maar
-    // Bandcamp kiest die interne lay-out blijkbaar OOK zelf op basis van
-    // viewport/toestel: op een echte telefoon bouwt het zijn eigen,
-    // compactere/mobiele variant op (vermoedelijk al rond de ~350px), die
-    // we dan ALSNOG eens extra verkleinden — vandaar de "piepkleine" speler.
-    // We kunnen die interne breedte niet uitlezen (cross-origin iframe),
-    // dus is "juist" terugschalen sowieso giswerk. In plaats daarvan laten
-    // we de iframe simpelweg de volledige beschikbare breedte innemen en
-    // vertrouwen op Bandcamp's EIGEN responsive gedrag — dat is exact het
-    // mechanisme dat deze speler default ook op de echte Bandcamp-site
-    // gebruikt op mobiel.
-    $iframe.css({ width: '100%', height: bcHeight });
+    // size=large: geen vaste height zetten — CSS flex (zie style.css,
+    // .life-item.is-open .music > iframe) bepaalt de hoogte dynamisch.
+    // size=small (120px): wel een vaste height, want die speler heeft geen
+    // eigen intrinsieke hoogte.
+    if (/size=large/.test(embedUrl)) {
+      $iframe.css({ width: '100%' });
+    } else {
+      $iframe.css({ width: '100%', height: '120px' });
+    }
     return $iframe;
   }
 
