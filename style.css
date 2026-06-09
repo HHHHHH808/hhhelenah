@@ -839,15 +839,14 @@ right: 0;  box-sizing: border-box;
     min-width: 100%;
     max-width: 100%;
   height: 3.85rem;
-  /* Net als op desktop (zie de "klem-glitch"-fix bij .item/.activate
-     min/max-width): min-height/max-height moeten in BEIDE staten gelijk
-     zijn, anders "klemt" de overgang i.p.v. vloeiend te animeren — enkel
-     "height" mag verschillen en dus animeren. De scheidingslijn (eigen
-     border-bottom) is zo de drager van de open/dicht-beweging, exact het
-     desktop-concept maar dan verticaal. */
-  min-height: 3.85rem;
-  max-height: 30rem;
-  transition: height 0.5s ease;
+  /* Gesloten toestand: vaste hoogte + max-height gelijk aan die hoogte.
+     "max-height" is wél animeerbaar (ook naar/van "auto"), in tegenstelling
+     tot "height: auto". Door max-height te transitioneren van de gesloten
+     waarde naar een ruime open waarde, schuift de border-bottom vloeiend
+     omlaag terwijl de inhoud zichtbaar wordt — hetzelfde "scheidingslijn
+     schuift"-effect als de width-transitie op desktop. */
+  max-height: 3.85rem;
+  transition: filter 0.4s ease;
   border-right: none;
   border-bottom: 1px solid red;
   padding-top: 0rem;
@@ -930,11 +929,24 @@ background-position: left top;
      inhoud aan (geen scroll, geen overtollige witruimte, voor élk item
      afzonderlijk correct), met "max-height" nog als achtervang voor het
      zeldzame geval dat de inhoud toch heel lang zou zijn. */
+  /* Geopende toestand: height: auto zodat elk item exact zijn eigen
+     inhoud omsluit (geen vaste waarde past voor alle items tegelijk —
+     zie uitleg hierboven). max-height groot genoeg voor de langste
+     mogelijke inhoud; de transitie op max-height zorgt voor de vloeiende
+     "schuivende scheidingslijn"-animatie (zie .item hierboven). */
   height: auto;
   min-height: 3.85rem;
-  max-height: 30rem;
-  transition: height 0.5s ease;
+  max-height: 1200px;
+  transition: filter 0.4s ease;
   overflow-y: auto;
+}
+/* Sluitanimatie: houdt height:auto actief terwijl max-height naar de
+   gesloten hoogte terugkeert — zonder dit klapt height: 3.85rem van
+   ".item" het item instant dicht en is er geen zichtbare animatie. */
+.item.is-closing {
+  height: auto;
+  overflow: hidden;
+  transition: filter 0.4s ease;
   /* Zonder dit voelt scrollen met de vinger in een "overflow: auto"-vak op
      iOS Safari vaak alsof het niet werkt (log/haperend, soms helemaal
      genegeerd) — dit zet de vertrouwde, vloeiende "momentum"-scroll aan. */
@@ -949,7 +961,7 @@ background-position: left top;
   /* Geeft de scrollbar-thumb (zie ".item.activate::-webkit-scrollbar-thumb"
      hieronder) een eigen "track" die niet helemaal tot tegen de
      scheidingslijnen boven/onder de rij komt. */
-  padding-top: 0.4rem;
+  padding-top: 0;
   padding-bottom: 0.4rem;
   /* Desktop maakt ".item.activate" transparant — op mobile dekt de
      (ondoorzichtige) achtergrond van elk item net het overstekende stuk
@@ -1056,7 +1068,7 @@ background-position: left top;
   /* Zelfde top-marge als ".item iframe:first-of-type" hierboven, zodat
      de visuele afstand tussen beschrijving en speler gelijk is, ongeacht
      of het om de eigen audiospeler of een ingesloten video/embed gaat. */
-  margin-top: 1rem;
+  margin-top: 0.1rem;
   /* Volledige breedte (los van de cirkel, want "clear: both" duwt deze
      wrapper er al onder) + gecentreerde tekst/inhoud: zo komt de
      play-knop (".pp", "margin: 0 auto") mooi MIDDEN onder de cirkel te
@@ -1195,7 +1207,7 @@ background-position: left top;
        Spotify) dan boven de zelfgebouwde audiospeler (".music", die geen
        eigen top-marge heeft). Een kleine, vaste marge maakt de afstand nu
        gelijk voor alle spelertypes. */
-    margin-top: 1rem;
+    margin-top: 0.4rem;
     margin-bottom: 2rem;
 }
                  

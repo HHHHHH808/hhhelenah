@@ -844,41 +844,75 @@ $(document).ready(function () {
 
     e.stopPropagation();
 
+    if (!isMobile()) {
+      // Desktop: de CSS width-transitie (7rem → 25rem) + flexbox regelen
+      // de animatie volledig zelf — geen JS-hoogte-logica nodig.
+      if (isOpen) {
+        $item.removeClass("activate");
+        $item.children(".music").fadeOut(200, function () { $(this).empty(); });
+      } else {
+        $item.addClass("activate");
+        $(".item").not($item).children(".music").empty().hide();
+        $(".item").not($item).removeClass("activate");
+        var project0 = findProject(PROJECTS.work, $item.attr("id"));
+        var $music0 = $item.children(".music");
+        loadProjectContent($music0, project0, workAudioPath);
+        $music0.fadeIn(500);
+      }
+      return;
+    }
+
+    // === MOBIEL: JS-hoogte-animatie zodat openen en sluiten synchroon lopen ===
+    var PX_PER_SEC = 600;
+    var CLOSED_H = parseFloat($item.css('min-height')) || 61.6;
+
     if (isOpen) {
-      // Tweede klik op dezelfde afbeelding: sluit het item terug.
-      $item.removeClass("activate");
-      $item.children(".music").fadeOut(200, function () {
-        $(this).empty();
+      // Sluiten via klik op zelfde cirkel.
+      var fromH = $item[0].scrollHeight;
+      var dur = Math.round((fromH - CLOSED_H) / PX_PER_SEC * 1000);
+      $item.css('height', fromH + 'px');
+      $item.children('.music').fadeOut(Math.round(dur * 0.4));
+      $item.animate({ height: CLOSED_H }, dur, 'swing', function () {
+        $item.removeClass('activate');
+        $item.css('height', '');
+        $item.children('.music').empty().hide();
       });
     } else {
-      //overlapschuif
-      $item.addClass("activate");
-      // Tijdstip onthouden: de open-animatie (hoogte-transitie ~0.5s) vuurt
-      // zelf "scroll"-events af op de content — zonder deze guard zou de
-      // schuifbalk dus al verschijnen vóór de gebruiker effectief scrolt.
       $item.data("activatedAt", Date.now());
-      $(".item").not($item).children(".music").empty().hide();
-      $(".item").not($item).removeClass("activate");
-      //music
-      // Mobiel faadt de player in over 300ms, desktop over 500ms (bewust verschil).
-      var itemFadeDuration = isMobile() ? 300 : 500;
+
+      // === SLUITEN van het vorige open item — tegelijk met openen ===
+      var $others = $(".item").not($item).filter(".activate");
+      $others.each(function () {
+        var $o = $(this);
+        var fromH2 = this.scrollHeight;
+        var dur2 = Math.round((fromH2 - CLOSED_H) / PX_PER_SEC * 1000);
+        $o.css('height', fromH2 + 'px');
+        $o.children('.music').fadeOut(Math.round(dur2 * 0.4));
+        $o.animate({ height: CLOSED_H }, dur2, 'swing', function () {
+          $o.removeClass('activate');
+          $o.css('height', '');
+          $o.children('.music').empty().hide();
+        });
+      });
+
+      // === OPENEN van het nieuwe item — tegelijk met sluiten ===
       var project = findProject(PROJECTS.work, $item.attr("id"));
       var $music = $item.children(".music");
+      $item.addClass("activate");
       loadProjectContent($music, project, workAudioPath);
-      $music.fadeIn(itemFadeDuration);
-
-      // Naar het midden van het geopende item scrollen: anders moet je,
-      // als het item niet toevallig al in beeld stond, eerst zelf nog naar
-      // beneden scrollen vóór je door de tracklist kan scrollen — dubbel
-      // werk. We wachten tot de hoogte-transitie (0.5s) goeddeels voorbij
-      // is, zodat we naar de UITEINDELIJKE (open) positie scrollen i.p.v.
-      // naar een tussentijdse.
-      setTimeout(function () {
+      $music.css('visibility', 'hidden').show();
+      var targetH = $item[0].scrollHeight;
+      $music.css('visibility', '').hide();
+      $item.css('height', CLOSED_H + 'px');
+      var durOpen = Math.round((targetH - CLOSED_H) / PX_PER_SEC * 1000);
+      $music.fadeIn(Math.round(durOpen * 0.5));
+      $item.animate({ height: targetH }, durOpen, 'swing', function () {
+        $item.css('height', 'auto');
         var rect = $item[0].getBoundingClientRect();
         var itemMiddle = rect.top + rect.height / 2;
         var viewportMiddle = window.innerHeight / 2;
         window.scrollBy({ top: itemMiddle - viewportMiddle, behavior: "smooth" });
-      }, 350);
+      });
     }
   });
 
