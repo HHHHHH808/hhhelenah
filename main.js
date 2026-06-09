@@ -143,23 +143,8 @@ const PROJECTS = {
       status: "helenah",
       afbeelding: "assets/Images/Life/logo12.jpg",
       beschrijving: "Debut album on the Brussels based label 'Montage'.",
-      nummers: [
-        { id: "intro", titel: "Intro", duur: "01:46" },
-        { id: "hysteria", titel: "Hysteria", duur: "02:29" },
-        { id: "santiago", titel: "Santiago", duur: "01:35" },
-        { id: "interludea", titel: "Interlude I", duur: "01:28" },
-        { id: "ott", titel: "OTT", duur: "00:57" },
-        { id: "wdyi", titel: "Who Do You Is", duur: "03:37" },
-        { id: "interludeb", titel: "Interlude II", duur: "01:02" },
-        { id: "soil", titel: "Soil", duur: "03:14" },
-        { id: "greenhorn", titel: "Greenhorn", duur: "05:44" },
-        { id: "interludec", titel: "Interlude III", duur: "01:15" },
-        { id: "futurism", titel: "Futurism", duur: "06:09" },
-        { id: "ghq", titel: "GHQ", duur: "05:07" },
-        { id: "interd", titel: "Interlude IV", duur: "00:41" },
-        { id: "schurft", titel: "Schurft", duur: "03:18" },
-        { id: "tlgm", titel: "TLGFM", duur: "03:43" }
-      ]
+      type: "embed",
+      embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=1065259858/size=large/bgcol=ffffff/linkcol=de270f/artwork=small/transparent=true/"
     }
   ]
 };
@@ -338,6 +323,7 @@ function buildEmbed(embedUrl) {
   // proportioneel terug tot de beschikbare breedte: alles — inclusief de
   // tekst — krimpt mee, en blijft dus volledig binnen de lijnen.
   if (/bandcamp\.com/.test(embedUrl)) {
+    var bcHeight = /size=large/.test(embedUrl) ? '472px' : '120px';
     // EERDERE AANPAK (geschrapt): de iframe op een vaste, "voldoende
     // brede" eigen breedte (700px) zetten en als geheel terugschalen tot
     // de beschikbare kolombreedte. Dat ging ervan uit dat Bandcamp zijn
@@ -352,7 +338,7 @@ function buildEmbed(embedUrl) {
     // vertrouwen op Bandcamp's EIGEN responsive gedrag — dat is exact het
     // mechanisme dat deze speler default ook op de echte Bandcamp-site
     // gebruikt op mobiel.
-    $iframe.css({ width: '100%', height: '120px' });
+    $iframe.css({ width: '100%', height: bcHeight });
     return $iframe;
   }
 
