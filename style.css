@@ -7,7 +7,7 @@
             
   @font-face {
   font-family: media;
-  src: url(assets/Guifx.ttf);
+  src: url(assets/Fonts/Guifx.ttf);
 }
          
 *{
@@ -107,6 +107,9 @@ text-align: right;
     background-color: white;
     border: 1px solid red;
             }
+.bio-box a {
+  text-decoration: underline;
+}
 
 /*FORM*/
 .form { grid-area: 1 / 1 / 4 / 3; 
@@ -281,73 +284,231 @@ font-family: 'Roboto Condensed', sans-serif;
     letter-spacing: 1px;
   font-size: min(max(0.8rem, 1.2vw), 1.2rem);
 min-height: 0vw;
-      transition: top 0.5s, bottom 0.5s;
-
+      transition: top 0.5s, bottom 0.5s, color 2.5s, background-color 2.5s;
+  /* Basiswaarden voor de eigenschappen die hieronder bij ".is-open"
+     veranderen — nodig zodat er iets is om "naar toe" of "vanaf" te
+     animeren (anders geen smooth overgang, enkel een sprong). "padding" en
+     "width" staan hier al op hun "open"-waarde en blijven ongewijzigd bij
+     ".is-open" — enkel kleur/achtergrond faden, zodat het rode vlak nooit
+     plots van grootte verandert (een width/padding-sprong kan niet
+     "faden"). */
+  color: inherit;
+  background-color: transparent;
+  padding: 0.2em 0.4em;
+  width: fit-content;
+}
+/* Probeersel: titel als rood vlak met witte tekst erin (i.p.v. het rode
+   "badge"-jaartal hierboven), maar ENKEL wanneer het item geopend is —
+   gesloten items behouden hun originele look. NOTE: dit is nog
+   experimenteel en kan mogelijk weer teruggedraaid worden — vandaar als
+   één duidelijk afgebakend blokje gehouden. (Mobiel volgt later apart.) */
+.work-item.is-open h4,
+.life-item.is-open h4 {
+  color: #fff;
+  background-color: red;
 }
 .work h4 {
   padding-right: 1em;
   text-align: left;
   position: absolute;
-  bottom: 0.5em;
-  width: 7vw;
-    right: 0;
-    white-space: nowrap;
-    writing-mode: vertical-rl;
-        transition: top 0.5s, bottom 0.5s;
+  bottom: 0.5rem;
+  top: auto;
+  right: 0;
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+  /* transform-transitie: JS berekent de exacte translateY om de titel
+     van onderaan (gesloten) naar bovenaan (geopend) te bewegen, zodat
+     de transitie altijd klopt ongeacht titelhoogte of viewporthoogte.
+     "color"/"background-color" toegevoegd zodat de fade van de
+     ".is-open"-styling (zie h4 hierboven) ook effectief meedraait — een
+     "transition"-shorthand hier overschrijft anders volledig die van h4. */
+  transition: transform 1.5s ease, color 2.5s, background-color 2.5s;
 }
 .life h4 {
-  width: 20vw;
-  padding: 0;
-  text-align: center;
+  padding-right: 1em;
+  text-align: left;
+  position: absolute;
+  bottom: 0.5rem;
+  top: auto;
+  right: 0;
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+  width: auto;
+  transition: transform 1.5s ease, color 2.5s, background-color 2.5s;
 }
-.item {
+.work-item {
+  position: relative;
   border-right: 1px solid red;
   flex-shrink: 0;
+  /* "Platenbak"-effect: de kolom is smal en clipt (overflow: hidden) een
+     grote cirkel zodat enkel de bovenste helft zichtbaar is — als
+     labels die net boven de vinyl uitsteken (zie OG-screenshot). De
+     afbeelding zelf (zie .work-item img) heeft een vaste grootte die niet
+     verandert bij het openen, enkel de kolom verbreedt/clipt anders —
+     zo geen lelijke groei/krimp-glitch meer. */
   overflow: hidden;
-    height: 100%;
+  height: 100%;
   padding: 0;
-  transition: width 0.5s, height 1s, background-position 0.5s;
-    min-width: 4rem;
-  max-width: 7rem;
-    width: 7vw;
-  cursor: pointer;
-    background-color: white;    
-  background-repeat: no-repeat;
-  background-size: 20em auto;
+  transition: width 1.5s, background-position 1.5s, filter 1.2s ease;
+  /* min-width/max-width zijn bewust gelijk aan die van .is-open: deze
+     properties zelf zijn niet animeerbaar en zouden de kolombreedte
+     anders abrupt "klemzetten" bij het begin/einde van de transitie
+     (instant sprong i.p.v. vloeiend groeien/krimpen). Enkel "width"
+     mag het animatiewerk doen. */
+  min-width: 4rem;
+  max-width: 25rem;
+    width: 7rem;
+  /* Niet de hele kolom is klikbaar — enkel de afbeelding (zie "img"
+     regel: cursor:pointer staat daar al globaal op). Zo blijft de cursor
+     in de rest van het rayon de gewone pijl, en kan er ook gewoon
+     verticaal doorheen gescrolld worden (bv. lange tracklist). */
+  cursor: default;
+    background-color: white;
       opacity: 1;
 }
-.activate {
+.is-open {
   opacity: 1;
-    min-width: 15rem;
+  min-width: 4rem;
   max-width: 25rem;
   width: 25rem;
-  overflow: visible;
+  height: 100%;
+  /* De "wand" schuift open: de kolom verbreedt waardoor de volledige
+     cirkel zichtbaar wordt (i.p.v. enkel de bovenste helft). overflow
+     blijft bewust "hidden" (zelfde als .work-item): zo groeit de clip-grens
+     in lockstep mee met de width-transitie en is de scheidingslijn de
+     "drager" van de animatie — geen losse pop-glitch van de cirkel. */
     background-position: center top;
-      transition: width 0.5s, height 1s, background-position 0.5s;
-}         
-.activate h4{
-                top: 3em;
-                bottom: auto;
-            }
+      transition: width 1.5s, background-position 1.5s, filter 1.2s ease;
+}
+/* Het grijswaarden+blur-effect hoort enkel bij de AFBEELDING, niet bij de
+   scheidingslijn (border-right) of titel (h4) — die blijven altijd in
+   kleur en scherp, gesloten of niet (zie .work-item img / .life-item img filter). */
+.work-item.is-open img,
+.life-item.is-open img {
+  filter: grayscale(0%) blur(0px);
+}
+/* Life-item geopend (desktop): afbeelding centreren + left offset resetten.
+   Zelfde 0.15s vertraging als work-item zodat de itembreedte de afbeelding
+   altijd voorblijft en de scheidingslijn niet geraakt wordt. */
+.life-item.is-open img {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  transition: filter 1.2s ease, left 1.5s ease 0.15s, transform 1.5s ease 0.15s;
+}
+/* Geopend: cirkel gecentreerd. Een kleine vertraging (0.15s) op left en
+   transform zorgt ervoor dat de itembreedte altijd een voorsprong heeft op
+   de afbeeldingsbeweging — zo raakt de afbeelding de scheidingslijn niet. */
+.work-item.is-open img {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  transition: filter 1.2s ease, left 1.5s ease 0.15s, transform 1.5s ease 0.15s;
+}
+.work-item.is-open,
+.life-item.is-open {
+  border-radius: 0;
+  background-color: transparent;
+  /* overflow blijft hidden: de afbeelding wordt correct geclipt.
+     Het scrollen gebeurt enkel in de .music-div — zie hieronder. */
+}
+/* Desktop: enkel de inhoud (playlist/embed) scrolt, de afbeelding
+   blijft altijd bovenaan gefixeerd. .music wordt absoluut gepositioneerd
+   onder de afbeelding en krijgt overflow-y: auto.
+   Work: 17rem — zichtbare cirkel (clip-path: circle(38%) van 18rem) eindigt
+   op ~15.84rem, dus ~1rem witruimte.
+   Life: 19rem — vierkante afbeelding is volledig zichtbaar (18rem), dus
+   1rem witruimte onder de afbeelding. */
+.work-item.is-open .music {
+  position: absolute;
+  top: 17rem;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  width: 100%;
+}
+.life-item.is-open .music {
+  position: absolute;
+  top: 19rem;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  width: 100%;
+}
+/* Desktop: h4 transform wordt via JS gezet (zie main.js desktop-click-handler).
+   Geen extra top/bottom regels nodig hier — transform doet het werk. */
+
+/* Jaartal-label: lichte vetgedrukte typo, zelfde familie als de titel.
+   Standaard verborgen — enkel zichtbaar wanneer een item open staat
+   (desktop), netjes gecentreerd in de ~1rem witruimte tussen de
+   zichtbare cirkel en het begin van ".music" (zie top-waarden hierboven:
+   work=17rem, life=19rem). Op mobiel wordt dit hieronder herzien. */
+.jaartal {
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: min(max(0.7rem, 1vw), 0.9rem);
+  display: none;
+  margin: 0;
+}
+/* ".is-visible" wordt door JS toegevoegd zodra een item opengaat, en pas
+   weer verwijderd NADAT het jaartal volledig is uitgefade (zie
+   "fadeOutJaartal" in main.js). Hierdoor blijft de absolute positionering
+   tijdens het uitfaden behouden — anders zou het jaartal, zodra
+   ".work-item.is-open" meteen wegvalt bij het sluiten, terugvallen op de
+   (niet-gepositioneerde) basisstijl en naar de linkerbovenhoek "springen"
+   voor het kon wegfaden. */
+.work-item .jaartal.is-visible {
+  display: block;
+  width: fit-content;
+  position: absolute;
+  top: 16.45rem;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  /* Start onzichtbaar — wordt via JS samen met de beschrijving ingefade
+     (zie "DESKTOP_DUR"-animatie in main.js). */
+  opacity: 0;
+}
+.life-item .jaartal.is-visible {
+  display: block;
+  width: fit-content;
+  position: absolute;
+  top: 18.45rem;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  opacity: 0;
+}
 .hiding {
   width: 0;
   transition: width 0.5s;
 }
-.itam {
-  display: none;
+.life-item {
+  display: none; /* filter-tags tonen/verbergen items via fadeIn/fadeOut */
+  position: relative;
+  border-right: 1px solid red;
   flex-shrink: 0;
   overflow: hidden;
-  height: 40vw;
-  position: relative;
+  height: 100%;
   padding: 0;
-  transition: width 0.5s, height 0.5s;
-  width: 20vw;
-  margin-right: 1em;
+  transition: width 1.5s, filter 1.2s ease;
+  min-width: 4rem;
+  max-width: 25rem;
+  width: 9rem; /* iets breder dan work-items: meer witruimte rond de albumcover */
+  cursor: default;
+  background-color: white;
 }
-.active-itam {
-  opacity: 1;
-  width: 40vw;
-  height: calc(100vh - 10vw);
+.life-item.is-open {
+  min-width: 4rem;
+  max-width: 25rem;
+  width: 25rem;
+  height: 100%;
+  transition: width 1.5s, filter 1.2s ease;
 }
 .music{
  display: none;
@@ -356,25 +517,31 @@ min-height: 0vw;
       margin: 0;
             }
 .life .music {
-  height: 20vw;
+  height: auto;
 }
 .work .content {
   position: relative;
-    min-width: 15rem;
+  min-width: 15rem;
   max-width: 25rem;
-  width: 25rem;  padding: 0 3rem;
-  margin-top: 18rem;
+  width: 25rem;
+  padding: 0 3rem;
+  /* margin-top niet meer nodig: .music start pas op top:19rem (zie hierboven) */
+  margin-top: 0;
   box-sizing: border-box;
-}         
+}
 .life .content {
-  padding-left: 21vw;
-  padding-top: 0em;
-  width: 40vw;
+  position: relative;
+  min-width: 15rem;
+  max-width: 25rem;
+  width: 25rem;
+  padding: 0 3rem;
+  margin-top: 0;
+  box-sizing: border-box;
 }
 h5{
 font-family: 'Roboto', sans-serif;
     
-  font-size: min(max(0.9rem, 1.3vw), 1.3rem);
+  font-size: min(max(0.75rem, 1.1vw), 1.05rem);
 min-height: 0vw;
     
   font-weight: 400;   
@@ -385,14 +552,7 @@ min-height: 0vw;
                 padding: 1em 0;
             }
 .life h5 {
-  text-align: left;
-  position: absolute;
-  top: 24vw;
-  width: 20vw;
-  margin: 0;
-  left: 0;
-  padding: 0.5em;
-  display: block;
+  padding: 1em 0;
 }
 /*MEDIA - AUDIO - VIDEO - IMG*/
 audio {
@@ -430,12 +590,16 @@ font-family: 'Roboto', sans-serif;
 #progress-bar {
   -webkit-appearance: none;
   width: 80%;
-    display: inline;
+  /* "block" i.p.v. "inline": de play/pauze-knop (".pp", nu ook "block")
+     komt zo BOVEN de tijdsbalk te staan i.p.v. ernaast — geeft wat meer
+     ademruimte/visuele rust, zoals gevraagd. */
+  display: block;
+  /* Gecentreerd i.p.v. links uitgelijnd, zodat de knop erboven (".pp",
+     ook gecentreerd via "margin: 0 auto") er recht boven kan staan. */
+  margin: 0 auto;
   height: 0.5em;
   background: red;
   outline: none;
-  vertical-align: super;
-
 }
 #progress-bar::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -470,28 +634,137 @@ button {
   height:auto;
   cursor: pointer;
 } 
-.pp{
-      font-family: media;          
-            }
-.item iframe,
-.item video {
-    padding: 0.5em;
+/* Play/pauze-icoon zuiver met CSS getekend (i.p.v. tekst-glyphs uit het
+   "media"-icoonfont, "&#9658;" vs "&#10074;&#10074;" — die renderden op
+   duidelijk verschillende groottes, wat de knop deed "springen" en de
+   tekst ernaast deed verschuiven bij het wisselen tussen afspelen/pauze).
+   Vaste, identieke bounding box (1.4em vierkant) voor beide standen, en
+   "block" + margin i.p.v. "inline" naast de tijdsbalk: dat creëert wat
+   meer lucht/ruimte en oogt rustiger, zoals gevraagd. */
+.pp {
+  position: relative;
+  display: block;
+  width: 1.4em;
+  height: 1.4em;
+  /* Gecentreerd boven de tijdsbalk i.p.v. links uitgelijnd (de tijdsbalk
+     hierboven kreeg om diezelfde reden ook "margin: 0 auto"). */
+  margin: 0 auto 0.4em auto;
+}
+.pp::before,
+.pp::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  background: red;
+}
+/* Afspelen (standaard): één driehoek, met borders getekend zodat de
+   bounding box exact even groot blijft als de pauze-vorm hieronder. */
+.pp::before {
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: transparent;
+  border-style: solid;
+  border-width: 0.6em 0 0.6em 1em;
+  border-color: transparent transparent transparent red;
+  transform: translate(-35%, -50%);
+}
+.pp::after {
+  display: none;
+}
+/* Pauze (".is-playing"): twee gelijke balkjes i.p.v. de driehoek — exact
+   dezelfde bounding box/maat, dus geen visuele sprong meer. */
+.pp.is-playing::before {
+  left: 38%;
+  width: 0.35em;
+  height: 1.2em;
+  background: red;
+  border: none;
+  transform: translate(-50%, -50%);
+}
+.pp.is-playing::after {
+  display: block;
+  left: 68%;
+  width: 0.35em;
+  height: 1.2em;
+  transform: translate(-50%, -50%);
+}
+/* Bandcamp/embed iframe in open life-item: vul de resterende hoogte
+   van .music (flex-kolom) op na de beschrijving. min-height:0 is
+   nodig zodat flex de vaste height uit buildEmbed mag overschrijven. */
+.life-item.is-open .music > iframe {
+  width: 100%;
+}
+.work-item iframe,
+.work-item video {
+    /* Verticale padding verkleind (was 0.5em rondom) — bij meerdere
+       embeds onder elkaar (bv. TyPpO's 3 Bandcamp-tracks) telde de
+       top+bottom padding van elke iframe op tot een te grote witruimte
+       ertussen. Horizontale padding blijft 0.5em. */
+    padding: 0.15em 0.5em;
     z-index: 20;
     min-width: 15rem;
   max-width: 25rem;
   width: 25rem;
   height: 16rem;}
-.item iframe:first-of-type,
-.item video:first-of-type {
+.work-item iframe:first-of-type,
+.work-item video:first-of-type {
 }
 img {
   cursor: pointer;
 }
-.itam img {
+.life-item img {
+  display: block;
   opacity: 1;
-  height: 20vw;
-  width: 20vw;
+  position: absolute;
+  top: 0;
+  left: 1rem; /* 1rem witruimte links; overflow:hidden clipt rechts */
+  right: auto;
+  transform: none;
+  width: 18rem;
+  height: 18rem;
+  border-radius: 0; /* vierkant i.p.v. rond */
+  object-fit: cover;
+  filter: grayscale(100%) blur(2px);
+  transition: filter 1.2s ease, left 1.5s ease, transform 1.5s ease;
 }
+
+/* De afbeelding van een work-item heeft altijd dezelfde vaste grootte en
+   vorm (cirkel), gecentreerd bovenaan in de kolom — gesloten of geopend.
+   Enkel de kolom (.work-item) zelf clipt (overflow: hidden) deze cirkel tot
+   de bovenste helft wanneer hij dicht is ("platenbak"-effect, zie OG-
+   screenshot); bij het openen verbreedt de kolom (overflow: visible) en
+   wordt de volledige cirkel zichtbaar. Omdat de afbeelding zelf nooit
+   van grootte verandert, is er geen groei/krimp-glitch meer. */
+.work-item img {
+  display: block;
+  opacity: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: auto;
+  transform: none;
+  width: 18rem;
+  height: 18rem;
+  border-radius: 50%;
+  /* clip-path beperkt niet enkel de zichtbare vorm, maar ook het
+     klikbare gebied tot binnen de cirkel — geen "dode hoeken" van de
+     vierkante hitbox meer buiten de ronde rand. Iets kleiner dan 50%
+     zodat het klikgevoel strikt aanvoelt, ook met de muis. */
+  clip-path: circle(38%);
+  object-fit: cover;
+  /* Het grijswaarden+blur-effect zit op de afbeelding zelf (niet op de
+     kolom), zodat scheidingslijn en titel altijd in kleur/scherp blijven.
+     Blur iets minder heftig dan voorheen (2px i.p.v. 4px). */
+  filter: grayscale(100%) blur(2px);
+  transition: filter 1.2s ease, left 1.5s ease, transform 1.5s ease;
+  /* object-position wordt per item ingesteld via JS, op basis van
+     het optionele "afbeeldingPositie"-veld in PROJECTS (default "center"). */
+}
+
+/* Titel/tekst/tracklist (".content", binnenin ".music") krijgen hun
+   eigen ruimte onder de cirkel zodra het item open is (zie .work .content
+   margin-top: 1rem boven + 14rem hoogte + 1rem tussenruimte = 16rem). */
 
 
 
@@ -569,52 +842,12 @@ label .checkmark:after {
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
-           
-#mnm{
-background-image: url('assets/wide-circ/blur/circ-mnm.png');
-}
-#kerstre{
-background-image: url('assets/wide-circ/blur/circ-eenpng.png');
-}
-#ww{
-background-image: url('assets/wide-circ/blur/circ-ww.png');
-}
-#siebert{
-background-image: url('assets/wide-circ/blur/circ-truck.png');
-}
-#warmathon{
-background-image: url('assets/wide-circ/blur/circ-warmathon.png');
-}
-#burnout{
-background-image: url('assets/wide-circ/blur/circ-burnout.png');
-}
-#ivy{
-background-image: url('assets/wide-circ/blur/circ-ivy.png');
-}
-#schob{
-background-image: url('assets/wide-circ/blur/schob.png');
-}
 
-#flx{
-background-image: url('assets/wide-circ/blur/circ-flx.png');
-}
-#sbpi{
-background-image: url('assets/wide-circ/blur/circ-stubru.png');
-}
-#kaatje{
-background-image: url('assets/wide-circ/blur/circ-kaatje.png');
-}
-#green{
-background-image: url('assets/wide-circ/blur/circ-green.jpg');
-}
-#people{
-background-image: url('assets/wide-circ/blur/circ-people.jpg');
-}  
-#wayout{
-background-image: url('assets/wide-circ/blur/circ-wayout.png');
-}  
-           
-            
+/* De vroegere per-id background-image regels (dubbele blur/normaal-
+   afbeeldingen per item) zijn vervangen door één <img> per item
+   (geladen vanuit PROJECTS.afbeelding) met een CSS grayscale+blur-
+   filter dat overgaat bij het openen — zie .work-item / .life-item hierboven. */
+
              @media screen and (max-width: 768px) {
                  
 /*BASIC-MOB*/              
@@ -628,14 +861,24 @@ body {
   grid-template-rows: repeat(2, min-content) 1fr;   
 }      
 /*ABOUT-MOB*/
-       
-.bio { 
-    grid-area: 2 / 1 / 4 / 2; 
-                 }   
-.bio-box{position: fixed;
-    top:50%;
-                 left: 50%;
-                 transform: translate(-50%,-50%);}
+
+/* Full-screen overlay zodat tikken buiten de box altijd sluit,
+   ongeacht welk grid-gebied er achter zit. */
+.bio {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  grid-area: unset;
+}
+.bio-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 90vw;
+}
                  
 /*FORM-MOB*/
 .form { 
@@ -689,124 +932,594 @@ h2 {
                          transition: padding 0.5s;
                  }
                  
-/*WORK&LIFE-MOB*/              
-.work { 
+/*WORK&LIFE-MOB*/
+.work {
     grid-area: 3 / 1 / 4 / 2;
                 padding: 0;
                  }
-.life { 
+.life {
     grid-area: 3 / 1 / 4 / 2;
                 padding: 0;
-                 }               
+                 }
 .shown,
 .albums {
   flex-direction: column;
   padding: 1rem 1rem 3rem 1rem;
   overflow-x: hidden;
-    border: none;
+  border: none;
+  gap: 0.5rem;
 }
- .work h4 {
-  text-align: right;
+/* Desktop-only: .music absoluut positioneren onder de afbeelding.
+   Op mobiel valt .music gewoon in de normale documentstroom. */
+.work-item.is-open .music,
+.life-item.is-open .music {
+  position: relative;
   top: auto;
-  right: 1rem;
-  bottom: 0;
-  width: auto;
-    writing-mode: horizontal-tb;
-         transition: top 0.5s, bottom 0.5s;
-
+  left: auto;
+  right: auto;
+  bottom: auto;
+  overflow-y: visible;
+  width: 100%;
+  display: block; /* reset desktop flex */
+}
+.work h4 {
+  text-align: right;
+  top: 0.5rem;
+  left: 55%;
+  width: 44%;
+  right: auto;
+  bottom: auto;
+  writing-mode: horizontal-tb;
+  white-space: normal;
+  word-break: break-word;
+  transform: none !important;
+  transition: none;
 }
 .life h4 {
   position: absolute;
-  top: 20vw;
-  transform: translateY(-50%);
-  width: calc(100% - 45vw);
-right: 0;  box-sizing: border-box;
-  line-height: 1.4rem;
+  top: 0.5rem;
+  /* Ankeren vanuit links i.p.v. rechts: voorkomt dat right:X wordt
+     berekend t.o.v. een (te) brede scroll-width als de layout even
+     overflows heeft (bijv. tijdens het open-animeren van het item).
+     55% + 44% = 99% → titel kan nooit voorbij de rechterkant lopen. */
+  left: 55%;
+  width: 44%;
+  right: auto;
+  writing-mode: horizontal-tb;
+  max-width: 44%;
+  white-space: normal;
+  word-break: break-word;
+  transform: none !important;
+  text-align: right;
+  bottom: auto;
+  transition: none;
 }
-.item {
+.life-item.is-open h4 {
+  position: absolute;
+  top: 0.5rem;
+  left: 55%;
+  width: 44%;
+  right: auto;
+  max-width: 44%;
+  transform: none !important;
+}
+.work-item.is-open h4,
+.life-item.is-open h4 {
+  /* Op mobiel geen rood/wit "badge"-effect op de titel — gewoon de
+     normale stijl behouden. */
+  color: inherit;
+  background-color: transparent;
+}
+.work-item {
+  position: relative;
   width: 100%;
     min-width: 100%;
     max-width: 100%;
-  height: 4rem;
+  height: 3.85rem;
+  /* Gesloten toestand: vaste hoogte + max-height gelijk aan die hoogte.
+     "max-height" is wél animeerbaar (ook naar/van "auto"), in tegenstelling
+     tot "height: auto". Door max-height te transitioneren van de gesloten
+     waarde naar een ruime open waarde, schuift de border-bottom vloeiend
+     omlaag terwijl de inhoud zichtbaar wordt — hetzelfde "scheidingslijn
+     schuift"-effect als de width-transitie op desktop. */
+  max-height: 3.85rem;
+  transition: filter 1.2s ease;
   border-right: none;
   border-bottom: 1px solid red;
   padding-top: 0rem;
   box-sizing: border-box;
       background-size: 45% auto;
 background-position: left top;
+  border-radius: 0;
+  /* TERUG naar "hidden" (zoals desktop): de bedoeling is net dat de eigen
+     scheidingslijn de cirkel AFSNIJDT — enkel het bovenste ~35% blijft
+     zichtbaar binnen de rij, de rest wordt door de rand van deze kolom
+     geclipt (i.p.v. dat de cirkel zelf over de lijn heen tekent, wat met
+     "visible" gebeurde). */
+  overflow: hidden;
+  display: flex;
+  /* "flex-start": de cirkel hangt boven aan de rij. Samen met
+     "overflow: hidden" op ".work-item" zorgt dat ervoor dat enkel het bovenste
+     ~35% van de (veel grotere) cirkel binnen de rij zichtbaar blijft — de
+     rand van de kolom / de eigen scheidingslijn "snijdt" de rest af, net
+     als bij de desktop-"platenbak" (zie ".work-item" overflow: hidden). */
+  align-items: flex-start;
+}
+/* Gesloten item op mobile: ronde afbeelding links uitgelijnd en onderaan
+   tegen de eigen scheidingslijn, zodat de bovenkant er ~35% bovenuit piekt
+   (zelfde "platenbak"-gevoel als op desktop, maar dan verticaal gestapeld
+   — zie OG-screenshot). Grijswaarden + lichte blur tot het item opent. */
+.work-item img {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  /* Cirkel (11rem) vs. item-hoogte (3.85rem): de rand van de kolom
+     (".work-item", overflow: hidden) snijdt de cirkel af zodat enkel het
+     bovenste ~35% (3.85 / 11) binnen de rij zichtbaar blijft — de eigen
+     scheidingslijn "knipt" de cirkel dus letterlijk af i.p.v. dat de
+     cirkel over de lijn heen tekent. */
+  width: 11rem;
+  height: 11rem;
+  min-width: 11rem;
+  margin: 0 1rem 0 0;
+  border-radius: 50%;
+  object-fit: cover;
+  transform: none;
+  filter: grayscale(100%) blur(2px);
+  transition: filter 1.2s ease;
+}
+.work-item.is-open img,
+.life-item.is-open img {
+  filter: grayscale(0%) blur(0px);
+}
+/* Titel staat los van de flow, vast rechtsboven het item — zowel open als
+   dicht exact dezelfde positie, zodat ze nooit "springt" bij het open- of
+   dichtklappen (zie .work-item.is-open h4 hieronder, identiek). */
+.work-item h4 {
+  position: absolute;
+  top: 0.5rem;
+  left: 55%;
+  width: 44%;
+  right: auto;
+  text-align: right;
+  writing-mode: horizontal-tb;
+  white-space: normal;
+  word-break: break-word;
+  bottom: auto;
+  transform: none !important;
+  transition: none;
+}
+/* Jaartal op mobiel: rechts uitgelijnd onder de titel, in dezelfde kolom
+   (left:55% / width:44%) als h4. Overschrijft de desktop-regels (".work-item
+   .jaartal.is-visible" / ".life-item .jaartal.is-visible") via gelijke
+   specificiteit + latere bron-volgorde. ".is-visible" hoeft op mobiel niet
+   aanwezig te zijn — deze regel geldt sowieso. Enkel zichtbaar wanneer het
+   item open staat (".is-open") — gesloten items vallen terug op de basis
+   ".jaartal" regel hierboven (display: none). */
+.work-item.is-open .jaartal,
+.life-item.is-open .jaartal {
+  display: block;
+  position: absolute;
+  top: 2.3rem;
+  /* Zelfde box (positie + afmetingen) als h4 hierboven (".work-item h4":
+     left:55%, width:44%, box-sizing: border-box) — zo eindigt de
+     content-box (waarbinnen "text-align: right" de tekst plaatst) op
+     dezelfde rechterrand als bij h4, namelijk 99% min de rechter-padding.
+     h4's rechter-padding is "1em" van h4's eigen font-size — hier
+     gedupliceerd als absolute waarde (i.p.v. "1em", dat zou hier 1em van
+     het JAARTAL's eigen, kleinere font-size zijn) zodat beide rechterranden
+     exact overeenkomen, ongeacht viewportbreedte. */
+  left: 55%;
+  width: 44%;
+  right: auto;
+  box-sizing: border-box;
+  padding-right: min(max(0.8rem, 1.2vw), 1.2rem);
+  text-align: right;
+  /* Opacity wordt door JS geanimeerd (zie "main.js": fade-in/-out van
+     ".jaartal" samen met de hoogte-animatie). Basiswaarde 1 — JS zet
+     'm tijdelijk op 0 vóór de fade-in start. */
+  opacity: 1;
+  transform: none;
+}
+/* Geopend item op mobile: de afbeelding blijft een kleine cirkel, maar
+   wordt in-flow geplaatst (geen absolute centrering nodig — de kolom is
+   al smal/100% breed) zodat de tekst/tracklist er gewoon onder verschijnt. */
+.work-item.is-open {
+  /* Desktop .is-open zet width:25rem en max-width:25rem (hogere specificiteit
+     dan .work-item { width:100% }). Op mobiel moet het item altijd 100% breed
+     blijven — dit overschrijft de desktop-breedte expliciet. */
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  display: block;
+  /* Vaste hoogte (i.p.v. "auto", dat ".is-open" mobile zet — zie verderop):
+     "auto" kan niet smooth interpoleren met de "height: 3.85rem" van de
+     gesloten staat. Dezelfde min-/max-height als ".work-item" (zie aldaar)
+     voorkomt de klem-glitch — enkel "height" zelf animeert dan.
+
+     PROBLEEM met een vaste waarde hier: de werkelijke inhoud verschilt
+     flink per item (korte vs. lange beschrijving/tracklist, embed vs.
+     eigen speler...). "26rem" was voor de meeste items een paar pixels te
+     KRAP (vandaar het nutteloze interne scrollbalkje), maar "30rem"
+     (= max-height) is voor diezelfde items dan weer te ROYAAL (vandaar nu
+     net te VEEL witruimte onderaan). Er bestaat geen vaste waarde die voor
+     alle items tegelijk precies past.
+     Oplossing: "height: auto" — het vak past zich nu exact aan zijn eigen
+     inhoud aan (geen scroll, geen overtollige witruimte, voor élk item
+     afzonderlijk correct), met "max-height" nog als achtervang voor het
+     zeldzame geval dat de inhoud toch heel lang zou zijn. */
+  /* Geopende toestand: height: auto zodat elk item exact zijn eigen
+     inhoud omsluit (geen vaste waarde past voor alle items tegelijk —
+     zie uitleg hierboven). max-height groot genoeg voor de langste
+     mogelijke inhoud; de transitie op max-height zorgt voor de vloeiende
+     "schuivende scheidingslijn"-animatie (zie .work-item hierboven). */
+  height: auto;
+  min-height: 3.85rem;
+  max-height: 1200px;
+  transition: filter 1.2s ease;
+  overflow-y: auto;
+}
+/* Life-item op mobiel: zelfde open-stijl als work-item */
+.life-item.is-open {
+  /* Zelfde reden als .work-item.is-open: desktop width:25rem overschrijven. */
+  width: 100%;
+  max-width: 100%;
+  display: block;
+  height: auto;
+  min-height: 4.5rem;
+  max-height: 1200px;
+  transition: filter 1.2s ease;
+  overflow-x: hidden; /* clip horizontaal zodat right:0.5rem relatief aan zichtbare breedte blijft */
+  overflow-y: auto;
+}
+.life-item.is-open img {
+  float: left;
+  margin: 0 1rem 0.5rem 0;
+  position: relative;
+  left: auto;
+  right: auto;
+  transform: none;
+  border-radius: 0;
+  z-index: 2;
+}
+
+/* Sluitanimatie: houdt height:auto actief terwijl max-height naar de
+   gesloten hoogte terugkeert — zonder dit klapt height: 3.85rem van
+   ".work-item" het item instant dicht en is er geen zichtbare animatie. */
+.work-item.is-closing {
+  height: auto;
+  overflow: hidden;
+  transition: filter 1.2s ease;
+  /* Zonder dit voelt scrollen met de vinger in een "overflow: auto"-vak op
+     iOS Safari vaak alsof het niet werkt (log/haperend, soms helemaal
+     genegeerd) — dit zet de vertrouwde, vloeiende "momentum"-scroll aan. */
+  -webkit-overflow-scrolling: touch;
+  /* Zonder dit kan een vinger-sleep die op een link/knop in de tracklist
+     start (".audio", "a") door sommige Android-Chrome-versies als "dit is
+     geen scroll, dit element regelt zijn eigen aanraking" geïnterpreteerd
+     worden — waardoor verticaal scrollen door de lijst niet lukt zodra je
+     per ongeluk op een rij i.p.v. ertussen begint te slepen. Expliciet
+     "verticaal pannen toestaan" voorkomt dat. */
+  touch-action: pan-y;
+  /* Geeft de scrollbar-thumb (zie ".work-item.is-open::-webkit-scrollbar-thumb"
+     hieronder) een eigen "track" die niet helemaal tot tegen de
+     scheidingslijnen boven/onder de rij komt. */
+  padding-top: 0;
+  padding-bottom: 0.4rem;
+  /* Desktop maakt ".work-item.is-open" transparant — op mobile dekt de
+     (ondoorzichtige) achtergrond van elk item net het overstekende stuk
+     van de cirkel van het VORIGE item af (zie ".work-item": align-items:
+     flex-start + overlap-uitleg). Transparant betekent dat die cirkel door
+     de geopende inhoud heen "lekt". Daarom hier expliciet wit behouden. */
+  background-color: white;
+}
+/* Net als op desktop verandert de afbeelding zelf niet van grootte bij
+   het openen — enkel de filter gaat over. Maar de desktop-regel
+   ".work-item.is-open img" centreert de cirkel via left:50%+translateX(-50%);
+   dat moeten we hier expliciet neutraliseren, anders "springt" de
+   afbeelding van links uitgelijnd naar gecentreerd zodra .is-open
+   wordt toegevoegd. */
+.work-item.is-open img {
+  left: auto;
+  right: auto;
+  transform: none;
+  /* Open: cirkel blijft links uitgelijnd, maar "float"-en i.p.v. de
+     negatieve verticale margins van de gesloten staat (die waren enkel
+     bedoeld om over de eigen scheidingslijn te pieken) — zo vloeit de
+     titel/beschrijving er natuurlijk naast i.p.v. eronder. */
+  float: left;
+  margin: 0 1rem 0.5rem 0;
+  /* "position: relative" + z-index: positioneerde elementen worden altijd
+     als laatste (bovenop alles) getekend — zo wint de cirkel ALTIJD de
+     tik, ongeacht of de ernaast liggende tekst/tracklist toevallig over
+     (een deel van) haar vlak heen ligt. Dat overlappen verschilt namelijk
+     per item (afhankelijk van de lengte van beschrijving/tracklist), dus
+     een "overflow: hidden"-fix op de tekst alleen loste dit niet overal op. */
+  position: relative;
+  z-index: 2;
 }
 .hiding {
   width: auto;
   height: 0;
   transition: height 0.5s;
 }
-.activate {
+.is-open {
   width: 100%;
     min-height: 45vw;
   height: auto;
   transition: padding-top 0.5s;
-        overflow: hidden;
+  /* "visible" i.p.v. "hidden": anders knipt deze container het bovenste
+     stuk van de cirkel weg dat (bewust) boven de scheidingslijn uitsteekt
+     zodra het item open is — zie .work-item img margin-top hierboven. */
+        overflow: visible;
   max-width: 100%;
-}         
-.activate h4{
-                top: 0.5rem;
-                bottom: auto;
-    transition: top 0.5s, bottom 0.5s;
-            }
-.itam {
-  text-align: left;
-  margin: 1rem 0em;
-  width: auto;
-  height: auto;
 }
-.active-itam {
+.is-open h4{
+                top: 0.5rem;
+            }
+/* Open: titel verhuist naar rechtsboven (los van de normale flow, naast
+   de cirkel) i.p.v. mee te stromen onder de afbeelding+beschrijving —
+   net zoals in de OG-layout. */
+.work-item.is-open h4 {
+  position: absolute;
+  top: 0.5rem;
+  left: 55%;
+  width: 44%;
+  right: auto;
+  text-align: right;
+  max-width: 44%;
+  white-space: normal;
+  word-break: break-word;
+}
+.life-item {
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  height: 4.5rem;
+  min-height: 4.5rem;
+  max-height: 4.5rem;
+  transition: filter 1.2s ease;
+  border-right: none;
+  border-bottom: 1px solid red;
+  padding-top: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  background-color: white;
+}
+.is-open {
   width: 100%;
     height: auto;
     min-height: 50vh;
 }
-.active-itam h4 {
+.is-open h4 {
   top: 1.5em;
   transition: top 0.5s;
 }
 .work .content {
-    float: right;
-    min-width: 55%;
-  width: 55%;
+    float: none;
+    min-width: 100%;
+  width: 100%;
   height: auto;
   margin: 0;
-    padding: 2rem 2rem 0rem 0rem;
+    /* 3.2rem top-padding (i.p.v. 1rem): laat ruimte vrij voor de h4-titel
+       (top:0.5rem, ~1.4rem hoog) + het jaartal eronder (top:2.3rem, zie
+       ".jaartal" hierboven) in dezelfde rechtse kolom, zodat de
+       beschrijving (h5) er niet doorheen/overheen loopt. */
+    padding: 3.2rem 0 0 0;
+  box-sizing: border-box;
+}
+/* De beschrijving (h5) mag rond de naar links "float"-ende cirkel vloeien
+   (zie ".work-item.is-open img"); de tracklist/embed die erop volgt moet er
+   echter altijd ONDER beginnen — nooit ernaast geperst worden in de
+   resterende, smalle ruimte naast de cirkel. "clear: both" forceert dat. */
+.work .content ul,
+.work .embed-scale-wrapper,
+.work .player-area {
+  /* Iframes/video's vermijden de "float"-ende cirkel automatisch (ze
+     vormen zelf een nieuwe layout-context als vervangen element), en
+     beginnen daardoor altijd pas onder de cirkel. De zelfgebouwde
+     audiospeler zat voorheen IN ".content" (samen met de beschrijving)
+     en gedroeg zich daardoor inconsistent — soms half over de cirkel heen.
+     Door hem in zijn eigen ".player-area" te plaatsen (zie main.js,
+     "loadProjectContent") en hier hetzelfde "clear: both" toe te passen
+     als bij embeds, is de plaatsing nu voor alle spelertypes identiek. */
+  clear: both;
+}
+.work .player-area {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+}
+/* Geeft de beschrijving wat lucht t.o.v. de cirkel ernaast i.p.v. er
+   meteen tegenaan te plakken. */
+.work .content h5 {
+  /* "overflow: hidden" geeft dit element een eigen layout-context die
+     z'n eigen kader om de naast liggende "float"-ende cirkel heen laat
+     krimpen i.p.v. eroverheen te lopen. Zonder dit bleef de ONZICHTBARE
+     rand van de h5 toch over de cirkel heen liggen — waardoor een tik op
+     (het bovenste deel van) de cirkel per ongeluk op de tekst landde,
+     en het sluiten van het item dus niet werkte op die plek. */
+  overflow: hidden;
+  margin-bottom: 0.5rem;
 }
 .life .music {
   height: auto;
 }
 .life .content {
-  padding: 2.4rem;
-    width: 100%;
+  float: none;
+  min-width: 100%;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 0;
+  /* 3.2rem top-padding: beschrijving start onder de h4-titel (top:0.5rem,
+     ~1.4rem hoog) + het jaartal eronder (top:2.3rem, zie ".jaartal"
+     hierboven), zodat de beschrijving er niet doorheen/overheen loopt. */
+  padding: 3.2rem 0 0 0;
+  box-sizing: border-box;
+}
+.life .content h5 {
+  overflow: hidden; /* zorgt dat tekst naast float-afbeelding loopt */
+  margin-bottom: 0.5rem;
+}
+.life .content ul,
+.life .embed-scale-wrapper,
+.life .player-area {
+  clear: both; /* altijd onder de afbeelding, nooit ernaast */
+}
+.life .player-area {
+  /* Flexbox centreert play-knop en balk betrouwbaarder dan margin:0 auto
+     (dat soms niet werkt als de breedte van de ouder niet stabiel is). */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.5rem;   /* meer ruimte tussen afbeelding en speler */
+  width: 100%;
+  text-align: center;
 }
 .life h5 {
-  top: 4em;
-  left: 45vw;
-  width: 45vw;
   padding: 0;
-  transition: display 0.5s;
+  position: static;
+  top: auto;
+  left: auto;
+  width: auto;
 }           
     
-/*MEDIA-MOB*/      
-.itam img {
-  width: 40vw;
-  height: auto;
-} 
-.item iframe,
-.item video {
-    padding: 0.5em;
+/* Eigen scrollbar voor open items: iets dikker dan de site-brede 1px,
+   afgeronde hoek, en een doorzichtige rand rond de "duim" (samen met
+   "background-clip: padding-box") zodat ze niet helemaal tegen de
+   kolomranden/scheidingslijnen aansluit. Verschijnt — net als in Chrome —
+   alleen TERWIJL je scrolt: ".is-scrolling" wordt door "main.js" kort
+   toegevoegd bij een scroll-event en nadien automatisch weer verwijderd. */
+.work-item.is-open::-webkit-scrollbar {
+  width: 0.5rem;
+}
+.work-item.is-open::-webkit-scrollbar-track {
+  background: transparent;
+}
+/* GEEN kleur op de basis-duim: anders blijft hij gewoon permanent zichtbaar
+   zodra het item opengaat. Pas de combinatie ".is-scrolling" (hieronder,
+   enkel kort aanwezig tijdens het scrollen, zie main.js) krijgt een kleur.
+   De afgeronde randen ("border-radius") staan WEL hier al klaar op de
+   basis-duim — sommige mobiele WebKit-builds passen "border-radius" enkel
+   toe als die meteen meegegeven wordt i.p.v. pas via een latere regel. De
+   transparante "border" + "background-clip: padding-box" geven de duim
+   bovendien een klein, doorzichtig randje t.o.v. de track: zo wordt de
+   afronding ook visueel duidelijk i.p.v. weg te vallen tegen even brede
+   randen. */
+.work-item.is-open::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+.work-item.is-open.is-scrolling::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 0, 0, 0.45);
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+/* Firefox: "scrollbar-color" kent geen aparte hover/scroll-status — we
+   zetten 'm daarom ENKEL tijdens ".is-scrolling" (anders zou de balk daar
+   permanent zichtbaar blijven, net het probleem dat we willen vermijden).
+   Geen perfecte auto-hide op Firefox, maar wel de juiste kleur/gedrag op
+   alle Chromium-/WebKit-gebaseerde mobiele browsers (verreweg de meeste). */
+.work-item.is-open.is-scrolling {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 0, 0, 0.45) transparent;
+}
+
+/*MEDIA-MOB*/
+.music {
+  /* GEEN "overflow-x: auto" (meer) — zie uitleg in .music desktop regel */
+}
+/* De desktop ul gebruikt transform: translateX(-50%) + margin-left: 50%
+   als centering-trick. Op mobiel zet dit het layout-box op 50%→150% breedte,
+   wat overflow veroorzaakt en clipping van titels, tijden én de play-knop.
+   Reset naar gewone block-layout. */
+ul {
+  transform: none;
+  margin-left: 0;
+  width: 100%;
+  max-width: 100%;
+  /* align-self: stretch zorgt dat de ul (als flex-kind van .player-area)
+     toch de volle breedte neemt, ook al heeft .player-area align-items: center. */
+  align-self: stretch;
+  /* Desktop padding-right (1rem) is content-box, waardoor de ul breder is
+     dan zijn ouder → overflow + clipping van de tijden. box-sizing: border-box
+     houdt de ul exact 100% breed (padding inbegrepen). Klein padding-right
+     zodat de tijden niet tegen de rand plakken. */
+  box-sizing: border-box;
+  padding-right: 0.5rem;
+}
+.life-item img {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  width: 11rem;
+  height: 11rem;
+  min-width: 11rem;
+  margin: 0 1rem 0 0;
+  border-radius: 0; /* vierkant */
+  object-fit: cover;
+  transform: none;
+  filter: grayscale(100%) blur(2px);
+  transition: filter 1.2s ease;
+}
+.work-item iframe,
+.work-item video {
+    /* Zie toelichting bij de desktop-regel hierboven (kleinere verticale
+       padding tussen gestapelde embeds). */
+    padding: 0.15em 0.5em;
     z-index: 20;
     min-width: 90vw;
   max-width: 100vw;
   width: 100%;
   height: 45vw;}
-.item iframe:first-of-type,
-.item video:first-of-type {
-    margin-top: 20vw;
+/* Bandcamp's ingesloten speler wordt server-side op een VASTE breedte
+   (~350px) opgebouwd en past zich niet aan een smallere iframe aan — zijn
+   eigen tekst liep dan over zijn rand. "buildEmbed" (main.js) wikkelt zo'n
+   embed daarom in ".embed-scale-wrapper" en schaalt de iframe als geheel
+   proportioneel terug (incl. tekst) tot de beschikbare breedte, zodat alles
+   binnen de kolomranden blijft i.p.v. afgesneden of bescroll-baar te zijn. */
+.embed-scale-wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+.embed-scale-wrapper iframe,
+.embed-scale-wrapper iframe:first-of-type {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0 !important; /* overschrijft ".work-item iframe:first-of-type" (margin-top: 20vw)
+                hieronder — die duwde de geschaalde iframe buiten de
+                "overflow: hidden"-wrapper, waardoor er niets zichtbaar was */
+  transform-origin: top left;
+  min-width: 0;
+  max-width: none;
+  padding: 0;
+}
+.work-item iframe:first-of-type,
+.work-item video:first-of-type {
+    /* Was "margin-top: 20vw" — een relict uit de oude lay-out, toen de
+       beschrijving nog ONDER de cirkel stond en deze marge nodig was om
+       de iframe/video onder de (hogere) cirkel te duwen. Nu de
+       beschrijving NAAST de cirkel staat en ".content ul"/
+       ".embed-scale-wrapper" toch al "clear: both" hebben (zie hierboven),
+       is zo'n grote marge niet meer nodig — en zorgde ze net voor veel
+       MEER witruimte boven iframes/video's (Bandcamp, YouTube, Vimeo,
+       Spotify) dan boven de zelfgebouwde audiospeler (".music", die geen
+       eigen top-marge heeft). Een kleine, vaste marge maakt de afstand nu
+       gelijk voor alle spelertypes. */
+    margin-top: 0.4rem;
     margin-bottom: 2rem;
 }
                  
@@ -818,10 +1531,19 @@ background-position: left top;
     grid-area: 2 / 1 / 3 / 2; 
                  }             
 .tags {
-  columns: 3;
+  /* "columns: 3" (CSS multi-column) verdeelde de categorieën kolom-per-kolom
+     en gaf bij een oneven aantal items (bv. 4: 3 categorieën + "all") rare
+     resultaten — een rij met maar 1 item, en visuele "streepjes"-artefacten
+     (vermoedelijk fragmentatie van de absoluut gepositioneerde
+     ".checkmark" pseudo-elementen over kolomgrenzen heen). CSS Grid plaatst
+     items netjes rij-per-rij (3 per rij), met een eventuele rest-categorie
+     alleen op haar eigen rij — geen artefacten. */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 0.5rem;
   padding: 1.5rem;
       font-size: min(max(0.6rem, 0.9vw), 1.2rem);
-}   
+}
 .tags-life.tags{padding: 1.5rem 0.5rem 1.5rem 3rem;
                  }
 label .checkmark:after {
