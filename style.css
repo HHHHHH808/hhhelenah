@@ -79,8 +79,7 @@ color: white;
 background-color: red;
 font-size: min(max(1rem, 1.2vw), 1.5rem);
 min-height: 0vw;
-text-align: right;
-            display: none;}
+text-align: right;}
     #press-btn, #cv-btn{
                display: none; 
             }
