@@ -208,7 +208,7 @@ const PROJECTS = {
       titel: "Andrea Murtas",
       datum: "2018-01",
       categorieen: ["mixing"],
-      afbeelding: "assets/Images/Work/wide-circ/blur/circ-wayout.png",
+      afbeelding: "assets/Images/Work/Murtas.jpg",
       type: "audio",
       beschrijving: "Mixing for Andrea Murtas",
       nummers: [
