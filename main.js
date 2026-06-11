@@ -4,25 +4,171 @@
 // wordt hieruit automatisch opgebouwd (zie verdere stappen).
 // ============================================================
 const PROJECTS = {
+  // Volgorde: chronologisch, meest recente werk eerst (datum = JJJJ-MM).
   work: [
     {
-      id: "wayout",
-      titel: "Andrea Murtas",
-      categorieen: ["mixing", "production"],
-      afbeelding: "assets/Images/Work/wide-circ/blur/circ-wayout.png",
-      type: "audio",
-      beschrijving: "Mixing for Andrea Murtas: The Way Out. Client: Sonhouse.",
-      nummers: [
-        { id: "andrea", titel: "The Way Out", duur: "6:44" }
-      ]
+      id: "BurgerS1",
+      titel: "Burger Service",
+      datum: "2026-02",
+      categorieen: ["mastering"],
+      afbeelding: "assets/Images/Work/BurgerS1.jpg",
+      type: "embed",
+      embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=1268760684/size=large/bgcol=ffffff/linkcol=de270f/artwork=none/transparent=true/",
+      beschrijving: "Mastering for Burger Service’s LP"
+    },
+    {
+      id: "Lieg1",
+      titel: "Liegenaar",
+      datum: "2026-02",
+      categorieen: ["mastering"],
+      afbeelding: "assets/Images/Work/Liegenaar1.jpg",
+      type: "embed",
+      embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=2237593515/size=large/bgcol=ffffff/linkcol=de270f/artwork=none/transparent=true/",
+      beschrijving: "Mastering for Liegenaar’s LP"
+    },
+    {
+      id: "OFMRake",
+      titel: "One Frame Movement",
+      datum: "2026-01",
+      categorieen: ["mastering"],
+      afbeelding: "assets/Images/Work/OFMRake.jpg",
+      type: "embed",
+      embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=4088165736/size=large/bgcol=ffffff/linkcol=de270f/artwork=none/transparent=true/",
+      beschrijving: "Mastering for One Frame Movement’s LP"
+    },
+    {
+      id: "LiesaCara",
+      titel: "Liesa Van Der Aa",
+      datum: "2025-10",
+      categorieen: ["production", "mixing"],
+      afbeelding: "assets/Images/Work/LiesaCaramel.webp",
+      type: "embed",
+      embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=328048578/size=large/bgcol=ffffff/linkcol=de270f/artwork=none/transparent=true/",
+      beschrijving: "Co-mix / sound-design for Liesa Van Der Aa’s LP"
+    },
+    {
+      id: "GerardJer",
+      titel: "Gerard - Je.Rar Reworks",
+      datum: "2025-05",
+      categorieen: ["mastering"],
+      afbeelding: "assets/Images/Work/JeRar.webp",
+      type: "embed",
+      embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=3077992896/size=large/bgcol=ffffff/linkcol=de270f/artwork=none/transparent=true/",
+      beschrijving: "Mastering for Gerard’s LP"
+    },
+    {
+      id: "Typpo1",
+      titel: "TyPpO",
+      datum: "2024-03",
+      categorieen: ["mastering"],
+      afbeelding: "assets/Images/Work/TyPpO1.webp",
+      type: "embed",
+      // Drie kleine Bandcamp track-embeds, worden onder elkaar getoond
+      // (zie loadProjectContent: embedUrl mag een array zijn).
+      embedUrl: [
+        "https://bandcamp.com/EmbeddedPlayer/track=4253173949/size=small/bgcol=ffffff/linkcol=de270f/artwork=none/transparent=true/",
+        "https://bandcamp.com/EmbeddedPlayer/track=2587785353/size=small/bgcol=ffffff/linkcol=de270f/artwork=none/transparent=true/",
+        "https://bandcamp.com/EmbeddedPlayer/track=899365866/size=small/bgcol=ffffff/linkcol=de270f/artwork=none/transparent=true/"
+      ],
+      beschrijving: "Mastering for a few TyPpO singles."
+    },
+    {
+      id: "LaminaKitch",
+      titel: "Lamina / Kitchen Cynics",
+      datum: "2023-10",
+      categorieen: ["mastering"],
+      afbeelding: "assets/Images/Work/LaminaKitchen.webp",
+      type: "embed",
+      embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=2775957945/size=large/bgcol=ffffff/linkcol=de270f/artwork=none/transparent=true/",
+      beschrijving: "Mastering for Lamina’s and Kitchen Cynics’s LP"
+    },
+    {
+      id: "aeiou",
+      titel: "a-e-i-o-u - Opbrakel",
+      datum: "2023-03",
+      categorieen: ["mastering"],
+      afbeelding: "assets/Images/Work/a-e-i-o-uOpbrakel.webp",
+      type: "embed",
+      embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=4220442005/size=large/bgcol=ffffff/linkcol=de270f/artwork=none/transparent=true/",
+      beschrijving: "Mastering for a-e-i-o-u’s EP"
+    },
+    {
+      id: "OFMBr",
+      titel: "One Frame Movement",
+      datum: "2023-02",
+      categorieen: ["mastering"],
+      afbeelding: "assets/Images/Work/OFMBrusque.webp",
+      type: "embed",
+      embedUrl: "https://open.spotify.com/embed/album/0bUUWG2GeLcIhawdH6Cxd0?utm_source=generator&theme=0&si=2808234f371c46e1",
+      beschrijving: "Mastering for OFM’s EP"
+    },
+    {
+      id: "MuriOm",
+      titel: "Muri - Omgeef Me",
+      datum: "2022-07",
+      categorieen: ["production"],
+      afbeelding: "assets/Images/Work/MuriOmgeefMe.webp",
+      type: "embed",
+      embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=219850248/size=large/bgcol=ffffff/linkcol=de270f/artwork=none/transparent=true/",
+      beschrijving: "Production and Sound Design for Muri’s LP"
+    },
+    {
+      id: "burnout",
+      titel: "Burnout",
+      datum: "2020-04",
+      categorieen: ["mastering"],
+      afbeelding: "assets/Images/Work/BurnOut.webp",
+      type: "embed",
+      embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=2426151550/size=large/bgcol=ffffff/linkcol=de270f/artwork=none/transparent=true/",
+      beschrijving: "Mastering for Epong's soundtrack of Rik Chaubet's film"
+    },
+    {
+      id: "schob",
+      titel: "Schobbee",
+      datum: "2023-04",
+      categorieen: ["mastering"],
+      afbeelding: "assets/Images/Work/wide-circ/blur/schob.png",
+      type: "embed",
+      // Bandcamp's embed-HTML wordt server-side op een vaste breedte
+      // (~350px) gerenderd binnen de iframe — dat is GEEN CSS-probleem aan
+      // onze kant (cross-origin, dus niet aanpasbaar): zodra de iframe
+      // smaller is dan die vaste breedte, loopt de tekst (tracktitel, duur)
+      // over zijn eigen rand en wordt ze afgesneden ("size=small" bleek nog
+      // slechter — die layout overlapt zichzelf in een smalle iframe). We
+      // geven de iframe daarom op mobiel een vaste min-breedte + horizontale
+      // scroll (zie ".item .music iframe" in style.css), zodat de inhoud
+      // intact blijft en de gebruiker er desnoods naar kan scrollen.
+      embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=202891063/size=large/bgcol=ffffff/linkcol=de270f/artwork=none/transparent=true/",
+      beschrijving: "Mastering for Schobbee’s LP"
+    },
+    {
+      id: "siebert",
+      titel: "Truck",
+      datum: "2019-04",
+      categorieen: ["production"],
+      afbeelding: "assets/Images/Work/wide-circ/blur/circ-truck.png",
+      type: "embed",
+      embedUrl: "https://player.vimeo.com/video/348057330",
+      beschrijving: "Soundtrack for Siebert Mispelons videowork, 'Truck'."
+    },
+    {
+      id: "people",
+      titel: "People's People",
+      datum: "2019-03",
+      categorieen: ["production"],
+      afbeelding: "assets/Images/Work/LSPeople.webp",
+      type: "embed",
+      embedUrl: "https://open.spotify.com/embed/album/5Kg7zckDCzTRa8qdac2gQD?utm_source=generator&theme=0&si=f6540c3963324685",
+      beschrijving: "Sound design and extra arrangements for Lip Service's EP 'People's People'."
     },
     {
       id: "ww",
       titel: "Warmste Week 2019",
+      datum: "2019-01",
       categorieen: ["production"],
       afbeelding: "assets/Images/Work/wide-circ/blur/circ-ww.png",
       type: "audio",
-      beschrijving: "Soundtrack for StuBru's promotional campaign for 'De Warmste Week 2019'.",
+      beschrijving: "Soundtrack for StuBru's promotional campaign",
       nummers: [
         { id: "warmweek", titel: "Warmste Week", duur: "0:07" },
         { id: "sba1", titel: "Harp Fall", duur: "0:11" },
@@ -38,74 +184,45 @@ const PROJECTS = {
       ]
     },
     {
-      id: "siebert",
-      titel: "Truck",
-      categorieen: ["production"],
-      afbeelding: "assets/Images/Work/wide-circ/blur/circ-truck.png",
-      type: "embed",
-      embedUrl: "https://player.vimeo.com/video/348057330",
-      beschrijving: "Soundtrack for Siebert Mispelons videowork, 'Truck'."
-    },
-    {
-      id: "burnout",
-      titel: "Burnout",
-      categorieen: ["mastering"],
-      afbeelding: "assets/Images/Work/wide-circ/blur/circ-burnout.png",
-      type: "embed",
-      embedUrl: "https://www.youtube.com/embed/eq25I4exauE",
-      beschrijving: "Mastering for Epong's soundtrack of Rik Chaubet's film, 'Burnout'."
-    },
-    {
       id: "ivy",
       titel: "Ivy Falls",
+      datum: "2018-08",
       categorieen: ["production"],
       afbeelding: "assets/Images/Work/wide-circ/blur/circ-ivy.png",
       type: "embed",
       embedUrl: "https://open.spotify.com/embed/track/1iQnPzwIEkNyG0B5zPwIUn",
-      beschrijving: "Production of 'Beautiful Stranger' by Ivy Falls with Kasper Cornelus."
-    },
-    {
-      id: "schob",
-      titel: "Schobbee",
-      categorieen: ["mastering"],
-      afbeelding: "assets/Images/Work/wide-circ/blur/schob.png",
-      type: "embed",
-      // Bandcamp's embed-HTML wordt server-side op een vaste breedte
-      // (~350px) gerenderd binnen de iframe — dat is GEEN CSS-probleem aan
-      // onze kant (cross-origin, dus niet aanpasbaar): zodra de iframe
-      // smaller is dan die vaste breedte, loopt de tekst (tracktitel, duur)
-      // over zijn eigen rand en wordt ze afgesneden ("size=small" bleek nog
-      // slechter — die layout overlapt zichzelf in een smalle iframe). We
-      // geven de iframe daarom op mobiel een vaste min-breedte + horizontale
-      // scroll (zie ".item .music iframe" in style.css), zodat de inhoud
-      // intact blijft en de gebruiker er desnoods naar kan scrollen.
-      embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=202891063/size=large/bgcol=ffffff/linkcol=de270f/artwork=none/transparent=true/",
-      beschrijving: "Mastering for 'Poe's Law' by Schobbee."
-    },
-    {
-      id: "people",
-      titel: "People's People",
-      categorieen: ["production"],
-      afbeelding: "assets/Images/Work/wide-circ/blur/circ-people.jpg",
-      type: "embed",
-      embedUrl: "https://www.youtube.com/embed/FD35-NHz7BI",
-      beschrijving: "Sound design and extra arrangements for Lip Service's EP 'People's People'."
+      beschrijving: "Production for Ivy Falls with Kasper Cornelus"
     },
     {
       id: "green",
       titel: "Green Greener Greenest",
-      categorieen: ["mastering", "mixing", "production"],
+      datum: "2018-02",
+      categorieen: ["mastering", "production"],
       afbeelding: "assets/Images/Work/wide-circ/blur/circ-green.jpg",
       type: "embed",
       embedUrl: "https://player.vimeo.com/video/221453555",
       beschrijving: "Sound-design voor Senne Marquenie's short movie 'Green, Greener, Greenest'."
+    },
+    {
+      id: "wayout",
+      titel: "Andrea Murtas",
+      datum: "2018-01",
+      categorieen: ["mixing"],
+      afbeelding: "assets/Images/Work/wide-circ/blur/circ-wayout.png",
+      type: "audio",
+      beschrijving: "Mixing for Andrea Murtas",
+      nummers: [
+        { id: "andrea", titel: "The Way Out", duur: "6:44" }
+      ]
     }
   ],
 
+  // Volgorde: chronologisch, meest recente release eerst (datum = JJJJ-MM).
   life: [
     {
       id: "comp",
       titel: "Compressed '16-'17",
+      datum: "2020-11",
       status: "helenah",
       afbeelding: "assets/Images/Life/logocompressed.jpg",
       beschrijving: "A series of songs made between '16 '17, sonically bundled by various tape & compression emulations.",
@@ -115,6 +232,7 @@ const PROJECTS = {
     {
       id: "hhh",
       titel: "Helenah",
+      datum: "2019-10",
       status: "helenah",
       afbeelding: "assets/Images/Life/logo12.jpg",
       beschrijving: "Debut album on the Brussels based label 'Montage'.",
@@ -216,14 +334,41 @@ function buildProjectImage(project) {
     .css('object-position', project.afbeeldingPositie || 'center');
 }
 
-function buildWorkItem(project) {
+// Bouwt het jaartal-label (".jaartal") op basis van "datum" (formaat
+// "JJJJ-MM"). Geeft niets terug als er geen datum is, zodat oudere/
+// onvolledige entries de layout niet verstoren.
+function buildYearLabel(project) {
+  if (!project.datum) return null;
+  var jaar = String(project.datum).split('-')[0];
+  return $('<div class="jaartal"></div>').text(jaar);
+}
+
+function buildWorkItem(project, order) {
   var $item = $('<div class="work-item"></div>')
     .attr('id', project.id)
+    // "data-order" bewaart de chronologische positie (index in PROJECTS.work,
+    // dat array staat al van nieuw naar oud). Hierop sorteren we ".shown"
+    // telkens opnieuw na het filteren op categorie, zodat de volgorde altijd
+    // chronologisch blijft - ongeacht in welke volgorde items in/uit "shown"
+    // verplaatst worden.
+    .attr('data-order', order)
     .addClass((project.categorieen || []).join(' '))
     .append(buildProjectImage(project))
     .append('<div class="music"></div>')
     .append($('<h4></h4>').text(project.titel));
+  var $year = buildYearLabel(project);
+  if ($year) $item.append($year);
   return $item;
+}
+
+// Herordent de zichtbare work-items chronologisch (op basis van
+// "data-order"), ongeacht in welke volgorde ze in/uit ".shown" verplaatst
+// werden door de categorie-filters.
+function sortShownWorkItems() {
+  var $shown = $(".shown");
+  $shown.children(".work-item").sort(function (a, b) {
+    return ($(a).data('order') || 0) - ($(b).data('order') || 0);
+  }).appendTo($shown);
 }
 
 function buildLifeItem(project) {
@@ -233,13 +378,15 @@ function buildLifeItem(project) {
     .append(buildProjectImage(project))
     .append('<div class="music"></div>')
     .append($('<h4></h4>').html(project.titel));
+  var $year = buildYearLabel(project);
+  if ($year) $itam.append($year);
   return $itam;
 }
 
 function renderWorkItems() {
   var $repo = $('.hidden-repo');
-  PROJECTS.work.forEach(function (project) {
-    $repo.append(buildWorkItem(project));
+  PROJECTS.work.forEach(function (project, index) {
+    $repo.append(buildWorkItem(project, index));
   });
 }
 
@@ -516,7 +663,12 @@ function loadProjectContent($music, project, pathFn) {
   }
 
   if (project.type === 'embed') {
-    $music.append(buildEmbed(project.embedUrl));
+    // embedUrl mag een enkele URL zijn, of een array van URL's die dan
+    // als losse, kleine embeds onder elkaar getoond worden (zie "Typpo1").
+    var embedUrls = Array.isArray(project.embedUrl) ? project.embedUrl : [project.embedUrl];
+    embedUrls.forEach(function (url) {
+      $music.append(buildEmbed(url));
+    });
   } else if (project.type === 'video') {
     $music.append(buildVideo(project.videoBestand));
   }
@@ -553,6 +705,11 @@ $(document).ready(function () {
 
   $(".tags-work label input").on("click", function () {
     $(".work-item").removeClass("is-open").children(".music").empty().hide();
+    // Reset het jaartal van eventueel openstaande items: zonder dit blijft
+    // ".jaartal.is-visible" (incl. opacity/positionering) hangen op een item
+    // dat door het filter verborgen wordt, en duikt het jaartal weer op
+    // zodra je nadien naar "all" of een andere categorie gaat.
+    $(".work-item").find('.jaartal').stop(true).removeClass('is-visible').css('opacity', '');
     if (!isMobile()) { $(".work-item").find('h4').css('transform', ''); }
     var thistag = $(this).parent("label").text();
     var oldtag = $("label input:checked")
@@ -615,10 +772,14 @@ $(document).ready(function () {
         });
       }
     }
+
+    sortShownWorkItems();
   });
 
   $(".tags-life label input").on("click", function () {
     $(".life-item").removeClass("is-open").children(".music").empty().hide();
+    // Zie analoge toelichting bij ".tags-work label input" hierboven.
+    $(".life-item").find('.jaartal').stop(true).removeClass('is-visible').css('opacity', '');
     if (!isMobile()) { $(".life-item").find('h4').css('transform', ''); }
     var thistag = $(this).parent("label").text();
     var thislp = $("." + thistag);
@@ -674,9 +835,12 @@ $(document).ready(function () {
     if (!isMobile()) {
       $(".work-item, .life-item").find('h4').css('transform', '');
     }
+    // Reset jaartal (zie analoge toelichting bij ".tags-work label input").
+    $(".work-item, .life-item").find('.jaartal').stop(true).removeClass('is-visible').css('opacity', '');
     //reset work
     var ni = $(".hidden-repo .work-item");
     $(".shown").append(ni);
+    sortShownWorkItems();
     $(".oll").prop("checked", true);
     $("label input").not(".oll").prop("checked", false);
     //reset life
@@ -708,12 +872,44 @@ $(document).ready(function () {
   // Gedeelde hulpfunctie voor beide item-types: berekent de translateY (px)
   // om de h4 van "bottom: 0.5rem" naar "top: 0.5rem" te brengen zonder
   // afhankelijk te zijn van de visuele (geanimeerde) positie.
+  // Mobiel: schuift het jaartal en de beschrijving (".content") naar
+  // beneden als de titel (h4) door zijn lengte over meer dan 1 regel
+  // uitvalt. De CSS-basiswaarden (".jaartal" top: 2.3rem, ".content"
+  // padding-top: 3.2rem) gaan uit van een titel van 1 regel — "extra" is
+  // hier de bijkomende hoogte t.o.v. die ene regel, opgeteld bij beide.
+  function adjustMobileTitleLayout($item) {
+    var $h4 = $item.find('h4');
+    if (!$h4.length) return;
+    var cs = getComputedStyle($h4[0]);
+    // "line-height: normal" geeft via getComputedStyle de letterlijke
+    // string "normal" terug (niet-parsebaar) — val dan terug op de
+    // gebruikelijke browser-verhouding (~1.2x font-size).
+    var lineHeight = parseFloat(cs.lineHeight) || (1.2 * parseFloat(cs.fontSize));
+    var paddingV = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+    var extra = Math.max(0, $h4[0].offsetHeight - (lineHeight + paddingV));
+    var rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    $item.find('.jaartal').css('top', extra ? (2.3 * rem + extra) + 'px' : '');
+    $item.find('.content').css('padding-top', extra ? (3.2 * rem + extra) + 'px' : '');
+  }
+
   function calcH4Delta($wi) {
     var rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
     var offset = 0.5 * rem;
     var itemH = $wi[0].offsetHeight;
     var h4H = $wi.find('h4')[0].offsetHeight;
     return offset - (itemH - offset - h4H); // negatief = omhoog
+  }
+
+  // Faadt het jaartal van een sluitend item uit (desktop). De positionering
+  // (".jaartal.is-visible", zie style.css) blijft tijdens het uitfaden
+  // behouden — ".is-visible" wordt pas NA de animatie verwijderd. Zou dat
+  // meteen gebeuren (samen met ".is-open"), dan valt het jaartal terug op
+  // de niet-gepositioneerde basisstijl en "springt" het naar de
+  // linkerbovenhoek voor het kan wegfaden.
+  function fadeOutJaartal($wi, duration) {
+    $wi.find('.jaartal').stop(true).animate({ opacity: 0 }, duration, function () {
+      $(this).removeClass('is-visible').css('opacity', '');
+    });
   }
 
   // Klik enkel op de afbeelding opent/sluit een item — niet ergens in de
@@ -745,29 +941,36 @@ $(document).ready(function () {
 
       if (isOpen) {
         // Sluiten: positie vastzetten voor removeClass zodat .music niet springt
-        $item.children(".music").css({position:'absolute', top:'19rem', left:0, right:0, bottom:0});
+        $item.children(".music").css({position:'absolute', top:'17rem', left:0, right:0, bottom:0});
         $item.find('h4').css('transform', '');
         $item.removeClass("is-open");
+        // Jaartal faadt gelijktijdig en even snel uit als de beschrijving.
+        fadeOutJaartal($item, FADE_OUT_DUR);
         $item.children(".music").fadeOut(FADE_OUT_DUR, function () { $(this).empty().css({position:'',top:'',left:'',right:'',bottom:''}); });
       } else {
         var $others = $(".work-item").not($item).filter(".is-open");
         var project0 = findProject(PROJECTS.work, $item.attr("id"));
         var $music0 = $item.children(".music");
+        var $jaar0 = $item.find('.jaartal');
         var delta = calcH4Delta($item);
 
         // Positie van sluitende items vastzetten VOOR removeClass, zodat .music
         // niet van absolute naar static "springt" tijdens de fadeOut.
-        $others.children(".music").css({position:'absolute', top:'19rem', left:0, right:0, bottom:0});
+        $others.children(".music").css({position:'absolute', top:'17rem', left:0, right:0, bottom:0});
 
         // Stap 1: beide klasse-wissels + titelbewegingen in exact hetzelfde
         // animatieframe zodat alle CSS-transities simultaan starten.
         requestAnimationFrame(function () {
           $others.removeClass("is-open");
           $item.addClass("is-open");
-          // Sluit-items: titel terug naar onderaan
+          // Sluit-items: titel terug naar onderaan + jaartal faden uit
           $others.find('h4').css('transform', '');
-          // Open-item: titel naar bovenaan
+          fadeOutJaartal($others, FADE_OUT_DUR);
+          // Open-item: titel naar bovenaan + jaartal "is-visible" zodat het
+          // meteen z'n positie krijgt (nog opacity:0, zie style.css) vóór
+          // het effectief infaden in stap 2.
           $item.find('h4').css('transform', 'translateY(' + delta + 'px)');
+          $jaar0.addClass('is-visible');
           $others.children(".music").fadeOut(FADE_OUT_DUR, function () { $(this).empty().css({position:'',top:'',left:'',right:'',bottom:''}); });
 
           // Stap 2: DOM-manipulatie in het VOLGENDE frame, nadat alle
@@ -779,8 +982,15 @@ $(document).ready(function () {
             $music0.css({ display: 'block', opacity: 0 });
             loadProjectContent($music0, project0, workAudioPath);
             $music0.animate({ opacity: 1 }, DESKTOP_DUR);
+            // Jaartal faadt gelijktijdig en even traag in als de beschrijving.
+            $jaar0.css('opacity', 0).animate({ opacity: 1 }, DESKTOP_DUR);
+            // Hoogte enkel automatisch laten meegroeien bij EEN enkele
+            // grote Bandcamp-embed (size=large). Bij meerdere kleine embeds
+            // onder elkaar (bv. "Typpo1", size=small) heeft elke iframe al
+            // zijn eigen vaste, compacte hoogte (zie buildEmbed) en mag dat
+            // niet overschreven worden.
             var $iframe = $music0.find('iframe');
-            if ($iframe.length) {
+            if ($iframe.length === 1 && /bandcamp\.com/.test($iframe.attr('src') || '') && /size=large/.test($iframe.attr('src') || '')) {
               var musicH = $music0[0].clientHeight;
               var contentH = $music0.find('.content')[0] ? $music0.find('.content')[0].offsetHeight : 0;
               $iframe.css('height', Math.max(musicH - contentH - 10, 80) + 'px');
@@ -800,10 +1010,17 @@ $(document).ready(function () {
       var fromH = $item[0].scrollHeight;
       $item.css('height', fromH + 'px');
       $item.children('.music').fadeOut(Math.round(MOBILE_DUR * 0.4));
+      $item.find('.jaartal').animate({ opacity: 0 }, Math.round(MOBILE_DUR * 0.4));
+      // "is-open" pas verwijderen NA de hoogte-animatie: ".work-item.is-open"
+      // heeft max-height: 1200px — verwijder je de klasse meteen, dan klemt
+      // max-height (3.85rem) de hoogte instant terug naar gesloten, nog
+      // vóór de animate-tick kan tekenen, en sluit het item zonder zichtbare
+      // animatie.
       $item.animate({ height: CLOSED_H }, MOBILE_DUR, 'swing', function () {
         $item.removeClass('is-open');
         $item.css('height', '');
         $item.children('.music').empty().hide();
+        $item.find('.jaartal').css({ top: '', opacity: '' });
       });
     } else {
       $item.data("activatedAt", Date.now());
@@ -824,24 +1041,38 @@ $(document).ready(function () {
       var $music = $item.children(".music");
       $item.addClass("is-open");
       loadProjectContent($music, project, workAudioPath);
+      adjustMobileTitleLayout($item);
       $music.css('visibility', 'hidden').show();
       var targetH = $item[0].scrollHeight;
       $music.css('visibility', '').hide();
       $item.css('height', CLOSED_H + 'px');
+      // "is-open" weer verwijderen na het meten, en de "gesloten" h4-stijl
+      // expliciet laten renderen (forced reflow via offsetHeight) vóórdat we
+      // de klasse hieronder opnieuw toevoegen. Zonder deze stap gebeuren
+      // beide class-wissels in dezelfde synchrone afhandeling, waardoor de
+      // browser nooit de "gesloten" stijl tekent en de titel-fade niet kan
+      // starten — de rode/witte stijl "popt" dan instant op.
+      $item.removeClass("is-open");
+      void $item[0].offsetHeight;
 
       // === Beide animaties starten in hetzelfde animatieframe ===
       requestAnimationFrame(function () {
+        $item.addClass("is-open");
+        $item.find('.jaartal').css('opacity', 0);
         closeData.forEach(function (d) {
           d.$o.children('.music').fadeOut(Math.round(MOBILE_DUR * 0.4));
+          d.$o.find('.jaartal').animate({ opacity: 0 }, Math.round(MOBILE_DUR * 0.4));
           d.$o.animate({ height: CLOSED_H }, MOBILE_DUR, 'swing', function () {
             d.$o.removeClass('is-open');
             d.$o.css('height', '');
             d.$o.children('.music').empty().hide();
+            d.$o.find('.jaartal').css({ top: '', opacity: '' });
           });
         });
 
         $music.css({ opacity: 0 }).show();
         $music.animate({ opacity: 1 }, Math.round(MOBILE_DUR * 0.8));
+        $item.find('.jaartal').animate({ opacity: 1 }, Math.round(MOBILE_DUR * 0.8));
         $item.animate({ height: targetH }, MOBILE_DUR, 'swing', function () {
           $item.css('height', 'auto');
           var rect = $item[0].getBoundingClientRect();
@@ -870,11 +1101,13 @@ $(document).ready(function () {
         $item.children(".music").css({position:'absolute', top:'19rem', left:0, right:0, bottom:0});
         $item.find('h4').css('transform', '');
         $item.removeClass("is-open");
+        fadeOutJaartal($item, FADE_OUT_DUR);
         $item.children(".music").fadeOut(FADE_OUT_DUR, function () { $(this).empty().css({position:'',top:'',left:'',right:'',bottom:''}); });
       } else {
         var $others = $(".life-item").not($item).filter(".is-open");
         var project0 = findProject(PROJECTS.life, $item.attr("id"));
         var $music0 = $item.children(".music");
+        var $jaar0 = $item.find('.jaartal');
         var pathFn0 = lifeAudioPath(project0);
         var delta = calcH4Delta($item);
 
@@ -884,18 +1117,26 @@ $(document).ready(function () {
           $others.removeClass("is-open");
           $item.addClass("is-open");
           $others.find('h4').css('transform', '');
+          fadeOutJaartal($others, FADE_OUT_DUR);
           $item.find('h4').css('transform', 'translateY(' + delta + 'px)');
+          $jaar0.addClass('is-visible');
           $others.children(".music").fadeOut(FADE_OUT_DUR, function () { $(this).empty().css({position:'',top:'',left:'',right:'',bottom:''}); });
 
           requestAnimationFrame(function () {
             $music0.css({ display: 'block', opacity: 0 });
             loadProjectContent($music0, project0, pathFn0);
             $music0.animate({ opacity: 1 }, DESKTOP_DUR);
-            // Stel iframe-hoogte in op beschikbare ruimte in .music
-            // (= .music hoogte minus beschrijving), zodat de embed
-            // nooit buiten het item valt maar ook geen witruimte laat.
+            // Jaartal faadt gelijktijdig en even traag in als de beschrijving.
+            $jaar0.css('opacity', 0).animate({ opacity: 1 }, DESKTOP_DUR);
+            // Bandcamp vult de resterende hoogte; andere embeds (YouTube,
+            // Vimeo, Spotify) gebruiken de CSS-hoogte (zie .work-item iframe).
+            // Hoogte enkel automatisch laten meegroeien bij EEN enkele
+            // grote Bandcamp-embed (size=large). Bij meerdere kleine embeds
+            // onder elkaar (bv. "Typpo1", size=small) heeft elke iframe al
+            // zijn eigen vaste, compacte hoogte (zie buildEmbed) en mag dat
+            // niet overschreven worden.
             var $iframe = $music0.find('iframe');
-            if ($iframe.length) {
+            if ($iframe.length === 1 && /bandcamp\.com/.test($iframe.attr('src') || '') && /size=large/.test($iframe.attr('src') || '')) {
               var musicH = $music0[0].clientHeight;
               var contentH = $music0.find('.content')[0] ? $music0.find('.content')[0].offsetHeight : 0;
               $iframe.css('height', Math.max(musicH - contentH - 10, 80) + 'px');
@@ -914,10 +1155,13 @@ $(document).ready(function () {
       var fromH = $item[0].scrollHeight;
       $item.css('height', fromH + 'px');
       $item.children('.music').fadeOut(Math.round(MOBILE_DUR * 0.4));
+      $item.find('.jaartal').animate({ opacity: 0 }, Math.round(MOBILE_DUR * 0.4));
+      // Zie toelichting bij de work-item versie hierboven.
       $item.animate({ height: CLOSED_H }, MOBILE_DUR, 'swing', function () {
         $item.removeClass('is-open');
         $item.css('height', '');
         $item.children('.music').empty().hide();
+        $item.find('.jaartal').css({ top: '', opacity: '' });
       });
     } else {
       $item.data("activatedAt", Date.now());
@@ -935,23 +1179,34 @@ $(document).ready(function () {
       var pathFn2 = lifeAudioPath(project2);
       $item.addClass("is-open");
       loadProjectContent($music2, project2, pathFn2);
+      adjustMobileTitleLayout($item);
       $music2.css('visibility', 'hidden').show();
       var targetH2 = $item[0].scrollHeight;
       $music2.css('visibility', '').hide();
       $item.css('height', CLOSED_H + 'px');
+      // Zie toelichting bij de work-item versie hierboven: forced reflow
+      // zodat de "gesloten" h4-stijl effectief gerenderd wordt vóór we
+      // "is-open" hieronder opnieuw toevoegen — anders geen titel-fade.
+      $item.removeClass("is-open");
+      void $item[0].offsetHeight;
 
       requestAnimationFrame(function () {
+        $item.addClass("is-open");
+        $item.find('.jaartal').css('opacity', 0);
         closeData2.forEach(function (d) {
           d.$o.children('.music').fadeOut(Math.round(MOBILE_DUR * 0.4));
+          d.$o.find('.jaartal').animate({ opacity: 0 }, Math.round(MOBILE_DUR * 0.4));
           d.$o.animate({ height: CLOSED_H }, MOBILE_DUR, 'swing', function () {
             d.$o.removeClass('is-open');
             d.$o.css('height', '');
             d.$o.children('.music').empty().hide();
+            d.$o.find('.jaartal').css({ top: '', opacity: '' });
           });
         });
 
         $music2.css({ opacity: 0 }).show();
         $music2.animate({ opacity: 1 }, Math.round(MOBILE_DUR * 0.8));
+        $item.find('.jaartal').animate({ opacity: 1 }, Math.round(MOBILE_DUR * 0.8));
         $item.animate({ height: targetH2 }, MOBILE_DUR, 'swing', function () {
           $item.css('height', 'auto');
           var rect = $item[0].getBoundingClientRect();
