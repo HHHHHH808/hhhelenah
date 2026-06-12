@@ -10,6 +10,9 @@
   src: url(assets/Fonts/Guifx.ttf);
 }
          
+:root {
+  --accent-color: #0D6B56;
+}
 *{
 box-sizing: border-box;
             }
@@ -18,7 +21,7 @@ body {
   padding: 0;
   box-sizing: border-box;
   font-family: 'Roboto', sans-serif;
-  color: red;
+  color: var(--accent-color);
 width: 100vw;
     height: 100vh;
       overflow: hidden;
@@ -39,7 +42,7 @@ width: 100vw;
       width: 1px;
 }
  ::-webkit-scrollbar-thumb {
-  background: red; 
+  background: var(--accent-color); 
 }
 ::-webkit-scrollbar-thumb:hover {
   background: transparent; 
@@ -76,7 +79,7 @@ p {
     padding: 5px;
 overflow: hidden;
 color: white;
-background-color: red;
+background-color: var(--accent-color);
 font-size: min(max(1rem, 1.2vw), 1.5rem);
 min-height: 0vw;
 text-align: right;}
@@ -104,7 +107,7 @@ text-align: right;}
     min-width: 25rem;
     max-width: 40rem;
     background-color: white;
-    border: 1px solid red;
+    border: 1px solid var(--accent-color);
             }
 .bio-box a {
   text-decoration: underline;
@@ -131,9 +134,9 @@ min-height: 0vw;
     background-color: gainsboro;
 }
 #clue {
-color:red;
+color:var(--accent-color);
   outline:none;
-  border: 1px solid red;
+  border: 1px solid var(--accent-color);
   padding: 16px 32px;
   margin: 10px 2px;
   width: 25rem;
@@ -152,7 +155,7 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus, 
 input:-webkit-autofill:active  {
     -webkit-box-shadow: 0 0 0 30px white inset !important;
-    color: red;
+    color: var(--accent-color);
 }          
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: gainsboro; text-transform: uppercase;      font-family:'Syne',sans-serif;
@@ -172,9 +175,9 @@ input:-webkit-autofill:active  {
 }
 #login {
     background-color: white;
-  color: red;
+  color: var(--accent-color);
       font-family:'Syne',sans-serif;
-  border: 1px solid red;
+  border: 1px solid var(--accent-color);
     border-radius: 0;
   padding: 16px 32px;
   text-align: center;
@@ -189,7 +192,7 @@ min-height: 0vw;
 }
 #login:hover {
   color: white;
-  background-color: red;
+  background-color: var(--accent-color);
     transition: color 0.5s, background-color 0.5s;
 }
 .popup{
@@ -264,7 +267,7 @@ padding-bottom: 1em;
      
 .shown,
 .albums {
-    border-left: 1px solid red;
+    border-left: 1px solid var(--accent-color);
   margin: 0;
   display: flex;
   align-content: flex-start;
@@ -304,7 +307,7 @@ min-height: 0vw;
 .work-item.is-open h4,
 .life-item.is-open h4 {
   color: #fff;
-  background-color: red;
+  background-color: var(--accent-color);
 }
 .work h4 {
   padding-right: 1em;
@@ -337,7 +340,7 @@ min-height: 0vw;
 }
 .work-item {
   position: relative;
-  border-right: 1px solid red;
+  border-right: 1px solid var(--accent-color);
   flex-shrink: 0;
   /* "Platenbak"-effect: de kolom is smal en clipt (overflow: hidden) een
      grote cirkel zodat enkel de bovenste helft zichtbaar is — als
@@ -490,7 +493,7 @@ min-height: 0vw;
 .life-item {
   display: none; /* filter-tags tonen/verbergen items via fadeIn/fadeOut */
   position: relative;
-  border-right: 1px solid red;
+  border-right: 1px solid var(--accent-color);
   flex-shrink: 0;
   overflow: hidden;
   height: 100%;
@@ -597,7 +600,7 @@ font-family: 'Roboto', sans-serif;
      ook gecentreerd via "margin: 0 auto") er recht boven kan staan. */
   margin: 0 auto;
   height: 0.5em;
-  background: red;
+  background: var(--accent-color);
   outline: none;
 }
 #progress-bar::-webkit-slider-thumb {
@@ -624,7 +627,7 @@ button {
     margin: 0;
   font-size: 2rem;
   background-color: transparent;
-  -webkit-text-stroke: 0px red;
+  -webkit-text-stroke: 0px var(--accent-color);
   cursor: pointer;
   border: none;
     display: inline;
@@ -654,7 +657,7 @@ button {
   content: "";
   position: absolute;
   top: 50%;
-  background: red;
+  background: var(--accent-color);
 }
 /* Afspelen (standaard): één driehoek, met borders getekend zodat de
    bounding box exact even groot blijft als de pauze-vorm hieronder. */
@@ -665,7 +668,7 @@ button {
   background: transparent;
   border-style: solid;
   border-width: 0.6em 0 0.6em 1em;
-  border-color: transparent transparent transparent red;
+  border-color: transparent transparent transparent var(--accent-color);
   transform: translate(-35%, -50%);
 }
 .pp::after {
@@ -677,7 +680,7 @@ button {
   left: 38%;
   width: 0.35em;
   height: 1.2em;
-  background: red;
+  background: var(--accent-color);
   border: none;
   transform: translate(-50%, -50%);
 }
@@ -813,14 +816,14 @@ label input {
   width:1.1vw;
     min-height: 0.8rem;
     max-height: 1.1rem;
-  border: 1px solid red;
+  border: 1px solid var(--accent-color);
         border-radius: 50%;
 }
 label:hover input ~ .checkmark {
   background-color: #ccc;
 }
 label input:checked ~ .checkmark {
-  border: 1px solid red;
+  border: 1px solid var(--accent-color);
 }
 .checkmark:after {
   content: "";
@@ -835,7 +838,7 @@ label .checkmark:after {
   top: 0;
   width: 5px;
   height: 10px;
-  border: solid red;
+  border: solid var(--accent-color);
   border-width: 0 3px 3px 0;
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
@@ -1024,7 +1027,7 @@ h2 {
   max-height: 3.85rem;
   transition: filter 1.2s ease;
   border-right: none;
-  border-bottom: 1px solid red;
+  border-bottom: 1px solid var(--accent-color);
   padding-top: 0rem;
   box-sizing: border-box;
       background-size: 45% auto;
@@ -1280,7 +1283,7 @@ background-position: left top;
   max-height: 4.5rem;
   transition: filter 1.2s ease;
   border-right: none;
-  border-bottom: 1px solid red;
+  border-bottom: 1px solid var(--accent-color);
   padding-top: 0;
   box-sizing: border-box;
   overflow: hidden;
