@@ -37,6 +37,16 @@ const PROJECTS = {
       beschrijving: "Mastering for One Frame Movement’s LP"
     },
     {
+      id: "Lips2",
+      titel: "Lip Service - Swalman",
+      datum: "2026-01",
+      categorieen: ["production"],
+      afbeelding: "assets/Images/Work/Lips2.jpg",
+      type: "embed",
+      embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=479454980/size=large/bgcol=ffffff/linkcol=de270f/artwork=none/transparent=true/",
+      beschrijving: "Co-production for Lip Service’s LP"
+    },
+    {
       id: "LiesaCara",
       titel: "Liesa Van Der Aa",
       datum: "2025-10",
