@@ -7,6 +7,16 @@ const PROJECTS = {
   // Volgorde: chronologisch, meest recente werk eerst (datum = JJJJ-MM).
   work: [
     {
+      id: "DeKloeVF",
+      titel: "De Kloe - Vanity Fair",
+      datum: "2026-09",
+      categorieen: ["production", "mixing"],
+      afbeelding: "assets/Images/Work/DeKloeVF.jpg",
+      type: "embed",
+      embedUrl: "https://bandcamp.com/EmbeddedPlayer/album=207537911/size=large/bgcol=ffffff/linkcol=de270f/artwork=none/transparent=true/",
+      beschrijving: "Mixing & Co-Production for De Kloe’s debut LP"
+    },
+    {
       id: "BurgerS1",
       titel: "Burger Service",
       datum: "2026-02",
